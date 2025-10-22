@@ -285,7 +285,7 @@
                 showTyping();
                 setTimeout(() => {
                     hideTyping();
-                    addMessage(`Perfect! ${gallons} gallons per day.<br><br>I've estimated your average annual peak sun hours at <strong>${estimatedAnnualSun} hours/day</strong> and cold water temperature at <strong>${estimatedAnnualColdWater}°F</strong>.<br><br>You can:<br>• Type <strong>"annual"</strong> for yearly averages<br>• Type a season: <strong>winter, spring, summer, fall</strong><br>• Type <strong>"custom"</strong> to enter your own values<br><br>What would you like?`);
+                    addMessage(`Perfect! ${gallons} gallons per day.<br><br><strong>You can model your system using:</strong><br>• Type <strong>"annual"</strong> to use typical annual averages<br>• Type a <strong>season</strong> (winter, spring, summer, fall) for seasonal estimates<br>• Type <strong>"custom"</strong> to enter your exact values<br><br>The final calculation will use your location's actual climate data.<br><br>What would you like?`);
                     conversationStep = 3;
                 }, 800);
             }, 300);
