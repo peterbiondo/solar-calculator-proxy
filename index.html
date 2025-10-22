@@ -285,7 +285,7 @@
                 showTyping();
                 setTimeout(() => {
                     hideTyping();
-                    addMessage(`Perfect! ${gallons} gallons per day.<br><br><strong>You can model your system using:</strong><br>• Type <strong>"annual"</strong> to use typical annual averages<br>• Type a <strong>season</strong> (winter, spring, summer, fall) for seasonal estimates<br>• Type <strong>"custom"</strong> to enter your exact values<br><br>The final calculation will use your location's actual climate data.<br><br>What would you like?`);
+                    addMessage(`Perfect! ${gallons} gallons per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (winter, spring, summer, fall) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values<br><br>What would you like?`);
                     conversationStep = 3;
                 }, 800);
             }, 300);
@@ -336,7 +336,7 @@
                     if (choice === 'annual') {
                         userData.peakSunHours = estimatedAnnualSun;
                         userData.coldWaterTemp = estimatedAnnualColdWater;
-                        addMessage(`Using annual averages: ${estimatedAnnualSun} hrs sun, ${estimatedAnnualColdWater}°F water.`);
+                        addMessage(`Perfect! We'll calculate using year-round average conditions for your location.`);
                         setTimeout(() => {
                             showTyping();
                             setTimeout(() => {
@@ -354,7 +354,7 @@
                         };
                         userData.peakSunHours = seasonData[choice].sun;
                         userData.coldWaterTemp = seasonData[choice].temp;
-                        addMessage(`Using ${choice} values: ${seasonData[choice].sun} hrs sun, ${seasonData[choice].temp}°F water.`);
+                        addMessage(`Perfect! We'll calculate for ${choice} conditions.`);
                         setTimeout(() => {
                             showTyping();
                             setTimeout(() => {
@@ -367,7 +367,7 @@
                         addMessage(`Great! What are your peak sun hours per day? (1-10)`);
                         conversationStep = 3.1;
                     } else {
-                        addMessage('Please type: "annual", "winter", "spring", "summer", "fall", or "custom"');
+                        addMessage('Please type: "annual", a season name (winter, spring, summer, fall), or "custom"');
                     }
                     break;
                 
