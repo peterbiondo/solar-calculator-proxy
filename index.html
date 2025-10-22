@@ -503,11 +503,46 @@
                 if (response.ok) {
                     const result = await response.json();
                     
-                    addMessage(`📦 <strong>Data sent successfully!</strong><br><pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 11px;">${JSON.stringify(userData, null, 2)}</pre>`);
-                    
-                    setTimeout(() => {
-                        addMessage(`<strong>✅ Connected to Make.com!</strong><br><br>Your proxy is working! The data was sent to Make.com through your Vercel proxy.<br><br><strong>Next step:</strong> We need to fix Problem #2 (getting results back from Google Sheets).`);
-                    }, 1000);
+                    // Check if we got actual results back
+                    if (result.success && result.system_1250w && result.system_1500w) {
+                        // Display the real calculated results!
+                        const sys1250 = result.system_1250w;
+                        const sys1500 = result.system_1500w;
+                        
+                        addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+                            📍 <strong>Location:</strong> ${userData.location}<br>
+                            💧 <strong>Daily Hot Water:</strong> ${userData.gallons} gallons<br>
+                            ☀️ <strong>Peak Sun Hours:</strong> ${userData.peakSunHours} hrs/day<br>
+                            🌡️ <strong>Cold Water Temp:</strong> ${userData.coldWaterTemp}°F<br>
+                            🔥 <strong>Hot Water Temp:</strong> ${userData.hotWaterTemp}°F<br>
+                            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+                            📊 <strong>High Limit:</strong> ${userData.highLimit}°F<br><br>
+                            
+                            <strong>🔷 1250W System:</strong><br>
+                            • Inverters: ${sys1250.inverters}<br>
+                            • Panels: ${sys1250.panels}<br>
+                            • Tank Size: ${sys1250.tank_size} gallons<br>
+                            • Status: ${sys1250.watt_status}<br>
+                            • Final Temp: ${sys1250.final_temp}°F<br>
+                            • Element Size: ${sys1250.element_size}W<br>
+                            • kWh/day: ${sys1250.kwh_day}<br>
+                            • kWh Max: ${sys1250.kwh_max}<br><br>
+                            
+                            <strong>🔷 1500W System:</strong><br>
+                            • Inverters: ${sys1500.inverters}<br>
+                            • Panels: ${sys1500.panels}<br>
+                            • Tank Size: ${sys1500.tank_size} gallons<br>
+                            • Status: ${sys1500.watt_status}<br>
+                            • Final Temp: ${sys1500.final_temp}°F<br>
+                            • Element Size: ${sys1500.element_size}W<br>
+                            • kWh/day: ${sys1500.kwh_day}<br>
+                            • kWh Max: ${sys1500.kwh_max}<br><br>
+                            
+                            <em>These results assume optimal conditions: panels tilted at your latitude angle, facing due south, with no shading.</em>`);
+                    } else {
+                        // Fallback if data structure is different
+                        addMessage(`<strong>✅ Connected to Make.com!</strong><br><br>Data was sent successfully!<br><br><strong>Debug info:</strong><br><pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 10px;">${JSON.stringify(result, null, 2)}</pre>`);
+                    }
                 } else {
                     addMessage(`<strong>❌ Error:</strong> Got response code ${response.status}`);
                 }
