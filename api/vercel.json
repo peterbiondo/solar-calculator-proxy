@@ -1,0 +1,10 @@
+	
+version	2
+builds	
+0	
+src	"api/**/*.js"
+use	"@vercel/node"
+routes	
+0	
+src	"/api/(.*)"
+dest	"/api/$1"
