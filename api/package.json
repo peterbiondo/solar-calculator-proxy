@@ -1,16 +1,16 @@
-json{
-  "name": "solar-calculator-proxy",
-  "version": "1.0.0",
-  "description": "Proxy server for Solar Calculator chatbot to connect to Make.com",
-  "main": "api/webhook-proxy.js",
-  "scripts": {
-    "dev": "vercel dev",
-    "deploy": "vercel"
-  },
-  "dependencies": {
-    "node-fetch": "^2.6.7"
-  },
-  "engines": {
-    "node": ">=14.x"
-  }
+{
+"name": "solar-calculator-proxy",
+"version": "1.0.0",
+"description": "Proxy server for Solar Calculator chatbot to connect to Make.com",
+"main": "api/webhook-proxy.js",
+"scripts": {
+"dev": "vercel dev",
+"deploy": "vercel"
+},
+"dependencies": {
+"node-fetch": "^2.6.7"
+},
+"engines": {
+"node": ">=14.x"
+}
 }
