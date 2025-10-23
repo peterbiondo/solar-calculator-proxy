@@ -663,7 +663,7 @@
                                 recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
                                 alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
                                 reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
-                            } else {
+                            } else if (panel1500 < panel1250) {
                                 recommended = sys1500;
                                 alternative = sys1250;
                                 recommendedName = "Off-Grid CIM 1500H";
@@ -671,6 +671,14 @@
                                 recommendedUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
                                 alternativeUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
                                 reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                            } else {
+                                recommended = sys1250;
+                                alternative = sys1500;
+                                recommendedName = "Off-Grid CIM 1200H";
+                                alternativeName = "Off-Grid CIM 1500H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                reason = "This system is the most cost-effective choice with a less expensive inverter.";
                             }
                             
                             const recTankDisplay = Math.round(gallonsToLiters(parseFloat(recommended.tank_size)));
@@ -683,9 +691,10 @@
                                 🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}${tempUnit}<br>
                                 🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}${tempUnit}<br>
                                 ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                                📊 <strong>High Limit:</strong> ${displayHighLimit}${tempUnit}<br><br>
+                                📊 <strong>High Limit:</strong> ${displayHighLimit}${tempUnit}<br>
+                                ${parseFloat(displayHighLimit) > 50 ? '<br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.<br>' : ''}<br>
                                 
-                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
+                                
                                 
                                 <strong>✅ RECOMMENDED SYSTEM</strong><br><br>
                                 
@@ -699,7 +708,7 @@
                                 
                                 <em>${reason}</em><br><br>
                                 
-                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
+                                
                                 
                                 <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
                                 
@@ -711,9 +720,9 @@
                                 • kWh/day: ${alternative.kwh_day}<br>
                                 • kWh Max: ${alternative.kwh_max}<br><br>
                                 
-                                <em>This system may be preferred if you need higher element wattage or have specific installation requirements.</em><br><br>
                                 
-                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
+                                
+                                
                                 
                                 <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`);
                             
@@ -743,12 +752,12 @@
                                 alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
                                 reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
                             } else if (inv1500 < inv1250) {
-                                recommended = sys1500;
-                                alternative = sys1250;
-                                recommendedName = "Off-Grid CIM 1500H";
-                                alternativeName = "Off-Grid CIM 1200H";
-                                recommendedUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
-                                alternativeUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                recommended = sys1250;
+                                alternative = sys1500;
+                                recommendedName = "Off-Grid CIM 1200H";
+                                alternativeName = "Off-Grid CIM 1500H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
                                 reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
                             } else if (panel1250 < panel1500) {
                                 recommended = sys1250;
@@ -757,15 +766,15 @@
                                 alternativeName = "Off-Grid CIM 1500H";
                                 recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
                                 alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
-                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                                reason = "This system is the most cost-effective choice with a less expensive inverter.";
                             } else {
-                                recommended = sys1500;
-                                alternative = sys1250;
-                                recommendedName = "Off-Grid CIM 1500H";
-                                alternativeName = "Off-Grid CIM 1200H";
-                                recommendedUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
-                                alternativeUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
-                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                                recommended = sys1250;
+                                alternative = sys1500;
+                                recommendedName = "Off-Grid CIM 1200H";
+                                alternativeName = "Off-Grid CIM 1500H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                reason = "This system is the most cost-effective choice with a less expensive inverter.";
                             }
                             
                             addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
@@ -775,9 +784,10 @@
                                 🌡️ <strong>Cold Water Temp:</strong> ${Math.round(actualColdTemp)}°F<br>
                                 🔥 <strong>Hot Water Temp:</strong> ${Math.round(userData.hotWaterTemp)}°F<br>
                                 ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                                📊 <strong>High Limit:</strong> ${Math.round(userData.highLimit)}°F<br><br>
+                                📊 <strong>High Limit:</strong> ${Math.round(userData.highLimit)}°F<br>
+                                ${userData.highLimit > 120 ? '<br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 120°F requires an anti-scald mixing valve on the water heater.<br>' : ''}<br>
                                 
-                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
+                                
                                 
                                 <strong>✅ RECOMMENDED SYSTEM</strong><br><br>
                                 
@@ -791,7 +801,7 @@
                                 
                                 <em>${reason}</em><br><br>
                                 
-                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
+                                
                                 
                                 <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
                                 
@@ -803,9 +813,9 @@
                                 • kWh/day: ${alternative.kwh_day}<br>
                                 • kWh Max: ${alternative.kwh_max}<br><br>
                                 
-                                <em>This system may be preferred if you need higher element wattage or have specific installation requirements.</em><br><br>
                                 
-                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
+                                
+                                
                                 
                                 <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`);
                             
