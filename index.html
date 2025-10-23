@@ -546,11 +546,11 @@
                             setTimeout(() => {
                                 hideTyping();
                                 const defaultLimit = unitSystem === 'metric' ? '65°C' : '150°F';
-                                const limitRange = unitSystem === 'metric' ? '60-85°C' : '140-185°F';
+                                const limitOption = unitSystem === 'metric' ? '50°C' : '120°F';
                                 const warningText = unitSystem === 'metric' ? 
                                     '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.' :
                                     '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 120°F requires an anti-scald mixing valve on the water heater.';
-                                addMessage(`High temperature limit is set to <strong>${defaultLimit}</strong>. Type "${unitSystem === 'metric' ? '65' : '150'}" to keep it, or enter ${limitRange}.${warningText}`);
+                                addMessage(`High temperature limit is set to <strong>${defaultLimit}</strong>. Type "${unitSystem === 'metric' ? '65' : '150'}" to keep it, or enter ${limitOption}.${warningText}`);
                                 conversationStep = 6;
                             }, 800);
                         }, 500);
