@@ -661,7 +661,7 @@
                                 • kWh/day: ${sys1500.kwh_day}<br>
                                 • kWh Max: ${sys1500.kwh_max}<br><br>
                                 
-                                <em>These results assume optimal conditions: panels tilted at your latitude angle (${actualLat}°), facing due south, with no shading.</em>`);
+                                <em>These results assume optimal conditions: panels tilted at your latitude angle (${Math.round(actualLat)}°), facing due south, with no shading.</em>`);
                         } else {
                             // Imperial display
                             addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
@@ -693,7 +693,7 @@
                                 • kWh/day: ${sys1500.kwh_day}<br>
                                 • kWh Max: ${sys1500.kwh_max}<br><br>
                                 
-                                <em>These results assume optimal conditions: panels tilted at your latitude angle (${actualLat}°), facing due south, with no shading.</em>`);
+                                <em>These results assume optimal conditions: panels tilted at your latitude angle (${Math.round(actualLat)}°), facing due south, with no shading.</em>`);
                         }
                     } else {
                         addMessage(`<strong>✅ Connected to Make.com!</strong><br><br>Data was sent successfully!<br><br><strong>Debug info:</strong><br><pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 10px;">${JSON.stringify(result, null, 2)}</pre>`);
