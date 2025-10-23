@@ -411,8 +411,8 @@
                 case 3: // Season choice
                     const seasonChoice = message.toLowerCase();
                     if (seasonChoice === 'annual') {
-                        userData.peakSunHours = parseFloat(estimatedAnnualSun.toFixed(1));
-                        userData.coldWaterTemp = estimatedAnnualColdWater;
+                        // Annual uses AI climate data - OpenAI will provide the actual values
+                        userData.useAIClimate = true;
                         addMessage(`Perfect! We'll calculate using year-round average conditions for your location.`);
                         setTimeout(() => {
                             showTyping();
@@ -425,15 +425,10 @@
                             }, 800);
                         }, 500);
                     } else if (['winter', 'spring', 'summer', 'fall'].includes(seasonChoice)) {
-                        const seasonData = {
-                            winter: { sun: 2.5, temp: 60 },
-                            spring: { sun: 5.0, temp: 65 },
-                            summer: { sun: 7.0, temp: 75 },
-                            fall: { sun: 4.0, temp: 70 }
-                        };
-                        userData.peakSunHours = parseFloat(seasonData[seasonChoice].sun.toFixed(1));
-                        userData.coldWaterTemp = seasonData[seasonChoice].temp;
-                        addMessage(`Perfect! We'll calculate for ${seasonChoice} conditions.`);
+                        // Store the season choice - OpenAI will provide the actual values
+                        userData.season = seasonChoice;
+                        userData.useAIClimate = true;
+                        addMessage(`Perfect! We'll calculate for ${seasonChoice} conditions based on your location.`);
                         setTimeout(() => {
                             showTyping();
                             setTimeout(() => {
@@ -445,6 +440,8 @@
                             }, 800);
                         }, 500);
                     } else if (seasonChoice === 'custom') {
+                        // Custom uses user-provided values, not AI
+                        userData.useAIClimate = false;
                         addMessage(`Great! What are your peak sun hours per day? (1-10)`);
                         conversationStep = 3.1;
                     } else {
