@@ -452,8 +452,9 @@
                 case 3.1: // Custom sun hours
                     const customSun = parseFloat(message);
                     if (customSun >= 1 && customSun <= 10) {
-                        userData.peakSunHours = customSun;
-                        addMessage(`Got it! Using ${customSun} peak sun hours per day.`);
+                        // Round to 1 decimal place for storage and display
+                        userData.peakSunHours = Math.round(customSun * 10) / 10;
+                        addMessage(`Got it! Using ${userData.peakSunHours} peak sun hours per day.`);
                         setTimeout(() => {
                             showTyping();
                             setTimeout(() => {
@@ -476,7 +477,7 @@
                         if (customCold >= 0 && customCold <= 30) {
                             tempInF = celsiusToFahrenheit(customCold);
                             userData.coldWaterTemp = tempInF;
-                            addMessage(`Perfect! Using ${customCold}°C for cold water.`);
+                            addMessage(`Perfect! Using ${Math.round(customCold)}°C for cold water.`);
                         } else {
                             addMessage('Please enter a temperature between 0 and 30°C.');
                             return;
@@ -484,7 +485,7 @@
                     } else {
                         if (customCold >= 32 && customCold <= 85) {
                             userData.coldWaterTemp = customCold;
-                            addMessage(`Perfect! Using ${customCold}°F for cold water.`);
+                            addMessage(`Perfect! Using ${Math.round(customCold)}°F for cold water.`);
                         } else {
                             addMessage('Please enter a temperature between 32 and 85°F.');
                             return;
