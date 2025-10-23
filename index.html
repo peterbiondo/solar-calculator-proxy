@@ -238,7 +238,10 @@
         const WEBHOOK_URL = 'https://solar-calculator-proxy.vercel.app/api/webhook-proxy';
         
         let conversationStep = 0;
-        let userData = {};
+        let userData = {
+            season: '',
+            useAIClimate: false
+        };
         let estimatedAnnualSun = 5.5;
         let estimatedAnnualColdWater = 68;
         let unitSystem = ''; // 'imperial' or 'metric'
