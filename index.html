@@ -547,7 +547,10 @@
                                 hideTyping();
                                 const defaultLimit = unitSystem === 'metric' ? '65°C' : '150°F';
                                 const limitRange = unitSystem === 'metric' ? '60-85°C' : '140-185°F';
-                                addMessage(`High temperature limit is set to <strong>${defaultLimit}</strong>. Type "${unitSystem === 'metric' ? '65' : '150'}" to keep it, or enter ${limitRange}.`);
+                                const warningText = unitSystem === 'metric' ? 
+                                    '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.' :
+                                    '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 120°F requires an anti-scald mixing valve on the water heater.';
+                                addMessage(`High temperature limit is set to <strong>${defaultLimit}</strong>. Type "${unitSystem === 'metric' ? '65' : '150'}" to keep it, or enter ${limitRange}.${warningText}`);
                                 conversationStep = 6;
                             }, 800);
                         }, 500);
@@ -691,8 +694,7 @@
                                 🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}${tempUnit}<br>
                                 🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}${tempUnit}<br>
                                 ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                                📊 <strong>High Limit:</strong> ${displayHighLimit}${tempUnit}<br>
-                                ${parseFloat(displayHighLimit) > 50 ? '<br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.<br>' : ''}<br>
+                                📊 <strong>High Limit:</strong> ${displayHighLimit}${tempUnit}<br><br>
                                 
                                 
                                 
@@ -784,8 +786,7 @@
                                 🌡️ <strong>Cold Water Temp:</strong> ${Math.round(actualColdTemp)}°F<br>
                                 🔥 <strong>Hot Water Temp:</strong> ${Math.round(userData.hotWaterTemp)}°F<br>
                                 ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                                📊 <strong>High Limit:</strong> ${Math.round(userData.highLimit)}°F<br>
-                                ${userData.highLimit > 120 ? '<br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 120°F requires an anti-scald mixing valve on the water heater.<br>' : ''}<br>
+                                📊 <strong>High Limit:</strong> ${Math.round(userData.highLimit)}°F<br><br>
                                 
                                 
                                 
