@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solar Calculator Chat - Test</title>
+    <title>Solar Calculator Chat - Metric/Imperial</title>
     <style>
         * {
             margin: 0;
@@ -104,7 +105,7 @@
         }
         
         .chat-input-area {
-            padding: 20px;
+            padding: 15px;
             background: white;
             border-top: 1px solid #e0e0e0;
         }
@@ -116,10 +117,10 @@
         
         #userInput {
             flex: 1;
-            padding: 12px 16px;
+            padding: 12px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 25px;
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
             transition: border-color 0.3s;
         }
@@ -129,13 +130,12 @@
         }
         
         #sendBtn {
-            padding: 12px 24px;
+            padding: 12px 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             border-radius: 25px;
             cursor: pointer;
-            font-size: 15px;
             font-weight: 600;
             transition: transform 0.2s;
         }
@@ -144,16 +144,12 @@
             transform: scale(1.05);
         }
         
-        #sendBtn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        
         .typing-indicator {
             display: none;
             padding: 12px 16px;
             background: white;
             border-radius: 18px;
+            border-bottom-left-radius: 4px;
             width: fit-content;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
@@ -165,35 +161,35 @@
         .typing-indicator span {
             height: 8px;
             width: 8px;
-            background: #999;
+            background: #667eea;
             border-radius: 50%;
             display: inline-block;
             margin: 0 2px;
-            animation: bounce 1.4s infinite ease-in-out;
-        }
-        
-        .typing-indicator span:nth-child(1) {
-            animation-delay: -0.32s;
+            animation: typing 1.4s infinite;
         }
         
         .typing-indicator span:nth-child(2) {
-            animation-delay: -0.16s;
+            animation-delay: 0.2s;
         }
         
-        @keyframes bounce {
-            0%, 80%, 100% {
-                transform: scale(0);
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
             }
-            40% {
-                transform: scale(1);
+            30% {
+                transform: translateY(-10px);
             }
         }
         
         .gallon-buttons {
-            display: grid;
+            display: none;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .gallon-btn {
@@ -217,7 +213,7 @@
     <div class="chat-container">
         <div class="chat-header">
             <h1>☀️ Solar Calculator Chat</h1>
-            <p>Test the conversation flow</p>
+            <p>International support - Metric & Imperial</p>
         </div>
         
         <div class="chat-messages" id="chatMessages">
@@ -230,12 +226,7 @@
         
         <div class="chat-input-area">
             <div id="gallonButtons" class="gallon-buttons" style="display: none;">
-                <button class="gallon-btn" onclick="selectGallons(30)">30 gal</button>
-                <button class="gallon-btn" onclick="selectGallons(40)">40 gal</button>
-                <button class="gallon-btn" onclick="selectGallons(50)">50 gal</button>
-                <button class="gallon-btn" onclick="selectGallons(60)">60 gal</button>
-                <button class="gallon-btn" onclick="selectGallons(80)">80 gal</button>
-                <button class="gallon-btn" onclick="selectGallons(100)">100 gal</button>
+                <!-- Will be populated dynamically based on unit system -->
             </div>
             <div class="input-group">
                 <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
@@ -245,19 +236,36 @@
     </div>
 
     <script>
-        // Using Vercel proxy instead of direct Make.com webhook (fixes CORS)
         const WEBHOOK_URL = 'https://solar-calculator-proxy.vercel.app/api/webhook-proxy';
         
         let conversationStep = 0;
         let userData = {};
         let estimatedAnnualSun = 5.5;
         let estimatedAnnualColdWater = 68;
+        let unitSystem = ''; // 'imperial' or 'metric'
         
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
         const typingIndicator = document.getElementById('typingIndicator');
         const gallonButtons = document.getElementById('gallonButtons');
+        
+        // Conversion functions
+        function litersToGallons(liters) {
+            return liters / 3.785;
+        }
+        
+        function gallonsToLiters(gallons) {
+            return gallons * 3.785;
+        }
+        
+        function celsiusToFahrenheit(celsius) {
+            return (celsius * 9/5) + 32;
+        }
+        
+        function fahrenheitToCelsius(fahrenheit) {
+            return (fahrenheit - 32) * 5/9;
+        }
         
         function addMessage(text, isUser = false) {
             const messageDiv = document.createElement('div');
@@ -276,16 +284,24 @@
             typingIndicator.classList.remove('show');
         }
         
-        function selectGallons(gallons) {
-            userData.gallons = gallons;
-            addMessage(`${gallons} gallons`, true);
+        function selectWaterAmount(amount) {
+            if (unitSystem === 'metric') {
+                userData.gallons = litersToGallons(amount); // Convert to gallons for backend
+                addMessage(`${amount} liters`, true);
+            } else {
+                userData.gallons = amount;
+                addMessage(`${amount} gallons`, true);
+            }
+            
             gallonButtons.style.display = 'none';
             
             setTimeout(() => {
                 showTyping();
                 setTimeout(() => {
                     hideTyping();
-                    addMessage(`Perfect! ${gallons} gallons per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (winter, spring, summer, fall) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values<br><br>What would you like?`);
+                    const displayAmount = unitSystem === 'metric' ? 
+                        `${amount} liters` : `${amount} gallons`;
+                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (winter, spring, summer, fall) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values<br><br>What would you like?`);
                     conversationStep = 3;
                 }, 800);
             }, 300);
@@ -308,6 +324,29 @@
         
         async function processMessage(message) {
             switch (conversationStep) {
+                case 0.5: // Unit system choice
+                    const choice = message.toLowerCase();
+                    if (choice.includes('imperial') || choice.includes('us') || choice.includes('gallon') || choice.includes('fahrenheit')) {
+                        unitSystem = 'imperial';
+                        addMessage(`Great! Using <strong>Imperial units</strong> (gallons, °F).`);
+                    } else if (choice.includes('metric') || choice.includes('liter') || choice.includes('celsius')) {
+                        unitSystem = 'metric';
+                        addMessage(`Great! Using <strong>Metric units</strong> (liters, °C).`);
+                    } else {
+                        addMessage('Please type "Imperial" for US units (gallons/°F) or "Metric" for international units (liters/°C)');
+                        return;
+                    }
+                    
+                    setTimeout(() => {
+                        showTyping();
+                        setTimeout(() => {
+                            hideTyping();
+                            addMessage(`Perfect! What's your location? (City, State/Country)`);
+                            conversationStep = 1;
+                        }, 800);
+                    }, 500);
+                    break;
+                
                 case 1: // Location
                     userData.location = message;
                     addMessage(`Great! Setting up for ${message}...`);
@@ -315,25 +354,58 @@
                         showTyping();
                         setTimeout(() => {
                             hideTyping();
-                            addMessage(`Perfect! Now, how many gallons of hot water do you use per day? Choose from the options:`);
+                            const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+                            addMessage(`Perfect! Now, how many ${unit} of hot water do you use per day? Choose from the options:`);
+                            
+                            // Populate buttons based on unit system
+                            if (unitSystem === 'metric') {
+                                gallonButtons.innerHTML = `
+                                    <button class="gallon-btn" onclick="selectWaterAmount(114)">114 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(151)">151 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(189)">189 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(227)">227 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(303)">303 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(379)">379 L</button>
+                                `;
+                            } else {
+                                gallonButtons.innerHTML = `
+                                    <button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button>
+                                `;
+                            }
+                            
                             gallonButtons.style.display = 'grid';
                             conversationStep = 2;
                         }, 1000);
                     }, 500);
                     break;
                 
-                case 2: // Gallons (text input)
-                    const gallons = parseInt(message);
-                    if ([30, 40, 50, 60, 80, 100].includes(gallons)) {
-                        selectGallons(gallons);
+                case 2: // Water amount (text input fallback)
+                    const amount = parseFloat(message);
+                    if (unitSystem === 'metric') {
+                        const validAmounts = [114, 151, 189, 227, 303, 379];
+                        if (validAmounts.some(v => Math.abs(amount - v) < 5)) {
+                            selectWaterAmount(Math.round(amount));
+                        } else {
+                            addMessage('Please click a button or enter a standard amount (114, 151, 189, 227, 303, or 379 liters)');
+                        }
                     } else {
-                        addMessage('Please click a button or enter: 30, 40, 50, 60, 80, or 100');
+                        const validAmounts = [30, 40, 50, 60, 80, 100];
+                        if (validAmounts.includes(Math.round(amount))) {
+                            selectWaterAmount(Math.round(amount));
+                        } else {
+                            addMessage('Please click a button or enter: 30, 40, 50, 60, 80, or 100');
+                        }
                     }
                     break;
                 
                 case 3: // Season choice
-                    const choice = message.toLowerCase();
-                    if (choice === 'annual') {
+                    const seasonChoice = message.toLowerCase();
+                    if (seasonChoice === 'annual') {
                         userData.peakSunHours = estimatedAnnualSun;
                         userData.coldWaterTemp = estimatedAnnualColdWater;
                         addMessage(`Perfect! We'll calculate using year-round average conditions for your location.`);
@@ -341,29 +413,33 @@
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                addMessage(`Hot water temperature is set to <strong>120°F</strong> by default. Type "120" to keep it, or enter 100-140°F.`);
+                                const defaultTemp = unitSystem === 'metric' ? '49°C' : '120°F';
+                                const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
+                                addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '49' : '120'}" to keep it, or enter ${tempRange}.`);
                                 conversationStep = 4;
                             }, 800);
                         }, 500);
-                    } else if (['winter', 'spring', 'summer', 'fall'].includes(choice)) {
+                    } else if (['winter', 'spring', 'summer', 'fall'].includes(seasonChoice)) {
                         const seasonData = {
                             winter: { sun: 2.5, temp: 60 },
                             spring: { sun: 5.0, temp: 65 },
                             summer: { sun: 7.0, temp: 75 },
                             fall: { sun: 4.0, temp: 70 }
                         };
-                        userData.peakSunHours = seasonData[choice].sun;
-                        userData.coldWaterTemp = seasonData[choice].temp;
-                        addMessage(`Perfect! We'll calculate for ${choice} conditions.`);
+                        userData.peakSunHours = seasonData[seasonChoice].sun;
+                        userData.coldWaterTemp = seasonData[seasonChoice].temp;
+                        addMessage(`Perfect! We'll calculate for ${seasonChoice} conditions.`);
                         setTimeout(() => {
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                addMessage(`Hot water temperature is set to <strong>120°F</strong> by default. Type "120" to keep it, or enter 100-140°F.`);
+                                const defaultTemp = unitSystem === 'metric' ? '49°C' : '120°F';
+                                const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
+                                addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '49' : '120'}" to keep it, or enter ${tempRange}.`);
                                 conversationStep = 4;
                             }, 800);
                         }, 500);
-                    } else if (choice === 'custom') {
+                    } else if (seasonChoice === 'custom') {
                         addMessage(`Great! What are your peak sun hours per day? (1-10)`);
                         conversationStep = 3.1;
                     } else {
@@ -380,7 +456,8 @@
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                addMessage(`What is your cold water temperature in Fahrenheit? (32-85°F)`);
+                                const tempRange = unitSystem === 'metric' ? '0-30°C' : '32-85°F';
+                                addMessage(`What is your cold water temperature? (${tempRange})`);
                                 conversationStep = 3.2;
                             }, 800);
                         }, 500);
@@ -391,104 +468,124 @@
                 
                 case 3.2: // Custom cold water temp
                     const customCold = parseFloat(message);
-                    if (customCold >= 32 && customCold <= 85) {
-                        userData.coldWaterTemp = customCold;
-                        addMessage(`Perfect! Using ${customCold}°F for cold water.`);
-                        setTimeout(() => {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                                addMessage(`Hot water temperature is set to <strong>120°F</strong> by default. Type "120" to keep it, or enter 100-140°F.`);
-                                conversationStep = 4;
-                            }, 800);
-                        }, 500);
-                    } else {
-                        addMessage('Please enter a temperature between 32°F and 85°F.');
-                    }
-                    break;
-                
-                case 4: // Hot water temp
-                    const temp = message.toLowerCase();
-                    if (temp === '120' || temp.includes('keep')) {
-                        userData.hotWaterTemp = 120;
-                        addMessage(`Perfect! Using 120°F.`);
-                    } else {
-                        const customTemp = parseInt(message);
-                        if (customTemp >= 100 && customTemp <= 140) {
-                            userData.hotWaterTemp = customTemp;
-                            addMessage(`Got it! Using ${customTemp}°F.`);
+                    let tempInF;
+                    
+                    if (unitSystem === 'metric') {
+                        if (customCold >= 0 && customCold <= 30) {
+                            tempInF = celsiusToFahrenheit(customCold);
+                            userData.coldWaterTemp = tempInF;
+                            addMessage(`Perfect! Using ${customCold}°C for cold water.`);
                         } else {
-                            addMessage('Please enter "120" or a temperature between 100-140°F.');
+                            addMessage('Please enter a temperature between 0 and 30°C.');
+                            return;
+                        }
+                    } else {
+                        if (customCold >= 32 && customCold <= 85) {
+                            userData.coldWaterTemp = customCold;
+                            addMessage(`Perfect! Using ${customCold}°F for cold water.`);
+                        } else {
+                            addMessage('Please enter a temperature between 32 and 85°F.');
                             return;
                         }
                     }
+                    
                     setTimeout(() => {
                         showTyping();
                         setTimeout(() => {
                             hideTyping();
-                            addMessage(`Solar panel wattage is set to <strong>450W</strong> by default. Type "450" to keep it, or enter 250-550 watts.`);
+                            const defaultTemp = unitSystem === 'metric' ? '49°C' : '120°F';
+                            const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
+                            addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '49' : '120'}" to keep it, or enter ${tempRange}.`);
+                            conversationStep = 4;
+                        }, 800);
+                    }, 500);
+                    break;
+                
+                case 4: // Hot water temp
+                    const hotTemp = parseFloat(message);
+                    let hotTempInF;
+                    
+                    if (unitSystem === 'metric') {
+                        if (hotTemp >= 38 && hotTemp <= 60) {
+                            hotTempInF = celsiusToFahrenheit(hotTemp);
+                            userData.hotWaterTemp = hotTempInF;
+                            addMessage(`Perfect! ${hotTemp}°C it is.`);
+                        } else {
+                            addMessage('Please enter a temperature between 38 and 60°C.');
+                            return;
+                        }
+                    } else {
+                        if (hotTemp >= 100 && hotTemp <= 140) {
+                            userData.hotWaterTemp = hotTemp;
+                            addMessage(`Perfect! ${hotTemp}°F it is.`);
+                        } else {
+                            addMessage('Please enter a temperature between 100 and 140°F.');
+                            return;
+                        }
+                    }
+                    
+                    setTimeout(() => {
+                        showTyping();
+                        setTimeout(() => {
+                            hideTyping();
+                            addMessage(`What wattage are your solar panels? <strong>450W</strong> is typical. (250-550W)`);
                             conversationStep = 5;
                         }, 800);
                     }, 500);
                     break;
                 
                 case 5: // Panel watts
-                    const watts = message.toLowerCase();
-                    if (watts === '450' || watts.includes('keep')) {
-                        userData.panelWatts = 450;
-                        addMessage(`Great! Using 450W panels.`);
-                    } else {
-                        const customWatts = parseInt(message);
-                        if (customWatts >= 250 && customWatts <= 550) {
-                            userData.panelWatts = customWatts;
-                            addMessage(`Perfect! Using ${customWatts}W panels.`);
-                        } else {
-                            addMessage('Please enter "450" or a wattage between 250-550 watts.');
-                            return;
-                        }
-                    }
-                    setTimeout(() => {
-                        showTyping();
+                    const panelWatts = parseInt(message);
+                    if (panelWatts >= 250 && panelWatts <= 550) {
+                        userData.panelWatts = panelWatts;
+                        addMessage(`Got it! ${panelWatts}W panels.`);
                         setTimeout(() => {
-                            hideTyping();
-                            addMessage(`High limit temperature is set to <strong>150°F</strong>. Type "150" to keep it, or enter 110-150°F.<br><br><em>Note: A thermostatic mixing valve prevents scalding at 150°F.</em>`);
-                            conversationStep = 6;
-                        }, 800);
-                    }, 500);
+                            showTyping();
+                            setTimeout(() => {
+                                hideTyping();
+                                const defaultLimit = unitSystem === 'metric' ? '65°C' : '150°F';
+                                const limitRange = unitSystem === 'metric' ? '60-85°C' : '140-185°F';
+                                addMessage(`High temperature limit is set to <strong>${defaultLimit}</strong>. Type "${unitSystem === 'metric' ? '65' : '150'}" to keep it, or enter ${limitRange}.`);
+                                conversationStep = 6;
+                            }, 800);
+                        }, 500);
+                    } else {
+                        addMessage('Please enter a wattage between 250 and 550.');
+                    }
                     break;
                 
                 case 6: // High limit
-                    const limit = message.toLowerCase();
-                    let finalLimit;
-                    if (limit === '150' || limit.includes('keep')) {
-                        finalLimit = 150;
-                    } else {
-                        const customLimit = parseInt(message);
-                        if (customLimit >= 110 && customLimit <= 150) {
-                            finalLimit = customLimit;
+                    const highLimit = parseFloat(message);
+                    let highLimitInF;
+                    
+                    if (unitSystem === 'metric') {
+                        if (highLimit >= 60 && highLimit <= 85) {
+                            highLimitInF = celsiusToFahrenheit(highLimit);
+                            userData.highLimit = highLimitInF;
+                            addMessage(`Perfect! High limit set to ${highLimit}°C.`);
                         } else {
-                            addMessage('Please enter "150" or a temperature between 110-150°F.');
+                            addMessage('Please enter a temperature between 60 and 85°C.');
+                            return;
+                        }
+                    } else {
+                        if (highLimit >= 140 && highLimit <= 185) {
+                            userData.highLimit = highLimit;
+                            addMessage(`Perfect! High limit set to ${highLimit}°F.`);
+                        } else {
+                            addMessage('Please enter a temperature between 140 and 185°F.');
                             return;
                         }
                     }
-                    userData.highLimit = finalLimit;
                     
-                    addMessage(`Excellent! Calculating your optimal solar system...`);
                     setTimeout(() => {
                         showTyping();
                         setTimeout(() => {
                             hideTyping();
-                            addMessage(`⏳ Sending data to Make.com...`);
-                            setTimeout(() => {
-                                sendToWebhook();
-                            }, 1000);
+                            addMessage(`🎉 <strong>Great! I have all the information.</strong><br><br>Calculating your solar hot water system...<br><br>⏳ Please wait...`);
+                            setTimeout(() => sendToWebhook(), 1500);
                         }, 800);
                     }, 500);
-                    conversationStep = 7;
                     break;
-                
-                default:
-                    addMessage('Processing...');
             }
         }
         
@@ -503,44 +600,100 @@
                 if (response.ok) {
                     const result = await response.json();
                     
-                    // Check if we got actual results back
                     if (result.success && result.system_1250w && result.system_1500w) {
-                        // Display the real calculated results!
                         const sys1250 = result.system_1250w;
                         const sys1500 = result.system_1500w;
                         
-                        addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
-                            📍 <strong>Location:</strong> ${userData.location}<br>
-                            💧 <strong>Daily Hot Water:</strong> ${userData.gallons} gallons<br>
-                            ☀️ <strong>Peak Sun Hours:</strong> ${userData.peakSunHours} hrs/day<br>
-                            🌡️ <strong>Cold Water Temp:</strong> ${userData.coldWaterTemp}°F<br>
-                            🔥 <strong>Hot Water Temp:</strong> ${userData.hotWaterTemp}°F<br>
-                            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                            📊 <strong>High Limit:</strong> ${userData.highLimit}°F<br><br>
+                        // Get actual values from OpenAI
+                        const actualPeakSun = result.peak_sun_hours_actual || userData.peakSunHours;
+                        const actualColdTemp = result.cold_water_temp_actual || userData.coldWaterTemp;
+                        const actualLat = result.latitude_actual || 0;
+                        
+                        // Convert for display if metric
+                        let displayGallons, displayColdTemp, displayHotTemp, displayHighLimit;
+                        let displayPeakSun, displayLat;
+                        let waterUnit, tempUnit;
+                        
+                        if (unitSystem === 'metric') {
+                            displayGallons = Math.round(gallonsToLiters(userData.gallons));
+                            displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
+                            displayHotTemp = Math.round(fahrenheitToCelsius(userData.hotWaterTemp));
+                            displayHighLimit = Math.round(fahrenheitToCelsius(userData.highLimit));
+                            waterUnit = 'liters';
+                            tempUnit = '°C';
                             
-                            <strong>🔷 1250W System:</strong><br>
-                            • Inverters: ${sys1250.inverters}<br>
-                            • Panels: ${sys1250.panels}<br>
-                            • Tank Size: ${sys1250.tank_size} gallons<br>
-                            • Status: ${sys1250.watt_status}<br>
-                            • Final Temp: ${sys1250.final_temp}°F<br>
-                            • Element Size: ${sys1250.element_size}W<br>
-                            • kWh/day: ${sys1250.kwh_day}<br>
-                            • kWh Max: ${sys1250.kwh_max}<br><br>
+                            // Convert tank sizes in results
+                            const tank1250Display = Math.round(gallonsToLiters(parseFloat(sys1250.tank_size)));
+                            const tank1500Display = Math.round(gallonsToLiters(parseFloat(sys1500.tank_size)));
                             
-                            <strong>🔷 1500W System:</strong><br>
-                            • Inverters: ${sys1500.inverters}<br>
-                            • Panels: ${sys1500.panels}<br>
-                            • Tank Size: ${sys1500.tank_size} gallons<br>
-                            • Status: ${sys1500.watt_status}<br>
-                            • Final Temp: ${sys1500.final_temp}°F<br>
-                            • Element Size: ${sys1500.element_size}W<br>
-                            • kWh/day: ${sys1500.kwh_day}<br>
-                            • kWh Max: ${sys1500.kwh_max}<br><br>
+                            // Convert temps in results
+                            const finalTemp1250 = Math.round(fahrenheitToCelsius(parseFloat(sys1250.final_temp)));
+                            const finalTemp1500 = Math.round(fahrenheitToCelsius(parseFloat(sys1500.final_temp)));
                             
-                            <em>These results assume optimal conditions: panels tilted at your latitude angle, facing due south, with no shading.</em>`);
+                            addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+                                📍 <strong>Location:</strong> ${userData.location}<br>
+                                💧 <strong>Daily Hot Water:</strong> ${displayGallons} ${waterUnit}<br>
+                                ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+                                🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}${tempUnit}<br>
+                                🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}${tempUnit}<br>
+                                ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+                                📊 <strong>High Limit:</strong> ${displayHighLimit}${tempUnit}<br><br>
+                                
+                                <strong>🔷 1250W System:</strong><br>
+                                • Inverters: ${sys1250.inverters}<br>
+                                • Panels: ${sys1250.panels}<br>
+                                • Tank Size: ${tank1250Display} ${waterUnit}<br>
+                                • Status: ${sys1250.watt_status}<br>
+                                • Final Temp: ${finalTemp1250}${tempUnit}<br>
+                                • Element Size: ${sys1250.element_size}W<br>
+                                • kWh/day: ${sys1250.kwh_day}<br>
+                                • kWh Max: ${sys1250.kwh_max}<br><br>
+                                
+                                <strong>🔷 1500W System:</strong><br>
+                                • Inverters: ${sys1500.inverters}<br>
+                                • Panels: ${sys1500.panels}<br>
+                                • Tank Size: ${tank1500Display} ${waterUnit}<br>
+                                • Status: ${sys1500.watt_status}<br>
+                                • Final Temp: ${finalTemp1500}${tempUnit}<br>
+                                • Element Size: ${sys1500.element_size}W<br>
+                                • kWh/day: ${sys1500.kwh_day}<br>
+                                • kWh Max: ${sys1500.kwh_max}<br><br>
+                                
+                                <em>These results assume optimal conditions: panels tilted at your latitude angle (${actualLat}°), facing due south, with no shading.</em>`);
+                        } else {
+                            // Imperial display
+                            addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+                                📍 <strong>Location:</strong> ${userData.location}<br>
+                                💧 <strong>Daily Hot Water:</strong> ${Math.round(userData.gallons)} gallons<br>
+                                ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+                                🌡️ <strong>Cold Water Temp:</strong> ${Math.round(actualColdTemp)}°F<br>
+                                🔥 <strong>Hot Water Temp:</strong> ${Math.round(userData.hotWaterTemp)}°F<br>
+                                ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+                                📊 <strong>High Limit:</strong> ${Math.round(userData.highLimit)}°F<br><br>
+                                
+                                <strong>🔷 1250W System:</strong><br>
+                                • Inverters: ${sys1250.inverters}<br>
+                                • Panels: ${sys1250.panels}<br>
+                                • Tank Size: ${sys1250.tank_size} gallons<br>
+                                • Status: ${sys1250.watt_status}<br>
+                                • Final Temp: ${sys1250.final_temp}°F<br>
+                                • Element Size: ${sys1250.element_size}W<br>
+                                • kWh/day: ${sys1250.kwh_day}<br>
+                                • kWh Max: ${sys1250.kwh_max}<br><br>
+                                
+                                <strong>🔷 1500W System:</strong><br>
+                                • Inverters: ${sys1500.inverters}<br>
+                                • Panels: ${sys1500.panels}<br>
+                                • Tank Size: ${sys1500.tank_size} gallons<br>
+                                • Status: ${sys1500.watt_status}<br>
+                                • Final Temp: ${sys1500.final_temp}°F<br>
+                                • Element Size: ${sys1500.element_size}W<br>
+                                • kWh/day: ${sys1500.kwh_day}<br>
+                                • kWh Max: ${sys1500.kwh_max}<br><br>
+                                
+                                <em>These results assume optimal conditions: panels tilted at your latitude angle (${actualLat}°), facing due south, with no shading.</em>`);
+                        }
                     } else {
-                        // Fallback if data structure is different
                         addMessage(`<strong>✅ Connected to Make.com!</strong><br><br>Data was sent successfully!<br><br><strong>Debug info:</strong><br><pre style="background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 10px;">${JSON.stringify(result, null, 2)}</pre>`);
                     }
                 } else {
@@ -558,19 +711,17 @@
             if (e.key === 'Enter') handleUserInput();
         });
         
-        // Initialize
-        setTimeout(() => {
-            addMessage("👋 Hi! I'm your Solar Hot Water Calculator assistant. I'll help you size your solar system in just a few quick questions.");
+        // Start conversation
+        window.addEventListener('load', () => {
             setTimeout(() => {
                 showTyping();
                 setTimeout(() => {
                     hideTyping();
-                    addMessage("Let's start! What city and state are you located in? (e.g., 'Phoenix, AZ' or 'Miami, Florida')");
-                    conversationStep = 1;
-                    userInput.focus();
-                }, 800);
-            }, 1000);
-        }, 500);
+                    addMessage(`👋 <strong>Welcome to the Solar Hot Water Calculator!</strong><br><br>I'll help you size your solar water heating system.<br><br>First, which unit system do you prefer?<br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)`);
+                    conversationStep = 0.5;
+                }, 1000);
+            }, 500);
+        });
     </script>
 </body>
 </html>
