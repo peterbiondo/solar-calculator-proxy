@@ -303,7 +303,7 @@
                     hideTyping();
                     const displayAmount = unitSystem === 'metric' ? 
                         `${amount} liters` : `${amount} gallons`;
-                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (winter, spring, summer, fall) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values<br><br>What would you like?`);
+                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values.<br><br>What would you like?`);
                     conversationStep = 3;
                 }, 800);
             }, 300);
