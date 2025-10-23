@@ -408,7 +408,7 @@
                 case 3: // Season choice
                     const seasonChoice = message.toLowerCase();
                     if (seasonChoice === 'annual') {
-                        userData.peakSunHours = estimatedAnnualSun;
+                        userData.peakSunHours = parseFloat(estimatedAnnualSun.toFixed(1));
                         userData.coldWaterTemp = estimatedAnnualColdWater;
                         addMessage(`Perfect! We'll calculate using year-round average conditions for your location.`);
                         setTimeout(() => {
@@ -428,7 +428,7 @@
                             summer: { sun: 7.0, temp: 75 },
                             fall: { sun: 4.0, temp: 70 }
                         };
-                        userData.peakSunHours = seasonData[seasonChoice].sun;
+                        userData.peakSunHours = parseFloat(seasonData[seasonChoice].sun.toFixed(1));
                         userData.coldWaterTemp = seasonData[seasonChoice].temp;
                         addMessage(`Perfect! We'll calculate for ${seasonChoice} conditions.`);
                         setTimeout(() => {
@@ -452,8 +452,8 @@
                 case 3.1: // Custom sun hours
                     const customSun = parseFloat(message);
                     if (customSun >= 1 && customSun <= 10) {
-                        // Round to 1 decimal place for storage and display
-                        userData.peakSunHours = Math.round(customSun * 10) / 10;
+                        // Round to exactly 1 decimal place using toFixed
+                        userData.peakSunHours = parseFloat(customSun.toFixed(1));
                         addMessage(`Got it! Using ${userData.peakSunHours} peak sun hours per day.`);
                         setTimeout(() => {
                             showTyping();
