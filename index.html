@@ -754,12 +754,12 @@
                                 alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
                                 reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
                             } else if (inv1500 < inv1250) {
-                                recommended = sys1250;
-                                alternative = sys1500;
-                                recommendedName = "Off-Grid CIM 1200H";
-                                alternativeName = "Off-Grid CIM 1500H";
-                                recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
-                                alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                recommended = sys1500;
+                                alternative = sys1250;
+                                recommendedName = "Off-Grid CIM 1500H";
+                                alternativeName = "Off-Grid CIM 1200H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
                                 reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
                             } else if (panel1250 < panel1500) {
                                 recommended = sys1250;
@@ -768,7 +768,15 @@
                                 alternativeName = "Off-Grid CIM 1500H";
                                 recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
                                 alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
-                                reason = "This system is the most cost-effective choice with a less expensive inverter.";
+                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                            } else if (panel1500 < panel1250) {
+                                recommended = sys1500;
+                                alternative = sys1250;
+                                recommendedName = "Off-Grid CIM 1500H";
+                                alternativeName = "Off-Grid CIM 1200H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
                             } else {
                                 recommended = sys1250;
                                 alternative = sys1500;
