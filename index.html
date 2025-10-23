@@ -632,6 +632,50 @@
                             const finalTemp1250 = Math.round(fahrenheitToCelsius(parseFloat(sys1250.final_temp)));
                             const finalTemp1500 = Math.round(fahrenheitToCelsius(parseFloat(sys1500.final_temp)));
                             
+                            // Determine recommendation
+                            let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
+                            const inv1250 = parseInt(sys1250.inverters);
+                            const inv1500 = parseInt(sys1500.inverters);
+                            const panel1250 = parseInt(sys1250.panels);
+                            const panel1500 = parseInt(sys1500.panels);
+                            
+                            if (inv1250 < inv1500) {
+                                recommended = sys1250;
+                                alternative = sys1500;
+                                recommendedName = "Off-Grid CIM 1200H";
+                                alternativeName = "Off-Grid CIM 1500H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                            } else if (inv1500 < inv1250) {
+                                recommended = sys1500;
+                                alternative = sys1250;
+                                recommendedName = "Off-Grid CIM 1500H";
+                                alternativeName = "Off-Grid CIM 1200H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                            } else if (panel1250 < panel1500) {
+                                recommended = sys1250;
+                                alternative = sys1500;
+                                recommendedName = "Off-Grid CIM 1200H";
+                                alternativeName = "Off-Grid CIM 1500H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                            } else {
+                                recommended = sys1500;
+                                alternative = sys1250;
+                                recommendedName = "Off-Grid CIM 1500H";
+                                alternativeName = "Off-Grid CIM 1200H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                            }
+                            
+                            const recTankDisplay = Math.round(gallonsToLiters(parseFloat(recommended.tank_size)));
+                            const altTankDisplay = Math.round(gallonsToLiters(parseFloat(alternative.tank_size)));
+                            
                             addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
                                 📍 <strong>Location:</strong> ${userData.location}<br>
                                 💧 <strong>Daily Hot Water:</strong> ${displayGallons} ${waterUnit}<br>
@@ -641,21 +685,35 @@
                                 ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
                                 📊 <strong>High Limit:</strong> ${displayHighLimit}${tempUnit}<br><br>
                                 
-                                <strong>🔷 <a href="https://www.cyboenergy.com/products/cim1200h_overview.html" target="_blank" style="color: #667eea; text-decoration: underline;">Off-Grid CIM 1200H</a>:</strong><br>
-                                • Inverters: ${sys1250.inverters}<br>
-                                • Panels: ${sys1250.panels}<br>
-                                • Tank Size: ${tank1250Display} ${waterUnit}<br>
-                                • Element Size: ${sys1250.element_size}W<br>
-                                • kWh/day: ${sys1250.kwh_day}<br>
-                                • kWh Max: ${sys1250.kwh_max}<br><br>
+                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
                                 
-                                <strong>🔷 <a href="https://www.cyboenergy.com/products/cim1500h_overview.html" target="_blank" style="color: #667eea; text-decoration: underline;">Off-Grid CIM 1500H</a>:</strong><br>
-                                • Inverters: ${sys1500.inverters}<br>
-                                • Panels: ${sys1500.panels}<br>
-                                • Tank Size: ${tank1500Display} ${waterUnit}<br>
-                                • Element Size: ${sys1500.element_size}W<br>
-                                • kWh/day: ${sys1500.kwh_day}<br>
-                                • kWh Max: ${sys1500.kwh_max}<br><br>
+                                <strong>✅ RECOMMENDED SYSTEM</strong><br><br>
+                                
+                                <strong>🔷 <a href="${recommendedUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${recommendedName}</a>:</strong><br>
+                                • Inverters: ${recommended.inverters}<br>
+                                • Panels: ${recommended.panels}<br>
+                                • Tank Size: ${recTankDisplay} ${waterUnit}<br>
+                                • Element Size: ${recommended.element_size}W<br>
+                                • kWh/day: ${recommended.kwh_day}<br>
+                                • kWh Max: ${recommended.kwh_max}<br><br>
+                                
+                                <em>${reason}</em><br><br>
+                                
+                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
+                                
+                                <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
+                                
+                                <strong>🔷 <a href="${alternativeUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${alternativeName}</a>:</strong><br>
+                                • Inverters: ${alternative.inverters}<br>
+                                • Panels: ${alternative.panels}<br>
+                                • Tank Size: ${altTankDisplay} ${waterUnit}<br>
+                                • Element Size: ${alternative.element_size}W<br>
+                                • kWh/day: ${alternative.kwh_day}<br>
+                                • kWh Max: ${alternative.kwh_max}<br><br>
+                                
+                                <em>This system may be preferred if you need higher element wattage or have specific installation requirements.</em><br><br>
+                                
+                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
                                 
                                 <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`);
                             
@@ -668,6 +726,48 @@
                             sendBtn.style.cursor = "not-allowed";
                         } else {
                             // Imperial display
+                            
+                            // Determine recommendation
+                            let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
+                            const inv1250 = parseInt(sys1250.inverters);
+                            const inv1500 = parseInt(sys1500.inverters);
+                            const panel1250 = parseInt(sys1250.panels);
+                            const panel1500 = parseInt(sys1500.panels);
+                            
+                            if (inv1250 < inv1500) {
+                                recommended = sys1250;
+                                alternative = sys1500;
+                                recommendedName = "Off-Grid CIM 1200H";
+                                alternativeName = "Off-Grid CIM 1500H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                            } else if (inv1500 < inv1250) {
+                                recommended = sys1500;
+                                alternative = sys1250;
+                                recommendedName = "Off-Grid CIM 1500H";
+                                alternativeName = "Off-Grid CIM 1200H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                            } else if (panel1250 < panel1500) {
+                                recommended = sys1250;
+                                alternative = sys1500;
+                                recommendedName = "Off-Grid CIM 1200H";
+                                alternativeName = "Off-Grid CIM 1500H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                            } else {
+                                recommended = sys1500;
+                                alternative = sys1250;
+                                recommendedName = "Off-Grid CIM 1500H";
+                                alternativeName = "Off-Grid CIM 1200H";
+                                recommendedUrl = "https://www.cyboenergy.com/products/cim1500h_overview.html";
+                                alternativeUrl = "https://www.cyboenergy.com/products/cim1200h_overview.html";
+                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                            }
+                            
                             addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
                                 📍 <strong>Location:</strong> ${userData.location}<br>
                                 💧 <strong>Daily Hot Water:</strong> ${Math.round(userData.gallons)} gallons<br>
@@ -677,21 +777,35 @@
                                 ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
                                 📊 <strong>High Limit:</strong> ${Math.round(userData.highLimit)}°F<br><br>
                                 
-                                <strong>🔷 <a href="https://www.cyboenergy.com/products/cim1200h_overview.html" target="_blank" style="color: #667eea; text-decoration: underline;">Off-Grid CIM 1200H</a>:</strong><br>
-                                • Inverters: ${sys1250.inverters}<br>
-                                • Panels: ${sys1250.panels}<br>
-                                • Tank Size: ${sys1250.tank_size} gallons<br>
-                                • Element Size: ${sys1250.element_size}W<br>
-                                • kWh/day: ${sys1250.kwh_day}<br>
-                                • kWh Max: ${sys1250.kwh_max}<br><br>
+                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
                                 
-                                <strong>🔷 <a href="https://www.cyboenergy.com/products/cim1500h_overview.html" target="_blank" style="color: #667eea; text-decoration: underline;">Off-Grid CIM 1500H</a>:</strong><br>
-                                • Inverters: ${sys1500.inverters}<br>
-                                • Panels: ${sys1500.panels}<br>
-                                • Tank Size: ${sys1500.tank_size} gallons<br>
-                                • Element Size: ${sys1500.element_size}W<br>
-                                • kWh/day: ${sys1500.kwh_day}<br>
-                                • kWh Max: ${sys1500.kwh_max}<br><br>
+                                <strong>✅ RECOMMENDED SYSTEM</strong><br><br>
+                                
+                                <strong>🔷 <a href="${recommendedUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${recommendedName}</a>:</strong><br>
+                                • Inverters: ${recommended.inverters}<br>
+                                • Panels: ${recommended.panels}<br>
+                                • Tank Size: ${recommended.tank_size} gallons<br>
+                                • Element Size: ${recommended.element_size}W<br>
+                                • kWh/day: ${recommended.kwh_day}<br>
+                                • kWh Max: ${recommended.kwh_max}<br><br>
+                                
+                                <em>${reason}</em><br><br>
+                                
+                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
+                                
+                                <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
+                                
+                                <strong>🔷 <a href="${alternativeUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${alternativeName}</a>:</strong><br>
+                                • Inverters: ${alternative.inverters}<br>
+                                • Panels: ${alternative.panels}<br>
+                                • Tank Size: ${alternative.tank_size} gallons<br>
+                                • Element Size: ${alternative.element_size}W<br>
+                                • kWh/day: ${alternative.kwh_day}<br>
+                                • kWh Max: ${alternative.kwh_max}<br><br>
+                                
+                                <em>This system may be preferred if you need higher element wattage or have specific installation requirements.</em><br><br>
+                                
+                                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br><br>
                                 
                                 <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`);
                             
