@@ -614,6 +614,29 @@
                         const actualColdTemp = result.cold_water_temp_actual || userData.coldWaterTemp;
                         const actualLat = result.latitude_actual || 0;
                         
+                        // Check if either system exceeds panel count
+                        const sys1250Exceeds = String(sys1250.panels).toLowerCase().includes('exceed');
+                        const sys1500Exceeds = String(sys1500.panels).toLowerCase().includes('exceed');
+                        
+                        // SCENARIO: Both systems exceed capacity
+                        if (sys1250Exceeds && sys1500Exceeds) {
+                            addMessage(`<strong>⚠️ Unable to Calculate System Size</strong><br><br>
+                                These systems cannot meet your hot water requirements with the available panel counts.<br><br>
+                                To get results, please try again with:<br>
+                                • Lower daily water usage<br>
+                                • Higher wattage panels (closer to 550W)<br>
+                                • Lower hot water temperature`);
+                            
+                            // End conversation
+                            conversationStep = -1;
+                            userInput.disabled = true;
+                            userInput.placeholder = "Calculation complete!";
+                            sendBtn.disabled = true;
+                            sendBtn.style.opacity = "0.5";
+                            sendBtn.style.cursor = "not-allowed";
+                            return;
+                        }
+                        
                         // Convert for display if metric
                         let displayGallons, displayColdTemp, displayHotTemp, displayHighLimit;
                         let displayPeakSun, displayLat;
@@ -642,7 +665,31 @@
                             const panel1250 = parseInt(sys1250.panels);
                             const panel1500 = parseInt(sys1500.panels);
                             
-                            if (inv1250 < inv1500) {
+                            // Check if only one system exceeds
+                            let showOnlyOne = false;
+                            let onlySystemExplanation = '';
+                            
+                            if (sys1250Exceeds && !sys1500Exceeds) {
+                                // Only 1500H works
+                                recommended = sys1500;
+                                recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                                recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                                reason = "This system can meet your hot water requirements.";
+                                onlySystemExplanation = "The CIM 1200H would require more panels than the maximum collector count allows.";
+                                showOnlyOne = true;
+                            } else if (sys1500Exceeds && !sys1250Exceeds) {
+                                // Only 1200H works
+                                recommended = sys1250;
+                                recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                                recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                                reason = "This system can meet your hot water requirements.";
+                                onlySystemExplanation = "The CIM 1500H would require more panels than the maximum collector count allows.";
+                                showOnlyOne = true;
+                            }
+                            
+                            if (!showOnlyOne) {
+                                // Normal comparison logic when both systems work
+                                if (inv1250 < inv1500) {
                                 recommended = sys1250;
                                 alternative = sys1500;
                                 recommendedName = "Use the Off-Grid CIM 1200H Inverter";
@@ -683,11 +730,11 @@
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
                                 reason = "This system is the most cost-effective choice with a less expensive inverter.";
                             }
+                            }  // End of if (!showOnlyOne)
                             
                             const recTankDisplay = Math.round(gallonsToLiters(parseFloat(recommended.tank_size)));
-                            const altTankDisplay = Math.round(gallonsToLiters(parseFloat(alternative.tank_size)));
                             
-                            addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+                            let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
                                 📍 <strong>Location:</strong> ${userData.location}<br>
                                 💧 <strong>Daily Hot Water:</strong> ${displayGallons} ${waterUnit}<br>
                                 ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
@@ -696,11 +743,9 @@
                                 ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
                                 📊 <strong>High Limit:</strong> ${displayHighLimit}${tempUnit}<br><br>
                                 
+                                <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
                                 
-                                
-                                <strong>✅ RECOMMENDED SYSTEM</strong><br><br>
-                                
-                                <strong>🔷 <a href="${recommendedUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${recommendedName}</a>:</strong><br>
+                                <strong><a href="${recommendedUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${recommendedName}</a>:</strong><br>
                                 • Inverters: ${recommended.inverters}<br>
                                 • Panels: ${recommended.panels}<br>
                                 • Tank Size: ${recTankDisplay} ${waterUnit}<br>
@@ -708,25 +753,29 @@
                                 • kWh/day: ${recommended.kwh_day}<br>
                                 • kWh Max: ${recommended.kwh_max}<br><br>
                                 
-                                <em>${reason}</em><br><br>
-                                
-                                
-                                
+                                <em>${reason}</em><br><br>`;
+                            
+                            if (showOnlyOne) {
+                                // Show explanation for why only one system works
+                                messageContent += `<em>${onlySystemExplanation}</em><br><br>`;
+                            } else {
+                                // Show alternative system
+                                const altTankDisplay = Math.round(gallonsToLiters(parseFloat(alternative.tank_size)));
+                                messageContent += `
                                 <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
                                 
-                                <strong>🔷 <a href="${alternativeUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${alternativeName}</a>:</strong><br>
+                                <strong><a href="${alternativeUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${alternativeName}</a>:</strong><br>
                                 • Inverters: ${alternative.inverters}<br>
                                 • Panels: ${alternative.panels}<br>
                                 • Tank Size: ${altTankDisplay} ${waterUnit}<br>
                                 • Element Size: ${alternative.element_size}W<br>
                                 • kWh/day: ${alternative.kwh_day}<br>
-                                • kWh Max: ${alternative.kwh_max}<br><br>
-                                
-                                
-                                
-                                
-                                
-                                <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`);
+                                • kWh Max: ${alternative.kwh_max}<br><br>`;
+                            }
+                            
+                            messageContent += `<em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
+                            
+                            addMessage(messageContent);
                             
                             // End conversation
                             conversationStep = -1;
@@ -745,7 +794,31 @@
                             const panel1250 = parseInt(sys1250.panels);
                             const panel1500 = parseInt(sys1500.panels);
                             
-                            if (inv1250 < inv1500) {
+                            // Check if only one system exceeds
+                            let showOnlyOne = false;
+                            let onlySystemExplanation = '';
+                            
+                            if (sys1250Exceeds && !sys1500Exceeds) {
+                                // Only 1500H works
+                                recommended = sys1500;
+                                recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                                recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                                reason = "This system can meet your hot water requirements.";
+                                onlySystemExplanation = "The CIM 1200H would require more panels than the maximum collector count allows.";
+                                showOnlyOne = true;
+                            } else if (sys1500Exceeds && !sys1250Exceeds) {
+                                // Only 1200H works
+                                recommended = sys1250;
+                                recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                                recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                                reason = "This system can meet your hot water requirements.";
+                                onlySystemExplanation = "The CIM 1500H would require more panels than the maximum collector count allows.";
+                                showOnlyOne = true;
+                            }
+                            
+                            if (!showOnlyOne) {
+                                // Normal comparison logic when both systems work
+                                if (inv1250 < inv1500) {
                                 recommended = sys1250;
                                 alternative = sys1500;
                                 recommendedName = "Use the Off-Grid CIM 1200H Inverter";
@@ -786,8 +859,9 @@
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
                                 reason = "This system is the most cost-effective choice with a less expensive inverter.";
                             }
+                            }  // End of if (!showOnlyOne)
                             
-                            addMessage(`<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+                            let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
                                 📍 <strong>Location:</strong> ${userData.location}<br>
                                 💧 <strong>Daily Hot Water:</strong> ${Math.round(userData.gallons)} gallons<br>
                                 ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
@@ -796,11 +870,9 @@
                                 ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
                                 📊 <strong>High Limit:</strong> ${Math.round(userData.highLimit)}°F<br><br>
                                 
+                                <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
                                 
-                                
-                                <strong>✅ RECOMMENDED SYSTEM</strong><br><br>
-                                
-                                <strong>🔷 <a href="${recommendedUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${recommendedName}</a>:</strong><br>
+                                <strong><a href="${recommendedUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${recommendedName}</a>:</strong><br>
                                 • Inverters: ${recommended.inverters}<br>
                                 • Panels: ${recommended.panels}<br>
                                 • Tank Size: ${recommended.tank_size} gallons<br>
@@ -808,25 +880,28 @@
                                 • kWh/day: ${recommended.kwh_day}<br>
                                 • kWh Max: ${recommended.kwh_max}<br><br>
                                 
-                                <em>${reason}</em><br><br>
-                                
-                                
-                                
+                                <em>${reason}</em><br><br>`;
+                            
+                            if (showOnlyOne) {
+                                // Show explanation for why only one system works
+                                messageContent += `<em>${onlySystemExplanation}</em><br><br>`;
+                            } else {
+                                // Show alternative system
+                                messageContent += `
                                 <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
                                 
-                                <strong>🔷 <a href="${alternativeUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${alternativeName}</a>:</strong><br>
+                                <strong><a href="${alternativeUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">${alternativeName}</a>:</strong><br>
                                 • Inverters: ${alternative.inverters}<br>
                                 • Panels: ${alternative.panels}<br>
                                 • Tank Size: ${alternative.tank_size} gallons<br>
                                 • Element Size: ${alternative.element_size}W<br>
                                 • kWh/day: ${alternative.kwh_day}<br>
-                                • kWh Max: ${alternative.kwh_max}<br><br>
-                                
-                                
-                                
-                                
-                                
-                                <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`);
+                                • kWh Max: ${alternative.kwh_max}<br><br>`;
+                            }
+                            
+                            messageContent += `<em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
+                            
+                            addMessage(messageContent);
                             
                             // End conversation
                             conversationStep = -1;
