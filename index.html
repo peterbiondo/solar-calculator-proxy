@@ -340,95 +340,120 @@
             'dc': 'District of Columbia'
         };
         
-        // Common city misspellings/corrections - EXPANDED
-        const cityCorrections = {
-            // Without spaces
-            'sanjose': 'San Jose',
-            'sanfrancisco': 'San Francisco',
-            'losangeles': 'Los Angeles',
-            'sandiego': 'San Diego',
-            'sanantonio': 'San Antonio',
-            'newyork': 'New York',
-            'lasvegas': 'Las Vegas',
-            'saltlakecity': 'Salt Lake City',
-            'oklahomacity': 'Oklahoma City',
-            'kansascity': 'Kansas City',
-            'neworleans': 'New Orleans',
-            'fortworth': 'Fort Worth',
-            'elpaso': 'El Paso',
-            'santaana': 'Santa Ana',
-            'virginiabeach': 'Virginia Beach',
-            'batonrouge': 'Baton Rouge',
-            'corpuschristi': 'Corpus Christi',
-            'santaclarita': 'Santa Clarita',
-            'grandrapids': 'Grand Rapids',
-            'capecoral': 'Cape Coral',
-            'portst': 'Port St',
-            
-            // With spaces but misspelled
-            'sn jose': 'San Jose',
-            'san jose': 'San Jose',
-            'los angelos': 'Los Angeles',
-            'los angles': 'Los Angeles',
-            'san fransisco': 'San Francisco',
-            'san fran': 'San Francisco',
-            'pheonix': 'Phoenix',
-            'phenix': 'Phoenix',
-            'pittsburg': 'Pittsburgh',
-            'pittsburh': 'Pittsburgh',
-            'huston': 'Houston',
-            'miamia': 'Miami',
-            'philadelpia': 'Philadelphia',
-            'philly': 'Philadelphia',
-            'san deigo': 'San Diego',
-            'san diego': 'San Diego',
-            'san antonio': 'San Antonio',
-            'new yourk': 'New York',
-            'las vegas': 'Las Vegas',
-            'lousville': 'Louisville',
-            'milwakee': 'Milwaukee',
-            'albuqerque': 'Albuquerque',
-            'sacremento': 'Sacramento',
-            'indianapolis': 'Indianapolis',
-            'cincinatti': 'Cincinnati',
-            'clevland': 'Cleveland',
-            'seatle': 'Seattle',
-            'seattle': 'Seattle',
-            'portlan': 'Portland',
-            'portland': 'Portland',
-            'denver': 'Denver',
-            'detrot': 'Detroit',
-            'detroit': 'Detroit',
-            'memfis': 'Memphis',
-            'nashvile': 'Nashville',
-            'charlote': 'Charlotte',
-            'raleigh': 'Raleigh',
-            'tampa': 'Tampa',
-            'orlando': 'Orlando',
-            'austin': 'Austin',
-            'dallas': 'Dallas',
-            'chicago': 'Chicago',
-            'boston': 'Boston',
-            'atlanta': 'Atlanta'
+        // Country abbreviations and corrections
+        const countryCorrections = {
+            'uk': 'United Kingdom',
+            'usa': 'United States',
+            'us': 'United States',
+            'uae': 'United Arab Emirates',
+            'nz': 'New Zealand',
+            'au': 'Australia',
+            'sa': 'South Africa',
+            'can': 'Canada',
+            'mex': 'Mexico',
+            'ger': 'Germany',
+            'fra': 'France',
+            'esp': 'Spain',
+            'ita': 'Italy',
+            'jpn': 'Japan',
+            'chn': 'China',
+            'ind': 'India',
+            'bra': 'Brazil',
+            'arg': 'Argentina',
+            'united kingdom': 'United Kingdom',
+            'united states': 'United States',
+            'south africa': 'South Africa',
+            'new zealand': 'New Zealand',
+            'united arab emirates': 'United Arab Emirates'
         };
+        
+        // Comprehensive city database for fuzzy matching
+        const cityDatabase = [
+            // US Cities
+            'San Jose', 'San Francisco', 'Los Angeles', 'San Diego', 'San Antonio',
+            'New York', 'Las Vegas', 'Phoenix', 'Houston', 'Philadelphia',
+            'Chicago', 'Dallas', 'Austin', 'Seattle', 'Portland',
+            'Denver', 'Boston', 'Miami', 'Atlanta', 'Detroit',
+            'Minneapolis', 'Tampa', 'Orlando', 'Charlotte', 'Nashville',
+            'Pittsburgh', 'Cincinnati', 'Cleveland', 'Milwaukee', 'Kansas City',
+            'Salt Lake City', 'Oklahoma City', 'New Orleans', 'Memphis',
+            'Louisville', 'Baltimore', 'Albuquerque', 'Sacramento', 'Indianapolis',
+            'Fort Worth', 'El Paso', 'Virginia Beach', 'Raleigh', 'Tucson',
+            
+            // International Cities
+            'London', 'Manchester', 'Birmingham', 'Liverpool', 'Edinburgh',
+            'Paris', 'Lyon', 'Marseille', 'Nice', 'Toulouse',
+            'Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Cologne',
+            'Madrid', 'Barcelona', 'Valencia', 'Seville', 'Bilbao',
+            'Rome', 'Milan', 'Naples', 'Turin', 'Florence',
+            'Tokyo', 'Osaka', 'Kyoto', 'Yokohama', 'Nagoya',
+            'Beijing', 'Shanghai', 'Guangzhou', 'Shenzhen', 'Chengdu',
+            'Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide',
+            'Toronto', 'Montreal', 'Vancouver', 'Calgary', 'Ottawa',
+            'Mumbai', 'Delhi', 'Bangalore', 'Kolkata', 'Chennai',
+            'Mexico City', 'Guadalajara', 'Monterrey', 'Cancun', 'Tijuana',
+            'Dubai', 'Abu Dhabi', 'Doha', 'Riyadh', 'Jeddah',
+            'Amsterdam', 'Brussels', 'Vienna', 'Copenhagen', 'Stockholm',
+            'Oslo', 'Helsinki', 'Warsaw', 'Prague', 'Budapest',
+            'Lisbon', 'Athens', 'Istanbul', 'Moscow', 'St Petersburg',
+            'Cape Town', 'Johannesburg', 'Durban', 'Pretoria',
+            'Buenos Aires', 'Sao Paulo', 'Rio de Janeiro', 'Lima', 'Bogota',
+            'Santiago', 'Caracas', 'Havana', 'San Juan'
+        ];
+        
+        // Calculate similarity score between two strings (simple version)
+        function similarityScore(str1, str2) {
+            str1 = str1.toLowerCase();
+            str2 = str2.toLowerCase();
+            
+            // Exact match
+            if (str1 === str2) return 100;
+            
+            // Contains check
+            if (str1.includes(str2) || str2.includes(str1)) return 90;
+            
+            // Check if str2 is missing just a few characters from str1
+            let matches = 0;
+            let str1Idx = 0;
+            for (let i = 0; i < str2.length; i++) {
+                while (str1Idx < str1.length && str1[str1Idx] !== str2[i]) {
+                    str1Idx++;
+                }
+                if (str1Idx < str1.length) {
+                    matches++;
+                    str1Idx++;
+                }
+            }
+            
+            const score = (matches / Math.max(str1.length, str2.length)) * 100;
+            return score;
+        }
+        
+        // Find best matching city
+        function findBestCityMatch(input) {
+            let bestMatch = null;
+            let bestScore = 0;
+            
+            for (let city of cityDatabase) {
+                const score = similarityScore(city, input);
+                if (score > bestScore && score >= 60) { // Minimum 60% similarity
+                    bestScore = score;
+                    bestMatch = city;
+                }
+            }
+            
+            return bestMatch;
+        }
         
         function parseAndCorrectLocation(input) {
             let corrected = input.trim().toLowerCase();
             
-            // First, check for exact matches in cityCorrections
-            for (let [misspelled, correct] of Object.entries(cityCorrections)) {
-                if (corrected === misspelled || corrected.startsWith(misspelled + ' ') || corrected.startsWith(misspelled + ',')) {
-                    corrected = corrected.replace(misspelled, correct);
-                    break;
-                }
-            }
-            
-            // Split by comma or multiple spaces to find city and state
-            let parts = corrected.split(/[,]+/).map(p => p.trim()).filter(p => p.length > 0);
+            // Split by comma first
+            let parts = corrected.split(/,/).map(p => p.trim()).filter(p => p.length > 0);
             
             if (parts.length === 0) return input;
             
-            // Now split each part by spaces
+            // Further split each part by spaces
             let allParts = [];
             parts.forEach(part => {
                 allParts = allParts.concat(part.split(/\s+/).filter(p => p.length > 0));
@@ -459,25 +484,34 @@
                 }
             }
             
-            // Check for country (if more parts remain and no state)
-            if (allParts.length >= 2 && !state) {
-                const possibleCountry = allParts[allParts.length - 1];
-                // Simple check: if it's longer than 2 chars and not in state list, might be country
-                if (possibleCountry.length > 2) {
-                    country = possibleCountry.charAt(0).toUpperCase() + possibleCountry.slice(1);
+            // Check if last part is a country abbreviation or name
+            if (!state && allParts.length >= 1) {
+                const lastPart = allParts[allParts.length - 1].toLowerCase();
+                if (countryCorrections[lastPart]) {
+                    country = countryCorrections[lastPart];
                     allParts.pop();
+                } else {
+                    // Check if it's a full country name
+                    const possibleCountry = allParts[allParts.length - 1];
+                    const commonCountries = ['canada', 'mexico', 'japan', 'china', 'india', 'australia', 
+                                            'germany', 'france', 'spain', 'italy', 'brazil', 'argentina',
+                                            'england', 'ireland', 'scotland', 'wales'];
+                    if (commonCountries.includes(possibleCountry)) {
+                        country = possibleCountry.charAt(0).toUpperCase() + possibleCountry.slice(1);
+                        allParts.pop();
+                    }
                 }
             }
             
             // Rest is city - join it all
             city = allParts.join(' ');
             
-            // Check the full city name against corrections
-            const cityLower = city.toLowerCase();
-            if (cityCorrections[cityLower]) {
-                city = cityCorrections[cityLower];
+            // Try to find best matching city from database
+            const matchedCity = findBestCityMatch(city);
+            if (matchedCity) {
+                city = matchedCity;
             } else {
-                // Capitalize each word in city
+                // Capitalize each word if no match found
                 city = city.split(' ').map(word => 
                     word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
                 ).join(' ');
