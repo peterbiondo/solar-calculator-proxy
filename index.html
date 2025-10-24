@@ -246,6 +246,126 @@
         let estimatedAnnualColdWater = 68;
         let unitSystem = ''; // 'imperial' or 'metric'
         
+        // Conversational Help System
+        const helpDefinitions = {
+            'peak-sun': `<strong>☀️ Peak Sun Hours - What's that?</strong><br><br>
+                Think of peak sun hours as "full-strength sunshine hours." It's how many hours per day your panels get maximum sun power.<br><br>
+                <strong>Examples:</strong><br>
+                • Phoenix? About 6.5 hours<br>
+                • Seattle? More like 3.5 hours<br>
+                • Not sure? Pick "annual" and I'll figure it out for your area!<br><br>
+                <em>Fun fact: It's NOT the same as daylight hours - a cloudy day has lots of daylight but very few peak sun hours.</em>`,
+            
+            'cold-water': `<strong>❄️ Cold Water Temperature</strong><br><br>
+                This is how cold your water is coming out of the ground before heating.<br><br>
+                <strong>Typical temps:</strong><br>
+                • Arizona/Texas: Around 70°F (warm ground!)<br>
+                • Minnesota/Maine: Around 45°F (chilly!)<br>
+                • Most places: 50-65°F<br><br>
+                <em>Don't stress it! If you pick "annual" or a season, I'll use real climate data for your location.</em>`,
+            
+            'hot-water': `<strong>🔥 Hot Water Temperature</strong><br><br>
+                This is what you want your shower water heated to. Most people use 120°F (comfortable and safe).<br><br>
+                <strong>Quick guide:</strong><br>
+                • 120°F: Perfect for most homes (prevents scalding)<br>
+                • 130-140°F: If you have a dishwasher or need extra hot water<br>
+                • Above 140°F: Usually overkill (and dangerous for kids)<br><br>
+                <em>When in doubt, go with 120°F!</em>`,
+            
+            'high-limit': `<strong>🌡️ High Limit - Your Safety Cap</strong><br><br>
+                This is the maximum temperature your tank will reach before it says "whoa, that's hot enough!"<br><br>
+                Think of it like a safety valve. You want your water at 120°F, but you set the high limit to 140°F just in case the system gets extra sunny one day.<br><br>
+                <strong>Safe range:</strong> 130-160°F<br>
+                <strong>Most common:</strong> 140°F<br><br>
+                <em>It's like having a thermostat on a heater - prevents overheating!</em>`,
+            
+            'panel-wattage': `<strong>⚡ Panel Wattage - How Powerful?</strong><br><br>
+                This is how much electricity one solar panel can produce. Bigger number = more power per panel = fewer panels needed!<br><br>
+                <strong>Common sizes:</strong><br>
+                • 400W: Good (you'll need more panels)<br>
+                • 450W: Better (middle ground)<br>
+                • 550W: Best (fewer panels needed, but bigger/heavier)<br><br>
+                <em>Not sure? 400-450W is the sweet spot for most homes!</em>`,
+            
+            'annual-seasonal': `<strong>🌍 Annual vs Seasonal - What's the Difference?</strong><br><br>
+                <strong>Annual:</strong> Uses year-round averages. Great if you use hot water all year (most people!).<br><br>
+                <strong>Seasonal:</strong> Focuses on one season. Good if:<br>
+                • You only use a vacation home in winter<br>
+                • You want to see worst-case scenario (winter = less sun)<br>
+                • You're planning for a specific time of year<br><br>
+                <strong>Custom:</strong> You're a solar pro and have exact numbers!<br><br>
+                <em>Most people should pick "annual" - it's the safe bet!</em>`,
+            
+            'inverter': `<strong>🔌 What's an Inverter?</strong><br><br>
+                The inverter is the brain of your system. It takes the electricity from your solar panels and uses it to heat your water.<br><br>
+                <strong>Two types:</strong><br>
+                • CIM 1200H: Handles up to 1200 watts (smaller jobs)<br>
+                • CIM 1500H: Handles up to 1500 watts (bigger jobs)<br><br>
+                Don't worry - I'll figure out which one you need!<br><br>
+                <em>Think of it like choosing between a 4-cylinder and 6-cylinder engine.</em>`,
+            
+            'kwh': `<strong>⚡ kWh/day vs kWh Max - Energy Explained</strong><br><br>
+                <strong>kWh/day:</strong> How much energy you use each day to heat your water. Like your daily gas mileage.<br><br>
+                <strong>kWh Max:</strong> The maximum your system can produce on a perfect sunny day. Like your car's top speed.<br><br>
+                <em>Example: You need 8 kWh/day, but your system can produce 11 kWh max on super sunny days. Perfect!</em>`,
+            
+            'tank-size': `<strong>🛁 Tank Size - How Much Water?</strong><br><br>
+                This is how many gallons (or liters) of hot water you can store at once.<br><br>
+                <strong>Family size guide:</strong><br>
+                • 1-2 people: 40-50 gallons<br>
+                • 3-4 people: 50-80 gallons<br>
+                • 5+ people: 80+ gallons<br><br>
+                The system will pick the right size based on your daily usage!<br><br>
+                <em>Bigger tank = more hot water available, but takes longer to heat up.</em>`,
+            
+            'general': `<strong>💡 Need Help?</strong><br><br>
+                <strong>You can ask about:</strong><br>
+                • "peak sun hours" or "sun"<br>
+                • "cold water" or "water temp"<br>
+                • "hot water"<br>
+                • "high limit" or "safety"<br>
+                • "panel wattage" or "panels"<br>
+                • "annual vs seasonal"<br>
+                • "inverter"<br>
+                • "kwh" or "energy"<br>
+                • "tank size"<br><br>
+                <em>Type "?" anytime to see this menu!</em>`
+        };
+        
+        // Context-aware help handler
+        function showHelp(query) {
+            const q = query.toLowerCase().trim();
+            
+            // Check for specific topics
+            if (q.includes('peak') || q.includes('sun')) {
+                addMessage(helpDefinitions['peak-sun']);
+            } else if (q.includes('cold') && (q.includes('water') || q.includes('temp'))) {
+                addMessage(helpDefinitions['cold-water']);
+            } else if (q.includes('hot') && q.includes('water')) {
+                addMessage(helpDefinitions['hot-water']);
+            } else if (q.includes('high') || q.includes('limit') || q.includes('safety')) {
+                addMessage(helpDefinitions['high-limit']);
+            } else if (q.includes('panel') || q.includes('watt')) {
+                addMessage(helpDefinitions['panel-wattage']);
+            } else if (q.includes('annual') || q.includes('seasonal') || q.includes('custom')) {
+                addMessage(helpDefinitions['annual-seasonal']);
+            } else if (q.includes('inverter')) {
+                addMessage(helpDefinitions['inverter']);
+            } else if (q.includes('kwh') || q.includes('energy')) {
+                addMessage(helpDefinitions['kwh']);
+            } else if (q.includes('tank')) {
+                addMessage(helpDefinitions['tank-size']);
+            } else {
+                // Show general help menu
+                addMessage(helpDefinitions['general']);
+            }
+            
+            // Re-prompt the current question
+            setTimeout(() => {
+                addMessage(`Ready to continue? I'm still waiting for your answer to the question above!`);
+            }, 500);
+        }
+        
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -303,7 +423,7 @@
                     hideTyping();
                     const displayAmount = unitSystem === 'metric' ? 
                         `${amount} liters` : `${amount} gallons`;
-                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values.<br><br>What would you like?`);
+                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values.<br><br>What would you like?<br><br><em>💡 Type "?" anytime for help with terms</em>`);
                     conversationStep = 3;
                 }, 800);
             }, 300);
@@ -312,6 +432,19 @@
         async function handleUserInput() {
             const message = userInput.value.trim();
             if (!message) return;
+            
+            // Check for help commands first
+            const lowerMessage = message.toLowerCase();
+            if (lowerMessage === '?' || lowerMessage === 'help' || lowerMessage.includes('help') || lowerMessage === 'h') {
+                addMessage(message, true);
+                userInput.value = '';
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    showHelp(message);
+                }, 800);
+                return; // Don't process as normal input
+            }
             
             addMessage(message, true);
             userInput.value = '';
@@ -420,7 +553,7 @@
                                 hideTyping();
                                 const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
                                 const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '50' : '120'}" to keep it, or enter ${tempRange}.`);
+                                addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '50' : '120'}" to keep it, or enter ${tempRange}.<br><br><em>💡 Type "?" for help</em>`);
                                 conversationStep = 4;
                             }, 800);
                         }, 500);
@@ -435,14 +568,14 @@
                                 hideTyping();
                                 const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
                                 const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '50' : '120'}" to keep it, or enter ${tempRange}.`);
+                                addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '50' : '120'}" to keep it, or enter ${tempRange}.<br><br><em>💡 Type "?" for help</em>`);
                                 conversationStep = 4;
                             }, 800);
                         }, 500);
                     } else if (seasonChoice === 'custom') {
                         // Custom uses user-provided values, not AI
                         userData.useAIClimate = false;
-                        addMessage(`Great! What are your peak sun hours per day? (1-10)`);
+                        addMessage(`Great! What are your peak sun hours per day? (1-10)<br><br><em>💡 Type "?" for help</em>`);
                         conversationStep = 3.1;
                     } else {
                         addMessage('Please type: "annual", a season name (winter, spring, summer, fall), or "custom"');
@@ -460,7 +593,7 @@
                             setTimeout(() => {
                                 hideTyping();
                                 const tempRange = unitSystem === 'metric' ? '0-30°C' : '32-85°F';
-                                addMessage(`What is your cold water temperature? (${tempRange})`);
+                                addMessage(`What is your cold water temperature? (${tempRange})<br><br><em>💡 Type "?" for help</em>`);
                                 conversationStep = 3.2;
                             }, 800);
                         }, 500);
@@ -498,7 +631,7 @@
                             hideTyping();
                             const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
                             const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                            addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '50' : '120'}" to keep it, or enter ${tempRange}.`);
+                            addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '50' : '120'}" to keep it, or enter ${tempRange}.<br><br><em>💡 Type "?" for help</em>`);
                             conversationStep = 4;
                         }, 800);
                     }, 500);
@@ -531,7 +664,7 @@
                         showTyping();
                         setTimeout(() => {
                             hideTyping();
-                            addMessage(`What wattage are your solar panels? <strong>450W</strong> is typical. (250-550W)`);
+                            addMessage(`What wattage are your solar panels? <strong>450W</strong> is typical. (250-550W)<br><br><em>💡 Type "?" for help</em>`);
                             conversationStep = 5;
                         }, 800);
                     }, 500);
@@ -551,7 +684,7 @@
                                 const warningText = unitSystem === 'metric' ? 
                                     '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.' :
                                     '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 120°F requires an anti-scald mixing valve on the water heater.';
-                                addMessage(`High temperature limit is set to <strong>${defaultLimit}</strong>. Type "${unitSystem === 'metric' ? '65' : '150'}" to keep it, or enter ${limitOption}.${warningText}`);
+                                addMessage(`High temperature limit is set to <strong>${defaultLimit}</strong>. Type "${unitSystem === 'metric' ? '65' : '150'}" to keep it, or enter ${limitOption}.${warningText}<br><br><em>💡 Type "?" for help</em>`);
                                 conversationStep = 6;
                             }, 800);
                         }, 500);
