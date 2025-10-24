@@ -293,7 +293,7 @@
                 </div>
             </div>
             
-            <div class="chat-input-area">
+            <div class="chat-input-area" id="chatInputArea">
                 <div id="gallonButtons" class="gallon-buttons">
                     <!-- Will be populated dynamically -->
                 </div>
@@ -322,6 +322,7 @@
         const sendBtn = document.getElementById('sendBtn');
         const typingIndicator = document.getElementById('typingIndicator');
         const gallonButtons = document.getElementById('gallonButtons');
+        const chatInputArea = document.getElementById('chatInputArea');
         
         function startChat() {
             document.getElementById('startScreen').classList.add('hidden');
@@ -706,6 +707,9 @@
         }
         
         function displayResults(data) {
+            // Hide the input area after displaying results
+            chatInputArea.style.display = 'none';
+            
             const sys1250 = data.system_1250w;
             const sys1500 = data.system_1500w;
             
@@ -840,7 +844,11 @@
                     • kWh Max: ${alternative.kwh_max}<br><br>`;
                 }
                 
-                messageContent += `<em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
+                messageContent += `<em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.</em><br><br>
+                
+                    <strong>⬆️ Please scroll up to see the top of your results.</strong><br><br>
+                    
+                    <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
                 
                 addMessage(messageContent);
                 
@@ -965,7 +973,11 @@
                     • kWh Max: ${alternative.kwh_max}<br><br>`;
                 }
                 
-                messageContent += `<em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.<br><br>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
+                messageContent += `<em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.</em><br><br>
+                
+                    <strong>⬆️ Please scroll up to see the top of your results.</strong><br><br>
+                    
+                    <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
                 
                 addMessage(messageContent);
             }
