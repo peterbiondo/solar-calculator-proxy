@@ -316,6 +316,7 @@
         let estimatedAnnualSun = 5.5;
         let estimatedAnnualColdWater = 68;
         let unitSystem = '';
+        let pendingLocation = '';
         
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
@@ -422,7 +423,7 @@
                     const choice = message.toLowerCase();
                     if (choice === 'metric' || choice === 'm') {
                         unitSystem = 'metric';
-                        addMessage("Perfect! We'll use metric units (liters and Celsius).");
+                        addMessage("Fantastic! We'll use metric units (liters and Celsius).");
                         setTimeout(() => {
                             addMessage("What's your location? (City, State/Country)");
                             conversationStep = 1;
@@ -440,46 +441,58 @@
                     break;
                 
                 case 1:
-                    userData.location = message;
-                    addMessage(`Got it! ${message}.`);
-                    setTimeout(() => {
-                        showTyping();
+                    pendingLocation = message;
+                    addMessage(`Is this your location: <strong>"${message}"</strong>?<br><br>Type <strong>"yes"</strong> to confirm or enter your location again (use full names, no abbreviations).`);
+                    conversationStep = 1.5;
+                    break;
+                
+                case 1.5:
+                    const confirmation = message.toLowerCase();
+                    if (confirmation === 'yes' || confirmation === 'y') {
+                        userData.location = pendingLocation;
+                        addMessage(`Got it! ${pendingLocation}.`);
                         setTimeout(() => {
-                            hideTyping();
-                            const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
-                            const usageNote = unitSystem === 'metric' ? 
-                                'Note: Most consumers use 60-75 liters of hot water per day. Usage varies by individual.' : 
-                                'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
-                            addMessage(`Perfect! Now, how many ${unit} of hot water do you use per day?<br><br><em>${usageNote}</em><br><br>Choose from the options:`);
-                            
-                            if (unitSystem === 'metric') {
-                                gallonButtons.innerHTML = `
-                                    <button class="gallon-btn" onclick="selectWaterAmount(76)">76 L</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(114)">114 L</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(151)">151 L</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(189)">189 L</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(227)">227 L</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(303)">303 L</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(379)">379 L</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(454)">454 L</button>
-                                `;
-                            } else {
-                                gallonButtons.innerHTML = `
-                                    <button class="gallon-btn" onclick="selectWaterAmount(20)">20 gal</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button>
-                                    <button class="gallon-btn" onclick="selectWaterAmount(120)">120 gal</button>
-                                `;
-                            }
-                            
-                            gallonButtons.style.display = 'grid';
-                            conversationStep = 2;
-                        }, 1000);
-                    }, 500);
+                            showTyping();
+                            setTimeout(() => {
+                                hideTyping();
+                                const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+                                const usageNote = unitSystem === 'metric' ? 
+                                    'Note: Most consumers use 60-75 liters of hot water per day. Usage varies by individual.' : 
+                                    'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
+                                addMessage(`Perfect! Now, how many ${unit} of hot water do you use per day?<br><br><em>${usageNote}</em><br><br>Choose from the options:`);
+                                
+                                if (unitSystem === 'metric') {
+                                    gallonButtons.innerHTML = `
+                                        <button class="gallon-btn" onclick="selectWaterAmount(76)">76 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(114)">114 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(151)">151 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(189)">189 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(227)">227 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(303)">303 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(379)">379 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(454)">454 L</button>
+                                    `;
+                                } else {
+                                    gallonButtons.innerHTML = `
+                                        <button class="gallon-btn" onclick="selectWaterAmount(20)">20 gal</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(120)">120 gal</button>
+                                    `;
+                                }
+                                
+                                gallonButtons.style.display = 'grid';
+                                conversationStep = 2;
+                            }, 1000);
+                        }, 500);
+                    } else {
+                        pendingLocation = message;
+                        addMessage(`Is this your location: <strong>"${message}"</strong>?<br><br>Type <strong>"yes"</strong> to confirm or enter your location again (use full names, no abbreviations).`);
+                    }
                     break;
                 
                 case 2:
@@ -524,7 +537,7 @@
                         userData.season = scenario;
                         userData.useAIClimate = true;
                         
-                        addMessage(`Perfect! I'll use ${scenario} climate data for your location.`);
+                        addMessage(`Excellent! I'll use ${scenario} climate data for your location.`);
                         
                         setTimeout(() => {
                             showTyping();
@@ -559,7 +572,7 @@
                     const peakSun = parseFloat(message);
                     if (!isNaN(peakSun) && peakSun >= 1 && peakSun <= 10) {
                         userData.peakSunHours = peakSun;
-                        addMessage(`Got it! ${peakSun} peak sun hours per day.`);
+                        addMessage(`Fantastic! ${peakSun} peak sun hours per day.`);
                         
                         setTimeout(() => {
                             showTyping();
@@ -585,7 +598,7 @@
                             (coldTemp * 9/5) + 32 : coldTemp;
                         const displayTemp = unitSystem === 'metric' ? 
                             `${coldTemp}°C` : `${coldTemp}°F`;
-                        addMessage(`Perfect! Cold water at ${displayTemp}.`);
+                        addMessage(`OK, good! Cold water at ${displayTemp}.`);
                         
                         setTimeout(() => {
                             showTyping();
@@ -613,7 +626,7 @@
                             (hotTemp * 9/5) + 32 : hotTemp;
                         const displayTemp = unitSystem === 'metric' ? 
                             `${hotTemp}°C` : `${hotTemp}°F`;
-                        addMessage(`Set to ${displayTemp}.`);
+                        addMessage(`Perfect! Set to ${displayTemp}.`);
                         
                         setTimeout(() => {
                             showTyping();
@@ -633,7 +646,7 @@
                     const watts = parseInt(message);
                     if (!isNaN(watts) && watts >= 250 && watts <= 550) {
                         userData.panelWatts = watts;
-                        addMessage(`${watts}W panels - got it!`);
+                        addMessage(`Got it! ${watts}W panels.`);
                         
                         setTimeout(() => {
                             showTyping();
@@ -663,7 +676,7 @@
                             (highLimit * 9/5) + 32 : highLimit;
                         const displayLimit = unitSystem === 'metric' ? 
                             `${highLimit}°C` : `${highLimit}°F`;
-                        addMessage(`High limit set to ${displayLimit}.`);
+                        addMessage(`Excellent! High limit set to ${displayLimit}.`);
                         
                         setTimeout(() => {
                             addMessage("Perfect! I have all the information I need. Let me calculate your system...");
@@ -716,6 +729,30 @@
             const sys1250Exceeds = sys1250.watt_status && sys1250.watt_status.toLowerCase().includes('exceeds');
             const sys1500Exceeds = sys1500.watt_status && sys1500.watt_status.toLowerCase().includes('exceeds');
             
+            // Check if BOTH systems exceed the panel count
+            if (sys1250Exceeds && sys1500Exceeds) {
+                const displayGallons = unitSystem === 'metric' ? 
+                    Math.round(gallonsToLiters(parseFloat(userData.gallons))) : 
+                    Math.round(userData.gallons);
+                const displayHotTemp = unitSystem === 'metric' ? 
+                    Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
+                    Math.round(userData.hotWaterTemp);
+                const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+                const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
+                
+                addMessage(`<strong>⚠️ System Cannot Provide Required Results</strong><br><br>
+                    The system cannot provide the required hot water for your specifications:<br><br>
+                    • Daily Usage: ${displayGallons} ${unit}<br>
+                    • Target Temperature: ${displayHotTemp}${tempUnit}<br><br>
+                    <strong>Both available inverter systems (CIM 1200H and CIM 1500H) exceed the maximum collector count needed to meet these requirements.</strong><br><br>
+                    <strong>To get results, please try again with:</strong><br>
+                    • A lower target hot water temperature, OR<br>
+                    • Lower daily water usage (fewer ${unit} per day), OR<br>
+                    • Both adjustments<br><br>
+                    Please refresh the page to start over with different values.`);
+                return;
+            }
+            
             const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
             const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
             const actualLat = data.latitude_actual || 35;
@@ -733,21 +770,18 @@
                 const panel1500 = parseInt(sys1500.panels);
                 
                 let showOnlyOne = false;
-                let onlySystemExplanation = '';
                 
                 if (sys1250Exceeds && !sys1500Exceeds) {
                     recommended = sys1500;
                     recommendedName = "Use the Off-Grid CIM 1500H Inverter";
                     recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
                     reason = "This system can meet your hot water requirements.";
-                    onlySystemExplanation = "The CIM 1200H would require more panels than the maximum collector count allows.";
                     showOnlyOne = true;
                 } else if (sys1500Exceeds && !sys1250Exceeds) {
                     recommended = sys1250;
                     recommendedName = "Use the Off-Grid CIM 1200H Inverter";
                     recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
                     reason = "This system can meet your hot water requirements.";
-                    onlySystemExplanation = "The CIM 1500H would require more panels than the maximum collector count allows.";
                     showOnlyOne = true;
                 }
                 
@@ -827,9 +861,7 @@
                     
                     <em>${reason}</em><br><br>`;
                 
-                if (showOnlyOne) {
-                    messageContent += `<em>${onlySystemExplanation}</em><br><br>`;
-                } else {
+                if (!showOnlyOne) {
                     const altTankDisplay = Math.round(gallonsToLiters(parseFloat(alternative.tank_size)));
                     messageContent += `
                     <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
@@ -865,21 +897,18 @@
                 const panel1500 = parseInt(sys1500.panels);
                 
                 let showOnlyOne = false;
-                let onlySystemExplanation = '';
                 
                 if (sys1250Exceeds && !sys1500Exceeds) {
                     recommended = sys1500;
                     recommendedName = "Use the Off-Grid CIM 1500H Inverter";
                     recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
                     reason = "This system can meet your hot water requirements.";
-                    onlySystemExplanation = "The CIM 1200H would require more panels than the maximum collector count allows.";
                     showOnlyOne = true;
                 } else if (sys1500Exceeds && !sys1250Exceeds) {
                     recommended = sys1250;
                     recommendedName = "Use the Off-Grid CIM 1200H Inverter";
                     recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
                     reason = "This system can meet your hot water requirements.";
-                    onlySystemExplanation = "The CIM 1500H would require more panels than the maximum collector count allows.";
                     showOnlyOne = true;
                 }
                 
@@ -957,9 +986,7 @@
                     
                     <em>${reason}</em><br><br>`;
                 
-                if (showOnlyOne) {
-                    messageContent += `<em>${onlySystemExplanation}</em><br><br>`;
-                } else {
+                if (!showOnlyOne) {
                     messageContent += `
                     <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
                     
