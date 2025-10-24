@@ -51,6 +51,53 @@
             opacity: 0.9;
         }
         
+        .start-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .start-screen h2 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        .start-screen p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .start-screen button {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .start-screen button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .chat-interface {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -108,7 +155,6 @@
             padding: 12px 16px;
             background: white;
             border-radius: 18px;
-            border-bottom-left-radius: 4px;
             width: fit-content;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
@@ -140,17 +186,20 @@
             }
         }
         
-        .chat-input {
-            padding: 20px;
+        .chat-input-area {
+            padding: 15px;
             background: white;
             border-top: 1px solid #e0e0e0;
+        }
+        
+        .input-group {
             display: flex;
             gap: 10px;
         }
         
-        .chat-input input {
+        #userInput {
             flex: 1;
-            padding: 12px 16px;
+            padding: 12px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 25px;
             font-size: 14px;
@@ -158,11 +207,11 @@
             transition: border-color 0.3s;
         }
         
-        .chat-input input:focus {
+        #userInput:focus {
             border-color: #667eea;
         }
         
-        .chat-input button {
+        #sendBtn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
@@ -173,62 +222,40 @@
             transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .chat-input button:hover {
+        #sendBtn:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
         
-        .chat-input button:active {
-            transform: translateY(0);
-        }
-        
-        .start-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 40px;
-            text-align: center;
-        }
-        
-        .start-screen h2 {
-            color: #667eea;
-            font-size: 28px;
-            margin-bottom: 15px;
-        }
-        
-        .start-screen p {
-            color: #666;
-            font-size: 16px;
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-        
-        .start-screen button {
-            margin-top: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .start-screen button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-        
-        .start-screen button:active {
+        #sendBtn:active {
             transform: translateY(0);
         }
         
         .hidden {
             display: none !important;
+        }
+        
+        .gallon-buttons {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .gallon-btn {
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .gallon-btn:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -247,7 +274,7 @@
             <button onclick="startChat()">Start Calculator</button>
         </div>
         
-        <div id="chatInterface" class="hidden" style="display: flex; flex-direction: column; height: 100%;">
+        <div id="chatInterface" class="chat-interface hidden">
             <div class="chat-messages" id="chatMessages">
                 <div class="typing-indicator" id="typingIndicator">
                     <span></span>
@@ -256,13 +283,18 @@
                 </div>
             </div>
             
-            <div class="chat-input">
-                <input type="text" id="userInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') handleUserInput()">
-                <button onclick="handleUserInput()">Send ⬆️</button>
+            <div class="chat-input-area">
+                <div id="gallonButtons" class="gallon-buttons" style="display: none;">
+                    <!-- Will be populated dynamically based on unit system -->
+                </div>
+                <div class="input-group">
+                    <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
+                    <button id="sendBtn">Send</button>
+                </div>
             </div>
         </div>
     </div>
-    
+
     <script>
         const WEBHOOK_URL = 'https://solar-calculator-proxy.vercel.app/api/webhook-proxy';
         
@@ -277,7 +309,9 @@
         
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
         const typingIndicator = document.getElementById('typingIndicator');
+        const gallonButtons = document.getElementById('gallonButtons');
         
         function startChat() {
             document.getElementById('startScreen').classList.add('hidden');
@@ -314,6 +348,10 @@
             typingIndicator.style.display = 'none';
         }
         
+        function litersToGallons(liters) {
+            return liters / 3.78541;
+        }
+        
         function gallonsToLiters(gallons) {
             return gallons * 3.78541;
         }
@@ -321,6 +359,34 @@
         function fahrenheitToCelsius(fahrenheit) {
             return (fahrenheit - 32) * 5/9;
         }
+        
+        function selectWaterAmount(amount) {
+            if (unitSystem === 'metric') {
+                userData.gallons = litersToGallons(amount); // Convert to gallons for backend
+                addMessage(`${amount} liters`, true);
+            } else {
+                userData.gallons = amount;
+                addMessage(`${amount} gallons`, true);
+            }
+            
+            gallonButtons.style.display = 'none';
+            
+            setTimeout(() => {
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    const displayAmount = unitSystem === 'metric' ? 
+                        `${amount} liters` : `${amount} gallons`;
+                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values.<br><br>What would you like?`);
+                    conversationStep = 3;
+                }, 800);
+            }, 300);
+        }
+        
+        sendBtn.addEventListener('click', handleUserInput);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleUserInput();
+        });
         
         async function handleUserInput() {
             const message = userInput.value.trim();
@@ -367,33 +433,59 @@
                         showTyping();
                         setTimeout(() => {
                             hideTyping();
-                            const waterUnit = unitSystem === 'metric' ? 'liters' : 'gallons';
-                            addMessage(`How much hot water do you use per day? (in ${waterUnit})`);
+                            const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+                            const usageNote = unitSystem === 'metric' ? 
+                                'Note: Most consumers use 60-75 liters of hot water per day. Usage varies by individual.' : 
+                                'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
+                            addMessage(`Perfect! Now, how many ${unit} of hot water do you use per day?<br><br><em>${usageNote}</em><br><br>Choose from the options:`);
+                            
+                            // Populate buttons based on unit system
+                            if (unitSystem === 'metric') {
+                                gallonButtons.innerHTML = `
+                                    <button class="gallon-btn" onclick="selectWaterAmount(76)">76 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(114)">114 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(151)">151 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(189)">189 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(227)">227 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(303)">303 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(379)">379 L</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(454)">454 L</button>
+                                `;
+                            } else {
+                                gallonButtons.innerHTML = `
+                                    <button class="gallon-btn" onclick="selectWaterAmount(20)">20 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button>
+                                    <button class="gallon-btn" onclick="selectWaterAmount(120)">120 gal</button>
+                                `;
+                            }
+                            
+                            gallonButtons.style.display = 'grid';
                             conversationStep = 2;
-                        }, 800);
+                        }, 1000);
                     }, 500);
                     break;
                 
-                case 2: // Daily water usage
+                case 2: // Water amount (text input fallback)
                     const amount = parseFloat(message);
-                    if (!isNaN(amount) && amount > 0) {
-                        userData.gallons = unitSystem === 'metric' ? (amount / 3.78541) : amount;
-                        const displayAmount = unitSystem === 'metric' ? 
-                            `${amount} liters` : `${amount} gallons`;
-                        setTimeout(() => {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                                setTimeout(() => {
-                                    const displayAmount = unitSystem === 'metric' ? 
-                                        `${amount} liters` : `${amount} gallons`;
-                                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values.<br><br>What would you like?`);
-                                    conversationStep = 3;
-                                }, 800);
-                            }, 800);
-                        }, 300);
+                    if (unitSystem === 'metric') {
+                        const validAmounts = [76, 114, 151, 189, 227, 303, 379, 454];
+                        if (validAmounts.some(v => Math.abs(amount - v) < 5)) {
+                            selectWaterAmount(Math.round(amount));
+                        } else {
+                            addMessage('Please click a button or enter a standard amount (76, 114, 151, 189, 227, 303, 379, or 454 liters)');
+                        }
                     } else {
-                        addMessage('Please enter a valid number for daily water usage.');
+                        const validAmounts = [20, 30, 40, 50, 60, 80, 100, 120];
+                        if (validAmounts.includes(Math.round(amount))) {
+                            selectWaterAmount(Math.round(amount));
+                        } else {
+                            addMessage('Please click a button or enter: 20, 30, 40, 50, 60, 80, 100, or 120');
+                        }
                     }
                     break;
                 
