@@ -39,6 +39,7 @@
             color: white;
             padding: 20px;
             text-align: center;
+            flex-shrink: 0;
         }
         
         .chat-header h1 {
@@ -96,13 +97,16 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            min-height: 0;
         }
         
         .chat-messages {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
+            padding-bottom: 10px;
             background: #f8f9fa;
+            min-height: 0;
         }
         
         .message {
@@ -190,6 +194,34 @@
             padding: 15px;
             background: white;
             border-top: 1px solid #e0e0e0;
+            flex-shrink: 0;
+        }
+        
+        .gallon-buttons {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .gallon-btn {
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .gallon-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallon-btn:active {
+            transform: scale(0.98);
         }
         
         .input-group {
@@ -220,6 +252,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: transform 0.2s, box-shadow 0.2s;
+            flex-shrink: 0;
         }
         
         #sendBtn:hover {
@@ -233,29 +266,6 @@
         
         .hidden {
             display: none !important;
-        }
-        
-        .gallon-buttons {
-            display: none;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .gallon-btn {
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: transform 0.2s;
-        }
-        
-        .gallon-btn:hover {
-            transform: scale(1.05);
         }
     </style>
 </head>
@@ -284,8 +294,8 @@
             </div>
             
             <div class="chat-input-area">
-                <div id="gallonButtons" class="gallon-buttons" style="display: none;">
-                    <!-- Will be populated dynamically based on unit system -->
+                <div id="gallonButtons" class="gallon-buttons">
+                    <!-- Will be populated dynamically -->
                 </div>
                 <div class="input-group">
                     <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
@@ -305,7 +315,7 @@
         };
         let estimatedAnnualSun = 5.5;
         let estimatedAnnualColdWater = 68;
-        let unitSystem = ''; // 'imperial' or 'metric'
+        let unitSystem = '';
         
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
@@ -316,6 +326,7 @@
         function startChat() {
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('chatInterface').classList.remove('hidden');
+            userInput.focus();
             
             setTimeout(() => {
                 addMessage("Hi! 👋 I'm your solar hot water assistant. First, which unit system would you prefer?");
@@ -362,7 +373,7 @@
         
         function selectWaterAmount(amount) {
             if (unitSystem === 'metric') {
-                userData.gallons = litersToGallons(amount); // Convert to gallons for backend
+                userData.gallons = litersToGallons(amount);
                 addMessage(`${amount} liters`, true);
             } else {
                 userData.gallons = amount;
@@ -370,6 +381,7 @@
             }
             
             gallonButtons.style.display = 'none';
+            userInput.focus();
             
             setTimeout(() => {
                 showTyping();
@@ -405,7 +417,7 @@
         
         async function processMessage(message) {
             switch (conversationStep) {
-                case 0.5: // Unit system choice
+                case 0.5:
                     const choice = message.toLowerCase();
                     if (choice === 'metric' || choice === 'm') {
                         unitSystem = 'metric';
@@ -426,7 +438,7 @@
                     }
                     break;
                 
-                case 1: // Location
+                case 1:
                     userData.location = message;
                     addMessage(`Got it! ${message}.`);
                     setTimeout(() => {
@@ -439,7 +451,6 @@
                                 'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
                             addMessage(`Perfect! Now, how many ${unit} of hot water do you use per day?<br><br><em>${usageNote}</em><br><br>Choose from the options:`);
                             
-                            // Populate buttons based on unit system
                             if (unitSystem === 'metric') {
                                 gallonButtons.innerHTML = `
                                     <button class="gallon-btn" onclick="selectWaterAmount(76)">76 L</button>
@@ -470,7 +481,7 @@
                     }, 500);
                     break;
                 
-                case 2: // Water amount (text input fallback)
+                case 2:
                     const amount = parseFloat(message);
                     if (unitSystem === 'metric') {
                         const validAmounts = [76, 114, 151, 189, 227, 303, 379, 454];
@@ -489,7 +500,7 @@
                     }
                     break;
                 
-                case 3: // Modeling scenario choice
+                case 3:
                     const scenario = message.toLowerCase().trim();
                     
                     if (scenario === 'annual') {
@@ -543,7 +554,7 @@
                     }
                     break;
                 
-                case 3.1: // Custom: Peak sun hours
+                case 3.1:
                     const peakSun = parseFloat(message);
                     if (!isNaN(peakSun) && peakSun >= 1 && peakSun <= 10) {
                         userData.peakSunHours = peakSun;
@@ -563,7 +574,7 @@
                     }
                     break;
                 
-                case 3.2: // Custom: Cold water temperature
+                case 3.2:
                     const coldTemp = parseFloat(message);
                     const minTemp = unitSystem === 'metric' ? 4 : 40;
                     const maxTemp = unitSystem === 'metric' ? 27 : 80;
@@ -591,7 +602,7 @@
                     }
                     break;
                 
-                case 4: // Hot water temperature
+                case 4:
                     const hotTemp = parseFloat(message);
                     const minHot = unitSystem === 'metric' ? 38 : 100;
                     const maxHot = unitSystem === 'metric' ? 60 : 140;
@@ -617,7 +628,7 @@
                     }
                     break;
                 
-                case 5: // Panel wattage
+                case 5:
                     const watts = parseInt(message);
                     if (!isNaN(watts) && watts >= 250 && watts <= 550) {
                         userData.panelWatts = watts;
@@ -641,7 +652,7 @@
                     }
                     break;
                 
-                case 6: // High limit
+                case 6:
                     const highLimit = parseFloat(message);
                     const minLimit = unitSystem === 'metric' ? 50 : 120;
                     const maxLimit = unitSystem === 'metric' ? 70 : 160;
@@ -698,43 +709,29 @@
             const sys1250 = data.system_1250w;
             const sys1500 = data.system_1500w;
             
-            // Check if either system exceeds max panel count
             const sys1250Exceeds = sys1250.watt_status && sys1250.watt_status.toLowerCase().includes('exceeds');
             const sys1500Exceeds = sys1500.watt_status && sys1500.watt_status.toLowerCase().includes('exceeds');
             
-            // Get actual values used
             const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
             const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
             const actualLat = data.latitude_actual || 35;
             
             if (unitSystem === 'metric') {
-                // Convert display values to metric
                 const displayGallons = Math.round(gallonsToLiters(parseFloat(userData.gallons)));
                 const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
                 const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
                 const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
                 
-                // Convert tank sizes from gallons to liters and round to whole numbers
-                const tank1250Display = Math.round(gallonsToLiters(parseFloat(sys1250.tank_size)));
-                const tank1500Display = Math.round(gallonsToLiters(parseFloat(sys1500.tank_size)));
-                
-                // Convert temps in results
-                const finalTemp1250 = Math.round(fahrenheitToCelsius(parseFloat(sys1250.final_temp)));
-                const finalTemp1500 = Math.round(fahrenheitToCelsius(parseFloat(sys1500.final_temp)));
-                
-                // Determine recommendation
                 let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
                 const inv1250 = parseInt(sys1250.inverters);
                 const inv1500 = parseInt(sys1500.inverters);
                 const panel1250 = parseInt(sys1250.panels);
                 const panel1500 = parseInt(sys1500.panels);
                 
-                // Check if only one system exceeds
                 let showOnlyOne = false;
                 let onlySystemExplanation = '';
                 
                 if (sys1250Exceeds && !sys1500Exceeds) {
-                    // Only 1500H works
                     recommended = sys1500;
                     recommendedName = "Use the Off-Grid CIM 1500H Inverter";
                     recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
@@ -742,7 +739,6 @@
                     onlySystemExplanation = "The CIM 1200H would require more panels than the maximum collector count allows.";
                     showOnlyOne = true;
                 } else if (sys1500Exceeds && !sys1250Exceeds) {
-                    // Only 1200H works
                     recommended = sys1250;
                     recommendedName = "Use the Off-Grid CIM 1200H Inverter";
                     recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
@@ -752,59 +748,56 @@
                 }
                 
                 if (!showOnlyOne) {
-                    // Normal comparison logic when both systems work
                     if (inv1250 < inv1500) {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    // Check if also has fewer panels
-                    if (panel1250 < panel1500) {
-                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                        recommended = sys1250;
+                        alternative = sys1500;
+                        recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        if (panel1250 < panel1500) {
+                            reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                        } else {
+                            reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                        }
+                    } else if (inv1500 < inv1250) {
+                        recommended = sys1500;
+                        alternative = sys1250;
+                        recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        if (panel1500 < panel1250) {
+                            reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                        } else {
+                            reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                        }
+                    } else if (panel1250 < panel1500) {
+                        recommended = sys1250;
+                        alternative = sys1500;
+                        recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                    } else if (panel1500 < panel1250) {
+                        recommended = sys1500;
+                        alternative = sys1250;
+                        recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
                     } else {
-                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                        recommended = sys1250;
+                        alternative = sys1500;
+                        recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        reason = "This system is the most cost-effective choice with a less expensive inverter.";
                     }
-                } else if (inv1500 < inv1250) {
-                    recommended = sys1500;
-                    alternative = sys1250;
-                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    // Check if also has fewer panels
-                    if (panel1500 < panel1250) {
-                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                    } else {
-                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-                    }
-                } else if (panel1250 < panel1500) {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                } else if (panel1500 < panel1250) {
-                    recommended = sys1500;
-                    alternative = sys1250;
-                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                } else {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    reason = "This system is the most cost-effective choice with a less expensive inverter.";
                 }
-                }  // End of if (!showOnlyOne)
                 
                 const recTankDisplay = Math.round(gallonsToLiters(parseFloat(recommended.tank_size)));
                 
@@ -831,10 +824,8 @@
                     <em>${reason}</em><br><br>`;
                 
                 if (showOnlyOne) {
-                    // Show explanation for why only one system works
                     messageContent += `<em>${onlySystemExplanation}</em><br><br>`;
                 } else {
-                    // Show alternative system
                     const altTankDisplay = Math.round(gallonsToLiters(parseFloat(alternative.tank_size)));
                     messageContent += `
                     <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
@@ -854,25 +845,21 @@
                 addMessage(messageContent);
                 
             } else {
-                // Imperial (gallons and Fahrenheit)
                 const displayGallons = Math.round(userData.gallons);
                 const displayColdTemp = Math.round(actualColdTemp);
                 const displayHotTemp = Math.round(userData.hotWaterTemp);
                 const displayHighLimit = Math.round(userData.highLimit);
                 
-                // Determine recommendation
                 let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
                 const inv1250 = parseInt(sys1250.inverters);
                 const inv1500 = parseInt(sys1500.inverters);
                 const panel1250 = parseInt(sys1250.panels);
                 const panel1500 = parseInt(sys1500.panels);
                 
-                // Check if only one system exceeds
                 let showOnlyOne = false;
                 let onlySystemExplanation = '';
                 
                 if (sys1250Exceeds && !sys1500Exceeds) {
-                    // Only 1500H works
                     recommended = sys1500;
                     recommendedName = "Use the Off-Grid CIM 1500H Inverter";
                     recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
@@ -880,7 +867,6 @@
                     onlySystemExplanation = "The CIM 1200H would require more panels than the maximum collector count allows.";
                     showOnlyOne = true;
                 } else if (sys1500Exceeds && !sys1250Exceeds) {
-                    // Only 1200H works
                     recommended = sys1250;
                     recommendedName = "Use the Off-Grid CIM 1200H Inverter";
                     recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
@@ -890,68 +876,65 @@
                 }
                 
                 if (!showOnlyOne) {
-                    // Normal comparison logic when both systems work
                     if (inv1250 < inv1500) {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    // Check if also has fewer panels
-                    if (panel1250 < panel1500) {
-                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                        recommended = sys1250;
+                        alternative = sys1500;
+                        recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        if (panel1250 < panel1500) {
+                            reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                        } else {
+                            reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                        }
+                    } else if (inv1500 < inv1250) {
+                        recommended = sys1500;
+                        alternative = sys1250;
+                        recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        if (panel1500 < panel1250) {
+                            reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                        } else {
+                            reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                        }
+                    } else if (panel1250 < panel1500) {
+                        recommended = sys1250;
+                        alternative = sys1500;
+                        recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                    } else if (panel1500 < panel1250) {
+                        recommended = sys1500;
+                        alternative = sys1250;
+                        recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
                     } else {
-                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                        recommended = sys1250;
+                        alternative = sys1500;
+                        recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                        alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                        recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+                        alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+                        reason = "This system is the most cost-effective choice with a less expensive inverter.";
                     }
-                } else if (inv1500 < inv1250) {
-                    recommended = sys1500;
-                    alternative = sys1250;
-                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    // Check if also has fewer panels
-                    if (panel1500 < panel1250) {
-                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                    } else {
-                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-                    }
-                } else if (panel1250 < panel1500) {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                } else if (panel1500 < panel1250) {
-                    recommended = sys1500;
-                    alternative = sys1250;
-                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                } else {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    reason = "This system is the most cost-effective choice with a less expensive inverter.";
                 }
-                }  // End of if (!showOnlyOne)
                 
                 let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
                     📍 <strong>Location:</strong> ${userData.location}<br>
-                    💧 <strong>Daily Hot Water:</strong> ${Math.round(userData.gallons)} gallons<br>
+                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
                     ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-                    🌡️ <strong>Cold Water Temp:</strong> ${Math.round(actualColdTemp)}°F<br>
-                    🔥 <strong>Hot Water Temp:</strong> ${Math.round(userData.hotWaterTemp)}°F<br>
+                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F<br>
+                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
                     ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                    📊 <strong>High Limit:</strong> ${Math.round(userData.highLimit)}°F<br><br>
+                    📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
                     
                     <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
                     
@@ -967,10 +950,8 @@
                     <em>${reason}</em><br><br>`;
                 
                 if (showOnlyOne) {
-                    // Show explanation for why only one system works
                     messageContent += `<em>${onlySystemExplanation}</em><br><br>`;
                 } else {
-                    // Show alternative system
                     messageContent += `
                     <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
                     
