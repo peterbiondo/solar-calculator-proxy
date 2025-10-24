@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solar Calculator Chat - Metric/Imperial</title>
+    <title>PV Solar Hot Water Calculator</title>
     <style>
         * {
             margin: 0;
@@ -272,13 +272,13 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-            <h1>☀️ Solar Hot Water Calculator</h1>
+            <h1>☀️ PV Solar Hot Water Calculator</h1>
             <p>International Support - Metric & Imperial</p>
         </div>
         
         <div id="startScreen" class="start-screen">
-            <h2>Welcome to Your Solar Hot Water System Calculator!</h2>
-            <p>I'll help you design the perfect solar hot water system for your home.</p>
+            <h2>Welcome to Your Photovoltaic Hot Water System Calculator!</h2>
+            <p>I'll help you design a PV solar water heater for your home.</p>
             <p>This takes about 2 minutes.</p>
             <p>Let's get started!</p>
             <button onclick="startChat()">Start Calculator</button>
@@ -330,9 +330,9 @@
             userInput.focus();
             
             setTimeout(() => {
-                addMessage("Hi! 👋 I'm your solar hot water assistant. First, which unit system would you prefer?");
+                addMessage("Hi! 👋 I'm your solar hot water assistant.");
                 setTimeout(() => {
-                    addMessage('Type <strong>"metric"</strong> for liters and Celsius, or <strong>"imperial"</strong> for gallons and Fahrenheit.');
+                    addMessage('Which unit system do you prefer?<br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)<br><br><em>Note: This calculator uses imperial measurements internally. Metric values are converted to the closest standard imperial equivalents for water heater volumes.</em>');
                     conversationStep = 0.5;
                 }, 1000);
             }, 500);
