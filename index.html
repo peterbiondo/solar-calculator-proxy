@@ -697,7 +697,12 @@
                                 alternativeName = "Use the Off-Grid CIM 1500H Inverter";
                                 recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                                // Check if also has fewer panels
+                                if (panel1250 < panel1500) {
+                                    reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                                } else {
+                                    reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                                }
                             } else if (inv1500 < inv1250) {
                                 recommended = sys1500;
                                 alternative = sys1250;
@@ -705,7 +710,12 @@
                                 alternativeName = "Use the Off-Grid CIM 1200H Inverter";
                                 recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                                // Check if also has fewer panels
+                                if (panel1500 < panel1250) {
+                                    reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                                } else {
+                                    reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                                }
                             } else if (panel1250 < panel1500) {
                                 recommended = sys1250;
                                 alternative = sys1500;
@@ -713,7 +723,7 @@
                                 alternativeName = "Use the Off-Grid CIM 1500H Inverter";
                                 recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                                reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
                             } else if (panel1500 < panel1250) {
                                 recommended = sys1500;
                                 alternative = sys1250;
@@ -721,7 +731,7 @@
                                 alternativeName = "Use the Off-Grid CIM 1200H Inverter";
                                 recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                                reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
                             } else {
                                 recommended = sys1250;
                                 alternative = sys1500;
@@ -828,7 +838,12 @@
                                 alternativeName = "Use the Off-Grid CIM 1500H Inverter";
                                 recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                                // Check if also has fewer panels
+                                if (panel1250 < panel1500) {
+                                    reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                                } else {
+                                    reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                                }
                             } else if (inv1500 < inv1250) {
                                 recommended = sys1500;
                                 alternative = sys1250;
@@ -836,7 +851,12 @@
                                 alternativeName = "Use the Off-Grid CIM 1200H Inverter";
                                 recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                                // Check if also has fewer panels
+                                if (panel1500 < panel1250) {
+                                    reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                                } else {
+                                    reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                                }
                             } else if (panel1250 < panel1500) {
                                 recommended = sys1250;
                                 alternative = sys1500;
@@ -844,7 +864,7 @@
                                 alternativeName = "Use the Off-Grid CIM 1500H Inverter";
                                 recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                                reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
                             } else if (panel1500 < panel1250) {
                                 recommended = sys1500;
                                 alternative = sys1250;
@@ -852,7 +872,7 @@
                                 alternativeName = "Use the Off-Grid CIM 1200H Inverter";
                                 recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
                                 alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                                reason = "This system uses fewer panels, reducing installation complexity and roof space requirements.";
+                                reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
                             } else {
                                 recommended = sys1250;
                                 alternative = sys1500;
