@@ -272,18 +272,18 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-        <p style="font-size: 14px; margin-bottom: 5px; opacity: 0.95; font-weight: 500;">iSolar Hot Water Academy's</p>
-        <h1>☀️ PV Solar Hot Water Calculator</h1>
-        <p>International Support - Metric & Imperial</p>
-    </div>
+            <p style="font-size: 14px; margin-bottom: 5px; opacity: 0.95; font-weight: 500;">iSolar Hot Water Academy's</p>
+            <h1>☀️ PV Solar Hot Water Calculator</h1>
+            <p>International Support - Metric & Imperial</p>
+        </div>
         
         <div id="startScreen" class="start-screen">
-           <h2>Welcome to Your Photovoltaic Hot Water System Calculator!</h2>
-    <p>I'll help you design a PV solar water heater for your home.</p>
-    <p>This takes about 2 minutes.</p>
-    <p>Let's get started!</p>
-    <button onclick="startChat()">Start Calculator</button>
-    <p style="font-size: 12px; color: #888; margin-top: 30px; line-height: 1.5; max-width: 500px;">This calculator estimates the size for a PV solar water heater by automatically gathering solar radiation and groundwater temperature data for your location. You can choose annual or seasonal averages or input your own values for a tailored estimate. This gives you a targeted entry point for sizing, rather than modeling from daily performance.</p>
+            <h2>Welcome to Your Photovoltaic Hot Water System Calculator!</h2>
+            <p>I'll help you design a PV solar water heater for your home.</p>
+            <p>This takes about 2 minutes.</p>
+            <p>Let's get started!</p>
+            <button onclick="startChat()">Start Calculator</button>
+            <p style="font-size: 12px; color: #888; margin-top: 30px; line-height: 1.5; max-width: 500px;">This calculator estimates the size for a PV solar water heater by automatically gathering solar radiation and groundwater temperature data for your location. You can choose annual or seasonal averages or input your own values for a tailored estimate. This gives you a targeted entry point for sizing, rather than modeling from daily performance.</p>
         </div>
         
         <div id="chatInterface" class="chat-interface hidden">
@@ -326,6 +326,16 @@
         const typingIndicator = document.getElementById('typingIndicator');
         const gallonButtons = document.getElementById('gallonButtons');
         const chatInputArea = document.getElementById('chatInputArea');
+        
+        // Metric tank size to gallon conversions (exact matches from your spreadsheet)
+        const metricTankConversions = {
+            150: 40,
+            200: 52,
+            250: 66,
+            300: 79,
+            400: 105,
+            500: 132
+        };
         
         // State abbreviations mapping
         const stateAbbreviations = {
@@ -537,7 +547,7 @@
             setTimeout(() => {
                 addMessage("Hi! 👋 I'm your solar hot water assistant.");
                 setTimeout(() => {
-                    addMessage('Which unit system do you prefer?<br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)<br><br><em>Note: This calculator uses imperial measurements internally. Metric values are converted to the closest standard imperial equivalents for water heater volumes.</em>');
+                    addMessage('Which unit system do you prefer?<br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)');
                     conversationStep = 0.5;
                     userInput.focus();
                 }, 1000);
@@ -580,7 +590,8 @@
         
         function selectWaterAmount(amount) {
             if (unitSystem === 'metric') {
-                userData.gallons = litersToGallons(amount);
+                // Use exact gallon conversions from the lookup table
+                userData.gallons = metricTankConversions[amount];
                 addMessage(`${amount} liters`, true);
             } else {
                 userData.gallons = amount;
@@ -674,14 +685,12 @@
                                 
                                 if (unitSystem === 'metric') {
                                     gallonButtons.innerHTML = `
-                                        <button class="gallon-btn" onclick="selectWaterAmount(76)">76 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(114)">114 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(151)">151 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(189)">189 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(227)">227 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(303)">303 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(379)">379 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(454)">454 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(150)">150 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(200)">200 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(250)">250 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(300)">300 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(400)">400 L</button>
+                                        <button class="gallon-btn" onclick="selectWaterAmount(500)">500 L</button>
                                     `;
                                 } else {
                                     gallonButtons.innerHTML = `
@@ -712,11 +721,11 @@
                 case 2:
                     const amount = parseFloat(message);
                     if (unitSystem === 'metric') {
-                        const validAmounts = [76, 114, 151, 189, 227, 303, 379, 454];
-                        if (validAmounts.some(v => Math.abs(amount - v) < 5)) {
+                        const validAmounts = [150, 200, 250, 300, 400, 500];
+                        if (validAmounts.includes(Math.round(amount))) {
                             selectWaterAmount(Math.round(amount));
                         } else {
-                            addMessage('Please click a button or enter a standard amount (76, 114, 151, 189, 227, 303, 379, or 454 liters)');
+                            addMessage('Please click a button or enter a standard amount (150, 200, 250, 300, 400, or 500 liters)');
                             userInput.focus();
                         }
                     } else {
@@ -1324,7 +1333,7 @@
                     
                     <em>These results are based on perfect conditions: panels at a ${latDisplay}° tilt (your latitude angle), facing due ${direction}, with zero shading.</em><br><br>
                     
-                    <strong><span style="color: #22c55e;">⬆️</span> Please scroll up to see the top of your results.</strong><br><br>
+                    <strong><span style="color: #22c55e; font-size: 20px;">▲</span> Please scroll up to see the top of your results.</strong><br><br>
                     
                     <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
                 
