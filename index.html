@@ -1026,6 +1026,10 @@
             const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
             const actualLat = data.latitude_actual || 35;
             
+            // Calculate display latitude and direction
+            const latDisplay = Math.abs(Math.round(actualLat));
+            const direction = actualLat < 0 ? 'north' : 'south';
+            
             const modelUrl = inverterModel === '1200H' ? 
                 'https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf' :
                 'https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf';
@@ -1059,7 +1063,7 @@
                     
                     <em>This system can meet your hot water requirements.</em><br><br>
                     
-                    <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.</em><br><br>
+                    <em>These results are based on perfect conditions: panels at a ${latDisplay}° tilt (your latitude angle), facing due ${direction}, with zero shading.</em><br><br>
                     
                     <strong>⬆️ Please scroll up to see the top of your results.</strong><br><br>
                     
@@ -1094,7 +1098,7 @@
                     
                     <em>This system can meet your hot water requirements.</em><br><br>
                     
-                    <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.</em><br><br>
+                    <em>These results are based on perfect conditions: panels at a ${latDisplay}° tilt (your latitude angle), facing due ${direction}, with zero shading.</em><br><br>
                     
                     <strong>⬆️ Please scroll up to see the top of your results.</strong><br><br>
                     
@@ -1110,6 +1114,10 @@
             const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
             const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
             const actualLat = data.latitude_actual || 35;
+            
+            // Calculate display latitude and direction
+            const latDisplay = Math.abs(Math.round(actualLat));
+            const direction = actualLat < 0 ? 'north' : 'south';
             
             if (unitSystem === 'metric') {
                 const displayGallons = Math.round(gallonsToLiters(parseFloat(userData.gallons)));
@@ -1209,7 +1217,7 @@
                     • kWh/day: ${alternative.kwh_day}<br>
                     • kWh Max: ${alternative.kwh_max}<br><br>
                     
-                    <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.</em><br><br>
+                    <em>These results are based on perfect conditions: panels at a ${latDisplay}° tilt (your latitude angle), facing due ${direction}, with zero shading.</em><br><br>
                     
                     <strong>⬆️ Please scroll up to see the top of your results.</strong><br><br>
                     
@@ -1312,7 +1320,7 @@
                     • kWh/day: ${alternative.kwh_day}<br>
                     • kWh Max: ${alternative.kwh_max}<br><br>
                     
-                    <em>These results are based on perfect conditions: panels at a ${Math.round(actualLat)}° tilt (your latitude angle), facing due south, with zero shading.</em><br><br>
+                    <em>These results are based on perfect conditions: panels at a ${latDisplay}° tilt (your latitude angle), facing due ${direction}, with zero shading.</em><br><br>
                     
                     <strong>⬆️ Please scroll up to see the top of your results.</strong><br><br>
                     
