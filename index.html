@@ -607,7 +607,7 @@
                     hideTyping();
                     const displayAmount = unitSystem === 'metric' ? 
                         `${amount} liters` : `${amount} gallons`;
-                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your modeling scenario:</strong><br>• Type <strong>"annual"</strong> - Year-round average conditions<br>• Type a <strong>season</strong> (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>) - Seasonal conditions<br>• Type <strong>"custom"</strong> - Enter your own specific values.<br><br>What would you like?`);
+                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your solar energy modeling scenario:</strong><br>• Type <strong>"annual"</strong> for year-round average conditions<br>• Type a season (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>) for seasonal conditions<br>• Type <strong>"custom"</strong> to enter your own specific values<br><br>Not sure which to choose? Type <strong>"help"</strong> to learn more, or just make your selection!`);
                     conversationStep = 3;
                     userInput.focus();
                 }, 800);
@@ -742,6 +742,23 @@
                 case 3:
                     const scenario = message.toLowerCase().trim();
                     
+                    if (scenario === 'help') {
+                        // Show help for modeling scenarios
+                        addMessage(`<strong>📚 MODELING SCENARIOS EXPLAINED:</strong><br><br>
+                            <strong>ANNUAL:</strong><br>
+                            Annual sizing uses year-round average solar radiation and groundwater temperature at your location. This provides a balanced system that performs well across all seasons. Choose this option if the system will be used year-round. It is the most common and cost-effective approach for most homes and businesses.<br><br>
+                            
+                            <strong>SEASONAL (Winter, Spring, Summer, Fall):</strong><br>
+                            Seasonal sizing uses climate data for a specific season. Select this option when hot water demand is concentrated during one part of the year. For example, choosing Summer is ideal for a cabin or resort that operates mainly in warmer months, keeping the system economical. Winter sizing is generally not recommended because shorter days and reduced solar radiation require a much larger, less cost-effective array.<br><br>
+                            
+                            <strong>CUSTOM:</strong><br>
+                            Custom sizing allows you to manually enter your own peak sun hours and cold-water temperature values. Select this option if you have unique data for your site or want to model a specific scenario. This gives you full control over the sizing inputs and performance assumptions.<br><br>
+                            
+                            Now, which scenario would you like? Type <strong>"annual"</strong>, a season name, or <strong>"custom"</strong>.`);
+                        userInput.focus();
+                        return;
+                    }
+                    
                     if (scenario === 'annual') {
                         userData.season = '';
                         userData.useAIClimate = true;
@@ -786,18 +803,28 @@
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                addMessage(`Great! What are your peak sun hours per day? (1-10)`);
+                                addMessage(`Great! What are your peak sun hours per day? (1-10)<br><br>Type <strong>"help"</strong> if you need more information.`);
                                 conversationStep = 3.1;
                                 userInput.focus();
                             }, 800);
                         }, 500);
                     } else {
-                        addMessage('Please type <strong>"annual"</strong>, a season (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>), or <strong>"custom"</strong>.');
+                        addMessage('Please type <strong>"annual"</strong>, a season (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>), <strong>"custom"</strong>, or <strong>"help"</strong>.');
                         userInput.focus();
                     }
                     break;
                 
                 case 3.1:
+                    if (message.toLowerCase().trim() === 'help') {
+                        // Show help for peak sun hours
+                        addMessage(`<strong>📚 PEAK SUN HOURS EXPLAINED:</strong><br><br>
+                            Peak sun hours measure the equivalent hours per day of full-strength sunlight (1,000 W/m²)—not total daylight hours. Most U.S. locations average 3-7 peak sun hours. Find your location's data at pvwatts.nrel.gov or similar solar databases.<br><br>
+                            
+                            Now, please enter your peak sun hours (1-10).`);
+                        userInput.focus();
+                        return;
+                    }
+                    
                     const peakSun = parseFloat(message);
                     if (!isNaN(peakSun) && peakSun >= 1 && peakSun <= 10) {
                         userData.peakSunHours = peakSun;
@@ -808,18 +835,29 @@
                             setTimeout(() => {
                                 hideTyping();
                                 const tempRange = unitSystem === 'metric' ? '4-27°C' : '40-80°F';
-                                addMessage(`What is your cold water temperature? (${tempRange})`);
+                                addMessage(`What is your cold water temperature? (${tempRange})<br><br>Type <strong>"help"</strong> if you need more information.`);
                                 conversationStep = 3.2;
                                 userInput.focus();
                             }, 800);
                         }, 500);
                     } else {
-                        addMessage('Please enter a number between 1 and 10 for peak sun hours.');
+                        addMessage('Please enter a number between 1 and 10 for peak sun hours, or type <strong>"help"</strong> for more information.');
                         userInput.focus();
                     }
                     break;
                 
                 case 3.2:
+                    if (message.toLowerCase().trim() === 'help') {
+                        // Show help for cold water temperature
+                        const tempRange = unitSystem === 'metric' ? '4-27°C' : '40-80°F';
+                        addMessage(`<strong>📚 COLD WATER TEMPERATURE EXPLAINED:</strong><br><br>
+                            Cold water temperature is your incoming water supply temperature from underground pipes. It affects how much energy is needed to heat your water. Most U.S. locations average 50-60°F annually. Measure it by running cold tap water for a few minutes with a thermometer.<br><br>
+                            
+                            Now, please enter your cold water temperature (${tempRange}).`);
+                        userInput.focus();
+                        return;
+                    }
+                    
                     const coldTemp = parseFloat(message);
                     const minTemp = unitSystem === 'metric' ? 4 : 40;
                     const maxTemp = unitSystem === 'metric' ? 27 : 80;
@@ -844,7 +882,7 @@
                         }, 500);
                     } else {
                         const tempRange = unitSystem === 'metric' ? '4-27°C' : '40-80°F';
-                        addMessage(`Please enter a temperature between ${tempRange}.`);
+                        addMessage(`Please enter a temperature between ${tempRange}, or type <strong>"help"</strong> for more information.`);
                         userInput.focus();
                     }
                     break;
