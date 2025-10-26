@@ -820,7 +820,7 @@
                         addMessage(`<strong>📚 PEAK SUN HOURS EXPLAINED:</strong><br><br>
                             Peak sun hours measure the equivalent hours per day of full-strength sunlight (1,000 W/m²)—not total daylight hours. Most U.S. locations average 3-7 peak sun hours. Find your location's data at pvwatts.nrel.gov or similar solar databases.<br><br>
                             
-                            Now, please enter your peak sun hours (1-10).`);
+                            Now, please enter your peak sun hours (2-9).`);
                         userInput.focus();
                         return;
                     }
@@ -841,7 +841,7 @@
                             }, 800);
                         }, 500);
                     } else {
-                        addMessage('Please enter a number between 1 and 10 for peak sun hours, or type <strong>"help"</strong> for more information.');
+                        addMessage('Please enter a number between 2 and 9 for peak sun hours, or type <strong>"help"</strong> for more information.');
                         userInput.focus();
                     }
                     break;
@@ -851,7 +851,7 @@
                         // Show help for cold water temperature
                         const tempRange = unitSystem === 'metric' ? '4-27°C' : '40-80°F';
                         addMessage(`<strong>📚 COLD WATER TEMPERATURE EXPLAINED:</strong><br><br>
-                            Cold water temperature is your incoming water supply temperature from underground pipes. It affects how much energy is needed to heat your water. Most locations average 45-75°F or 5-25°C annually. Measure it by running cold tap water for a few minutes with a thermometer.<br><br>
+                            Cold water temperature is your incoming water supply temperature from underground pipes. It affects how much energy is needed to heat your water. Most locations average 40-80°F or 4-27°C annually. Measure it by running cold tap water for a few minutes with a thermometer.<br><br>
                             
                             Now, please enter your cold water temperature (${tempRange}).`);
                         userInput.focus();
