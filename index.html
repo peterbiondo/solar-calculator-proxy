@@ -1011,9 +1011,9 @@
                 return;
             }
             
-            // Check if panels exceed maximum count
-            const sys1250Exceeds = sys1250.watt_status && sys1250.watt_status.toLowerCase().includes('exceeds');
-            const sys1500Exceeds = sys1500.watt_status && sys1500.watt_status.toLowerCase().includes('exceeds');
+            // Check if panels exceed maximum count (panels field will contain "Exceeds Count" text instead of a number)
+const sys1250Exceeds = typeof sys1250.panels === 'string' && sys1250.panels.toLowerCase().includes('exceeds');
+const sys1500Exceeds = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
             
             // If BOTH systems exceed panel count - show error message
             if (sys1250Exceeds && sys1500Exceeds) {
