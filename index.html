@@ -1031,7 +1031,8 @@ if (sys1250Exceeds && sys1500Exceeds) {
         The system cannot provide sufficient energy for your hot water specifications:<br><br>
         • Daily Usage: ${displayGallons} ${unit}<br>
         • Target Temperature: ${displayHotTemp}${tempUnit}<br>
-        • Peak Sun Hours: ${actualPeakSun} hrs/day<br><br>
+        • Peak Sun Hours: ${actualPeakSun} hrs/day<br>
+        • Panel Wattage: ${userData.panelWatts}W<br><br>
         <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong>`);
     return;
 }
