@@ -1016,23 +1016,25 @@ const sys1250Exceeds = typeof sys1250.panels === 'string' && sys1250.panels.toLo
 const sys1500Exceeds = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
             
             // If BOTH systems exceed panel count - show error message
-            if (sys1250Exceeds && sys1500Exceeds) {
-                const displayGallons = unitSystem === 'metric' ? 
-                    Math.round(gallonsToLiters(parseFloat(userData.gallons))) : 
-                    Math.round(userData.gallons);
-                const displayHotTemp = unitSystem === 'metric' ? 
-                    Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
-                    Math.round(userData.hotWaterTemp);
-                const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
-                const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
-                
-                addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
-                    The system cannot provide sufficient energy for your hot water specifications:<br><br>
-                    • Daily Usage: ${displayGallons} ${unit}<br>
-                    • Target Temperature: ${displayHotTemp}${tempUnit}<br><br>
-                    <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong>`);
-                return;
-            }
+if (sys1250Exceeds && sys1500Exceeds) {
+    const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+    const displayGallons = unitSystem === 'metric' ? 
+        Math.round(gallonsToLiters(parseFloat(userData.gallons))) : 
+        Math.round(userData.gallons);
+    const displayHotTemp = unitSystem === 'metric' ? 
+        Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
+        Math.round(userData.hotWaterTemp);
+    const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+    const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
+    
+    addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
+        The system cannot provide sufficient energy for your hot water specifications:<br><br>
+        • Daily Usage: ${displayGallons} ${unit}<br>
+        • Target Temperature: ${displayHotTemp}${tempUnit}<br>
+        • Peak Sun Hours: ${actualPeakSun} hrs/day<br><br>
+        <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong>`);
+    return;
+}
             
             // If only 1500H exceeds, show only 1200H
             if (sys1500Exceeds && !sys1250Exceeds) {
