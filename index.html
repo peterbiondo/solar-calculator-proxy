@@ -279,7 +279,7 @@
         
         <div id="startScreen" class="start-screen">
             <h2>Welcome to Your Photovoltaic Hot Water System Calculator!</h2>
-          <p><strong>I'll help you design a solar electric water heater for your home.</strong></p>
+            <p><strong>I'll help you design a solar electric water heater for your home.</strong></p>
             <p>This takes about 2 minutes.</p>
             <p>Let's get started!</p>
             <button onclick="startChat()">Start Calculator</button>
@@ -1002,37 +1002,20 @@
             const sys1250 = data.system_1250w;
             const sys1500 = data.system_1500w;
             
-            // Check if inverters are null (empty cells from spreadsheet)
+            // Check if 1200H inverter is null (wattage too high for this inverter)
             const sys1250InverterNull = !sys1250.inverters || sys1250.inverters === null || sys1250.inverters === 'null';
-            const sys1500InverterNull = !sys1500.inverters || sys1500.inverters === null || sys1500.inverters === 'null';
             
-            // SCENARIO 1: BOTH inverters are null - Panel wattage out of range
-            if (sys1250InverterNull && sys1500InverterNull) {
-                addMessage(`<strong>⚠️ Invalid Panel Wattage</strong><br><br>
-                    The panel wattage you entered is outside the acceptable range for these inverter systems.<br><br>
-                    <strong>Panel wattage must be between 250-550W.</strong><br><br>
-                    Please adjust your panel wattage and try again.`);
-                return;
-            }
-            
-            // SCENARIO 2: Only ONE inverter is null - Show only the working system
-            if (sys1250InverterNull && !sys1500InverterNull) {
-                // Only 1500 system works
+            // If 1200H inverter is null, only show 1500H system
+            if (sys1250InverterNull) {
                 displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
                 return;
             }
             
-            if (sys1500InverterNull && !sys1250InverterNull) {
-                // Only 1250 system works
-                displaySingleSystem(data, sys1250, '1200H', data.system_1250w);
-                return;
-            }
-            
-            // SCENARIO 3: Both inverters have values - Continue with exceeds logic
+            // Check if panels exceed maximum count
             const sys1250Exceeds = sys1250.watt_status && sys1250.watt_status.toLowerCase().includes('exceeds');
             const sys1500Exceeds = sys1500.watt_status && sys1500.watt_status.toLowerCase().includes('exceeds');
             
-            // Check if BOTH systems exceed the panel count
+            // If BOTH systems exceed panel count - show error message
             if (sys1250Exceeds && sys1500Exceeds) {
                 const displayGallons = unitSystem === 'metric' ? 
                     Math.round(gallonsToLiters(parseFloat(userData.gallons))) : 
@@ -1043,30 +1026,27 @@
                 const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
                 const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
                 
-                addMessage(`<strong>⚠️ System Cannot Provide Required Results</strong><br><br>
-                    The system cannot provide the required hot water for your specifications:<br><br>
+                addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
+                    The system cannot provide sufficient energy for your hot water specifications:<br><br>
                     • Daily Usage: ${displayGallons} ${unit}<br>
                     • Target Temperature: ${displayHotTemp}${tempUnit}<br><br>
-                    <strong>Both available inverter systems (CIM 1200H and CIM 1500H) exceed the maximum collector count needed to meet these requirements.</strong><br><br>
-                    <strong>To get results, please try again with:</strong><br>
-                    • A lower target hot water temperature, OR<br>
-                    • Lower daily water usage (fewer ${unit} per day), OR<br>
-                    • Both adjustments`);
+                    <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong>`);
                 return;
             }
             
-            // If only ONE system exceeds, show only the working one
-            if (sys1250Exceeds && !sys1500Exceeds) {
-                displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
-                return;
-            }
-            
+            // If only 1500H exceeds, show only 1200H
             if (sys1500Exceeds && !sys1250Exceeds) {
                 displaySingleSystem(data, sys1250, '1200H', data.system_1250w);
                 return;
             }
             
-            // SCENARIO 4: Both systems work - Show recommendation logic
+            // If only 1200H exceeds, show only 1500H
+            if (sys1250Exceeds && !sys1500Exceeds) {
+                displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
+                return;
+            }
+            
+            // Both systems work - Show recommendation logic
             displayBothSystems(data);
         }
         
