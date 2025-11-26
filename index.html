@@ -1146,6 +1146,49 @@ if (sys1250Exceeds && sys1500Exceeds) {
                     
                     <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
                 
+              addMessage(messageContent);
+// Scroll to show the TOP of the results
+setTimeout(() => {
+    const messages = chatMessages.querySelectorAll('.message');
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage) {
+        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}, 100);
+            } else {
+                const displayGallons = Math.round(userData.gallons);
+                const displayColdTemp = Math.round(actualColdTemp);
+                const displayHotTemp = Math.round(userData.hotWaterTemp);
+                const displayHighLimit = Math.round(userData.highLimit);
+                
+                let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+                    📍 <strong>Location:</strong> ${userData.location}<br>
+                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
+                    ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F<br>
+                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
+                    ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+                    📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
+                    
+                    <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+                    
+                    <strong><a href="${modelUrl}" target="_blank" style="color: #667eea; text-decoration: underline;">Use the Off-Grid CIM ${inverterModel} Inverter</a>:</strong><br>
+                    • Inverters: ${system.inverters}<br>
+                    • Panels: ${system.panels}<br>
+                    • Panel Wattage: ${userData.panelWatts}W<br>
+                    • Tank Size: ${system.tank_size} gallons<br>
+                    • Element Size: ${system.element_size}W<br>
+                    • kWh/day: ${system.kwh_day}<br>
+                    • kWh Max: ${system.kwh_max}<br><br>
+                    
+                    <em>This system can meet your hot water requirements.</em><br><br>
+                    
+                    <em>These results are based on perfect conditions: panels at a ${latDisplay}° tilt (your latitude angle), facing due ${direction}, with zero shading.</em><br><br>
+                    
+                    <strong><span style="color: #22c55e; font-size: 20px;">▲</span> Please scroll up to see the top of your results.</strong><br><br>
+                    
+                    <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
+                
                 addMessage(messageContent);
                 // Scroll to show the TOP of the results
    setTimeout(() => {
@@ -1388,11 +1431,6 @@ setTimeout(() => {
         lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }, 100);
-            }
-        }
-    </script>
-</body>
-</html>
             }
         }
     </script>
