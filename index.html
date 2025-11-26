@@ -1396,6 +1396,15 @@ if (sys1250Exceeds && sys1500Exceeds) {
                     <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
                 
                 addMessage(messageContent);
+           
+                // Scroll to show the TOP of the results
+                setTimeout(() => {
+                    const messages = chatMessages.querySelectorAll('.message');
+                    const lastMessage = messages[messages.length - 1];
+                    if (lastMessage) {
+                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
             }
         }
     </script>
