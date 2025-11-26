@@ -677,37 +677,47 @@
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
-                                const usageNote = unitSystem === 'metric' ? 
-                                    'Note: Most consumers use 60-75 liters of hot water per day. Usage varies by individual.' : 
-                                    'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
-                                addMessage(`Perfect! Now, how many ${unit} of hot water do you use per day?<br><br><em>${usageNote}</em><br><br>Choose from the options:`);
-                                
-                                if (unitSystem === 'metric') {
-                                    gallonButtons.innerHTML = `
-                                        <button class="gallon-btn" onclick="selectWaterAmount(150)">150 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(200)">200 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(250)">250 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(300)">300 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(400)">400 L</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(500)">500 L</button>
-                                    `;
-                                } else {
-                                    gallonButtons.innerHTML = `
-                                        <button class="gallon-btn" onclick="selectWaterAmount(20)">20 gal</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button>
-                                        <button class="gallon-btn" onclick="selectWaterAmount(120)">120 gal</button>
-                                    `;
-                                }
-                                
-                                gallonButtons.style.display = 'grid';
-                                conversationStep = 2;
-                                userInput.focus();
+const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+const usageNote = unitSystem === 'metric' ? 
+    'Note: Most consumers use 60-75 liters of hot water per day. Usage varies by individual.' : 
+    'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
+addMessage(`Perfect! Now, how many ${unit} of hot water do you use per day?<br><br><em>${usageNote}</em>`);
+
+// Wait 800ms, then show "Choose from options" and buttons
+setTimeout(() => {
+    showTyping();
+    setTimeout(() => {
+        hideTyping();
+        addMessage(`Choose from the options:`);
+        
+        if (unitSystem === 'metric') {
+            gallonButtons.innerHTML = `
+                <button class="gallon-btn" onclick="selectWaterAmount(150)">150 L</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(200)">200 L</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(250)">250 L</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(300)">300 L</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(400)">400 L</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(500)">500 L</button>
+            `;
+        } else {
+            gallonButtons.innerHTML = `
+                <button class="gallon-btn" onclick="selectWaterAmount(20)">20 gal</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button>
+                <button class="gallon-btn" onclick="selectWaterAmount(120)">120 gal</button>
+            `;
+        }
+        
+        gallonButtons.style.display = 'grid';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        conversationStep = 2;
+        userInput.focus();
+    }, 800);
+}, 500);
                             }, 1000);
                         }, 500);
                     } else {
