@@ -818,13 +818,11 @@ setTimeout(() => {
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                addMessage(`Great! What are your peak sun hours per day? (2-9)`);
-
-setTimeout(() => {
-    addMessage(`💡 <span style="background: #667eea; color: #000000; padding: 10px 15px; border-radius: 10px; display: inline-block; font-size: 16px;">Not sure? Type <strong style="font-weight: 700;">"help"</strong> to learn more!</span>`);
-    conversationStep = 3.1;
-    userInput.focus();
-}, 500);
+                                addMessage(`Great! What are your peak sun hours per day? (2-9)<br><br>Type <strong>"help"</strong> if you need more information.`);
+                                conversationStep = 3.1;
+                                userInput.focus();
+                            }, 800);
+                        }, 500);
                     } else {
                         addMessage('Please type <strong>"annual"</strong>, a season (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>), <strong>"custom"</strong>, or <strong>"help"</strong>.');
                         userInput.focus();
@@ -852,13 +850,11 @@ setTimeout(() => {
                             setTimeout(() => {
                                 hideTyping();
                                 const tempRange = unitSystem === 'metric' ? '4-27°C' : '40-80°F';
-                                addMessage(`What is your cold water temperature? (${tempRange})`);
-
-setTimeout(() => {
-    addMessage(`💡 <span style="background: #667eea; color: #000000; padding: 10px 15px; border-radius: 10px; display: inline-block; font-size: 16px;">Need guidance? Type <strong style="font-weight: 700;">"help"</strong> to learn more!</span>`);
-    conversationStep = 3.2;
-    userInput.focus();
-}, 500);
+                                addMessage(`What is your cold water temperature? (${tempRange})<br><br>Type <strong>"help"</strong> if you need more information.`);
+                                conversationStep = 3.2;
+                                userInput.focus();
+                            }, 800);
+                        }, 500);
                     } else {
                         addMessage('Please enter a number between 2 and 9 for peak sun hours, or type <strong>"help"</strong> for more information.');
                         userInput.focus();
