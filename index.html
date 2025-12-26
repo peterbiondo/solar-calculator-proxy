@@ -270,23 +270,38 @@
         }
     </style>
       <script>
-        // Force scroll to top on page load
-        window.onload = function() {
+        // Prevent iOS Safari from restoring scroll position
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+        
+        // Force scroll to top immediately
+        window.scrollTo(0, 0);
+        
+        // Also force on DOM ready and page load
+        document.addEventListener('DOMContentLoaded', function() {
             window.scrollTo(0, 0);
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
-            
-            // Reset all scrollable containers
-            const chatContainer = document.querySelector('.chat-container');
-            if (chatContainer) {
-                chatContainer.scrollTop = 0;
-            }
             
             const startScreen = document.querySelector('.start-screen');
             if (startScreen) {
                 startScreen.scrollTop = 0;
             }
-        };
+        });
+        
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 0);
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+                
+                const startScreen = document.querySelector('.start-screen');
+                if (startScreen) {
+                    startScreen.scrollTop = 0;
+                }
+            }, 0);
+        });
     </script>
 </head>
 <body>
