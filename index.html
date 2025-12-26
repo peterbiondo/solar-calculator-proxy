@@ -604,18 +604,25 @@
     }, 500);
 }
         
-        function addMessage(text, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            contentDiv.innerHTML = text;
-            
-            messageDiv.appendChild(contentDiv);
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+    function addMessage(text, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    contentDiv.innerHTML = text;
+    
+    messageDiv.appendChild(contentDiv);
+    chatMessages.appendChild(messageDiv);
+    
+    // Expand chat area after first few messages
+    const messageCount = chatMessages.querySelectorAll('.message').length;
+    if (messageCount >= 2) {
+        chatMessages.classList.add('expanded');
+    }
+    
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
         
         function showTyping() {
             typingIndicator.style.display = 'block';
