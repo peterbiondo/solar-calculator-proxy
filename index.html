@@ -326,9 +326,7 @@
   You can select annual or seasonal averages, or enter your own custom values.<br>
   The goal is to provide a practical starting point for system sizing rather than a detailed hour-by-hour or day-by-day performance model.
 </p>     
-        
-        
-        
+           
         </div>
         
         <div id="chatInterface" class="chat-interface hidden">
@@ -584,20 +582,20 @@
             }
         }
         
-        function startChat() {
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('chatInterface').classList.remove('hidden');
+       function startChat() {
+    document.getElementById('startScreen').classList.add('hidden');
+    document.getElementById('chatInterface').classList.remove('hidden');
+    
+    setTimeout(() => {
+        addMessage("Hi! 👋 I'm your solar hot water assistant.");
+        setTimeout(() => {
+            addMessage('Which unit system do you prefer?<br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)');
+            conversationStep = 0.5;
+            chatMessages.scrollTop = 0;
             userInput.focus();
-            
-            setTimeout(() => {
-                addMessage("Hi! 👋 I'm your solar hot water assistant.");
-                setTimeout(() => {
-                    addMessage('Which unit system do you prefer?<br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)');
-                    conversationStep = 0.5;
-                    userInput.focus();
-                }, 1000);
-            }, 500);
-        }
+        }, 1000);
+    }, 500);
+}
         
         function addMessage(text, isUser = false) {
             const messageDiv = document.createElement('div');
