@@ -269,12 +269,18 @@
             display: none !important;
         }
     </style>
-    <script>
+   <script>
         // Force scroll to top on page load
         window.onload = function() {
             window.scrollTo(0, 0);
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
+            
+            // Also reset chat container scroll
+            const chatContainer = document.querySelector('.chat-container');
+            if (chatContainer) {
+                chatContainer.scrollTop = 0;
+            }
         };
     </script>
 </head>
