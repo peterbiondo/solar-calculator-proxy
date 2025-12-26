@@ -58,7 +58,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 40px 40px 60px 40px;
+    padding: 40px 40px 20px 40px;
     text-align: center;
     overflow-y: auto;
 }
@@ -269,6 +269,14 @@
             display: none !important;
         }
     </style>
+    <script>
+        // Force scroll to top on page load
+        window.onload = function() {
+            window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        };
+    </script>
 </head>
 <body>
     <div class="chat-container">
