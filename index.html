@@ -845,7 +845,7 @@ setTimeout(() => {
                                 hideTyping();
                                 const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
                                 const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '50' : '120'}" to keep it, or enter ${tempRange}.`);
+                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><br>${defaultTemp} is advisable. This is the target temperature the entire tank will be heated to. Enter ${tempRange}.`);
                                 conversationStep = 4;
                                 userInput.focus();
                             }, 800);
@@ -862,7 +862,7 @@ setTimeout(() => {
                                 hideTyping();
                                 const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
                                 const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`Hot water temperature is set to <strong>${defaultTemp}</strong> by default. Type "${unitSystem === 'metric' ? '50' : '120'}" to keep it, or enter ${tempRange}.`);
+                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><br>${defaultTemp} is advisable. This is the target temperature the entire tank will be heated to. Enter ${tempRange}.`);
                                 conversationStep = 4;
                                 userInput.focus();
                             }, 800);
