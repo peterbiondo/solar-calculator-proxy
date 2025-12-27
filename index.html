@@ -815,22 +815,23 @@ setTimeout(() => {
                     const scenario = message.toLowerCase().trim();
                     
                     if (scenario === 'help') {
-                        // Show help for modeling scenarios
-                        addMessage(`<strong>📚 MODELING SCENARIOS EXPLAINED:</strong><br><br>
-                            <strong>"Annual"</strong><br>
-                            Annual sizing uses year-round average solar radiation and groundwater temperature at your location. This provides a balanced system that performs well most of the year. Choose "annual" if the system will be used year-round. It is the most common and cost-effective approach for most homes.<br><br>
-                            
-                            <strong>Seasonal<strong><br> 
-                            <strong>"Winter", "Spring", "Summer", "Fall"</strong><br>
-                            Seasonal sizing uses climate data for a specific time of year. Choose this option when hot water demand occurs primarily during one season. For example, choosing "Summer" is ideal for a cabin or resort that operates mainly in warmer months, making the system more economical. Winter sizing is generally not recommended, as shorter days and lower solar radiation would require a much larger array—often 40–80% larger than what is needed for most of the year.<br><br>                            
-                            
-                            <strong>"Custom"</strong><br>
-                            Custom sizing allows you to manually enter your own peak sun hours and cold-water temperature values. Select "custom" if you have unique data for your site or want to model a specific scenario. This gives you full control over the sizing inputs and performance assumptions.<br><br>
-                            
-                            Now, which scenario would you like? Type <strong>"annual"</strong>, <strong>"Winter", "Spring", "Summer", "Fall"<strong>, or <strong>"custom"</strong>.`);
-                        userInput.focus();
-                        return;
-                    }
+    // Show help for modeling scenarios
+    addMessage(`<strong>📚 MODELING SCENARIOS EXPLAINED:</strong><br><br>
+        
+        <strong>"Annual"</strong><br>
+        Annual sizing uses year-round average solar radiation and groundwater temperature at your location. This provides a balanced system that performs well most of the year. Choose "annual" if the system will be used year-round. It is the most common and cost-effective approach for most homes.<br><br>
+        
+        <strong>Seasonal</strong><br>
+        <strong>("Winter", "Spring", "Summer", "Fall")</strong><br>
+        Seasonal sizing uses climate data for a specific time of year. Choose this option when hot water demand occurs primarily during one season. For example, choosing "Summer" is ideal for a cabin or resort that operates mainly in warmer months, making the system more economical. Winter sizing is generally not recommended, as shorter days and lower solar radiation would require a much larger array—often 40–80% larger than what is needed for most of the year.<br><br>
+        
+        <strong>"Custom"</strong><br>
+        Custom sizing allows you to manually enter your own peak sun hours and cold-water temperature values. Select "custom" if you have unique data for your site or want to model a specific scenario. This gives you full control over the sizing inputs and performance assumptions.<br><br>
+        
+        Now, which scenario would you like? Type <strong>"annual"</strong>, <strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>, or <strong>"custom"</strong>.`);
+    userInput.focus();
+    return;
+}
                     
                     if (scenario === 'annual') {
                         userData.season = '';
