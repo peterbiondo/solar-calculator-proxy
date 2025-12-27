@@ -669,14 +669,9 @@
                     hideTyping();
                     const displayAmount = unitSystem === 'metric' ? 
                         `${amount} liters` : `${amount} gallons`;
-                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your solar energy modeling scenario:</strong><br>• Type <strong>"annual"</strong> for year-round average conditions<br>• Type a season (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>) for seasonal conditions<br>• Type <strong>"custom"</strong> to enter your own specific values`);
-
-setTimeout(() => {
-addMessage(`💡 <span style="background: #667eea; color: #000000; padding: 10px 15px; border-radius: 10px; display: inline-block; font-size: 16px;">Need help deciding? Type <strong style="font-weight: 700;">"help"</strong> for guidance!</span>`);
-    
-    conversationStep = 3;
-    userInput.focus();
-}, 500);
+                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your solar energy modeling scenario:</strong><br>• Type <strong>"annual"</strong> for year-round average conditions<br>• Type a season (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>) for seasonal conditions<br>• Type <strong>"custom"</strong> to enter your own specific values<br><br>Need help deciding? Type <strong>"help"</strong> for guidance!`);
+conversationStep = 3;
+userInput.focus();
                 }, 800);
             }, 300);
         }
