@@ -306,6 +306,19 @@
         .hidden {
             display: none !important;
         }
+        
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: rotate(14deg); }
+            20%, 40%, 60%, 80% { transform: rotate(-8deg); }
+        }
+        
+        .wave-emoji {
+            display: inline-block;
+            animation: wave 2s ease-in-out;
+            transform-origin: 70% 70%;
+            font-size: 28px;
+        }
     </style>
     
     <!-- iOS Safari scroll position fix -->
