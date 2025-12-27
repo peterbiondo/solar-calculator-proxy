@@ -1060,7 +1060,7 @@
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                addMessage(`Enter the wattage rating of your PV panels. Panels around 400–450 W are ideal for matching the output of the listed inverters. Choose a value between 250–550 W.`);
+                                addMessage(`<strong>Enter the wattage rating of your PV panels.</strong><br>Panels around 400–450 W are ideal for matching the output of the listed inverters. Choose a value between 250–550 W.`);
                                 conversationStep = 5;
                                 userInput.focus();
                             }, 800);
@@ -1103,7 +1103,7 @@
                 case 6:
                     const highLimit = parseFloat(message);
                     const minLimit = unitSystem === 'metric' ? 50 : 120;
-                    const maxLimit = unitSystem === 'metric' ? 70 : 160;
+                    const maxLimit = unitSystem === 'metric' ? 65 : 150;
                     
                     if (!isNaN(highLimit) && highLimit >= minLimit && highLimit <= maxLimit) {
                         userData.highLimit = unitSystem === 'metric' ? 
