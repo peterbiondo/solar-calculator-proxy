@@ -5,23 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PV Solar Hot Water Calculator</title>
     <style>
+        /* ===================================
+           RESET & BASE STYLES
+           =================================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
-     body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    overflow-x: hidden;
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden; /* Prevents horizontal scroll on mobile */
+        }
         
+        /* ===================================
+           CHAT CONTAINER
+           =================================== */
         .chat-container {
             width: 100%;
             max-width: 600px;
@@ -35,16 +41,19 @@
             overflow: hidden;
         }
         
+        /* ===================================
+           HEADER - STICKY ON SCROLL
+           =================================== */
         .chat-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
         
         .chat-header h1 {
             font-size: 24px;
@@ -56,16 +65,19 @@
             opacity: 0.9;
         }
         
-       .start-screen {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 40px 40px 20px 40px;
-    text-align: center;
-    overflow-y: auto;
-}
+        /* ===================================
+           START SCREEN
+           =================================== */
+        .start-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 40px 40px 20px 40px;
+            text-align: center;
+            overflow-y: auto; /* Allows scrolling on small screens */
+        }
         
         .start-screen h2 {
             color: #667eea;
@@ -98,6 +110,9 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
         
+        /* ===================================
+           CHAT INTERFACE
+           =================================== */
         .chat-interface {
             display: flex;
             flex-direction: column;
@@ -105,22 +120,26 @@
             min-height: 0;
         }
         
-       .chat-messages {
-    flex: 0 1 auto;
-    max-height: 250px;
-    overflow-y: auto;
-    padding: 20px;
-    padding-bottom: 10px;
-    background: #f8f9fa;
-    min-height: 150px;
-    transition: max-height 1.5s ease;
-}
+        /* Chat messages area - starts small, expands after 9 messages */
+        .chat-messages {
+            flex: 0 1 auto;
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 10px;
+            background: #f8f9fa;
+            min-height: 150px;
+            transition: max-height 1.5s ease; /* Smooth expansion animation */
+        }
 
-.chat-messages.expanded {
-    flex: 1;
-    max-height: none;
-}
+        .chat-messages.expanded {
+            flex: 1;
+            max-height: none;
+        }
         
+        /* ===================================
+           MESSAGE BUBBLES
+           =================================== */
         .message {
             margin-bottom: 15px;
             display: flex;
@@ -166,6 +185,9 @@
             border-bottom-right-radius: 4px;
         }
         
+        /* ===================================
+           TYPING INDICATOR
+           =================================== */
         .typing-indicator {
             display: none;
             padding: 12px 16px;
@@ -202,13 +224,17 @@
             }
         }
         
-       .chat-input-area {
-    padding: 10px 15px 5px 15px;
-    background: white;
-    border-top: 1px solid #e0e0e0;
-    flex-shrink: 0;
-}
+        /* ===================================
+           INPUT AREA
+           =================================== */
+        .chat-input-area {
+            padding: 10px 15px 5px 15px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            flex-shrink: 0;
+        }
         
+        /* Water amount selection buttons */
         .gallon-buttons {
             display: none;
             grid-template-columns: repeat(3, 1fr);
@@ -236,18 +262,18 @@
             transform: scale(0.98);
         }
         
-      .input-group {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 0;
-}
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 0;
+        }
         
         #userInput {
             flex: 1;
             padding: 12px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 25px;
-            font-size: 16px;
+            font-size: 16px; /* 16px prevents iOS zoom on focus */
             outline: none;
             transition: border-color 0.3s;
         }
@@ -281,8 +307,10 @@
             display: none !important;
         }
     </style>
-      <script>
-        // Prevent iOS Safari from restoring scroll position
+    
+    <!-- iOS Safari scroll position fix -->
+    <script>
+        // Prevent iOS Safari from restoring scroll position on reload
         if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
         }
@@ -290,7 +318,7 @@
         // Force scroll to top immediately
         window.scrollTo(0, 0);
         
-        // Also force on DOM ready and page load
+        // Force scroll on DOM ready
         document.addEventListener('DOMContentLoaded', function() {
             window.scrollTo(0, 0);
             document.body.scrollTop = 0;
@@ -302,6 +330,7 @@
             }
         });
         
+        // Force scroll on page load
         window.addEventListener('load', function() {
             setTimeout(function() {
                 window.scrollTo(0, 0);
@@ -318,29 +347,38 @@
 </head>
 <body>
     <div class="chat-container">
+        <!-- ===================================
+             HEADER - Brand & Title
+             =================================== -->
         <div class="chat-header">
             <p style="font-size: 14px; margin-bottom: 5px; opacity: 0.95; font-weight: 500;">iSolar Hot Water Academy's</p>
             <h1>☀️ PV Solar Hot Water Calculator</h1>
             <p>International Support - Metric & Imperial</p>
         </div>
         
+        <!-- ===================================
+             START SCREEN - Welcome Message
+             =================================== -->
         <div id="startScreen" class="start-screen">
             <h2>Welcome to Your Photovoltaic Hot Water System Calculator!</h2>
             <p><strong>I'll help you design a solar electric water heater!</strong></p>
             <p>This takes about 2 minutes.</p>
             <p>Let's get started!</p>
             <button onclick="startChat()">Start Calculator</button>
-          <p style="font-size: 12px; color: #888; margin-top: 30px; line-height: 1.5; max-width: 500px;">
-  This solar sizing tool estimates solar water heating output using local solar radiation and groundwater temperature data. It targets 75–85% of annual hot-water demand from solar, the optimal balance of cost and performance.
-</p>
+            
+            <p style="font-size: 12px; color: #888; margin-top: 30px; line-height: 1.5; max-width: 500px;">
+                This solar sizing tool estimates solar water heating output using local solar radiation and groundwater temperature data. It targets 75–85% of annual hot-water demand from solar, the optimal balance of cost and performance.
+            </p>
 
-<p style="font-size: 12px; color: #888; line-height: 1.5; max-width: 500px;">
-  You can select annual or seasonal averages, or enter your own custom values.<br>
-  The goal is to provide a practical starting point for system sizing rather than a detailed hour-by-hour or day-by-day performance model.
-</p>     
-           
+            <p style="font-size: 12px; color: #888; line-height: 1.5; max-width: 500px;">
+                You can select annual or seasonal averages, or enter your own custom values.<br>
+                The goal is to provide a practical starting point for system sizing rather than a detailed hour-by-hour or day-by-day performance model.
+            </p>
         </div>
         
+        <!-- ===================================
+             CHAT INTERFACE - Conversation Area
+             =================================== -->
         <div id="chatInterface" class="chat-interface hidden">
             <div class="chat-messages" id="chatMessages">
                 <div class="typing-indicator" id="typingIndicator">
@@ -351,9 +389,10 @@
             </div>
             
             <div class="chat-input-area" id="chatInputArea">
-                <div id="gallonButtons" class="gallon-buttons">
-                    <!-- Will be populated dynamically -->
-                </div>
+                <!-- Water amount selection buttons (populated dynamically) -->
+                <div id="gallonButtons" class="gallon-buttons"></div>
+                
+                <!-- Text input and send button -->
                 <div class="input-group">
                     <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
                     <button id="sendBtn">Send</button>
@@ -363,8 +402,13 @@
     </div>
 
     <script>
+        /* ===================================
+           CONFIGURATION & GLOBAL VARIABLES
+           =================================== */
+        
         const WEBHOOK_URL = 'https://solar-calculator-proxy.vercel.app/api/webhook-proxy';
         
+        // Conversation state
         let conversationStep = 0;
         let userData = {
             season: '',
@@ -372,9 +416,10 @@
         };
         let estimatedAnnualSun = 5.5;
         let estimatedAnnualColdWater = 68;
-        let unitSystem = '';
-        let pendingLocation = '';
+        let unitSystem = ''; // 'metric' or 'imperial'
+        let pendingLocation = ''; // For location confirmation
         
+        // DOM elements
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -382,7 +427,11 @@
         const gallonButtons = document.getElementById('gallonButtons');
         const chatInputArea = document.getElementById('chatInputArea');
         
-        // Metric tank size to gallon conversions (exact matches from your spreadsheet)
+        /* ===================================
+           DATA MAPPINGS
+           =================================== */
+        
+        // Metric tank size to gallon conversions (exact matches from spreadsheet)
         const metricTankConversions = {
             150: 40,
             200: 52,
@@ -392,7 +441,7 @@
             500: 132
         };
         
-        // State abbreviations mapping
+        // US State abbreviations mapping
         const stateAbbreviations = {
             'al': 'Alabama', 'ak': 'Alaska', 'az': 'Arizona', 'ar': 'Arkansas', 'ca': 'California',
             'co': 'Colorado', 'ct': 'Connecticut', 'de': 'Delaware', 'fl': 'Florida', 'ga': 'Georgia',
@@ -467,8 +516,11 @@
             'Buenos Aires', 'Sao Paulo', 'Rio de Janeiro', 'Lima', 'Bogota',
             'Santiago', 'Caracas', 'Havana', 'San Juan'
         ];
+        /* ===================================
+           HELPER FUNCTIONS - Location & Conversion
+           =================================== */
         
-        // Calculate similarity score between two strings (simple version)
+        // Calculate similarity score between two strings (for fuzzy city matching)
         function similarityScore(str1, str2) {
             str1 = str1.toLowerCase();
             str2 = str2.toLowerCase();
@@ -496,7 +548,7 @@
             return score;
         }
         
-        // Find best matching city
+        // Find best matching city from database
         function findBestCityMatch(input) {
             let bestMatch = null;
             let bestScore = 0;
@@ -512,6 +564,7 @@
             return bestMatch;
         }
         
+        // Parse and correct location input (handles cities, states, countries)
         function parseAndCorrectLocation(input) {
             let corrected = input.trim().toLowerCase();
             
@@ -594,50 +647,7 @@
             }
         }
         
-       function startChat() {
-    document.getElementById('startScreen').classList.add('hidden');
-    document.getElementById('chatInterface').classList.remove('hidden');
-    
-    setTimeout(() => {
-        addMessage("Hi! 👋 I'm your solar hot water assistant.");
-        setTimeout(() => {
-            addMessage('Which unit system do you prefer?<br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)');
-            conversationStep = 0.5;
-            chatMessages.scrollTop = 0;
-            userInput.focus();
-        }, 1000);
-    }, 500);
-}
-        
-    function addMessage(text, isUser = false) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
-    
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
-    contentDiv.innerHTML = text;
-    
-    messageDiv.appendChild(contentDiv);
-    chatMessages.appendChild(messageDiv);
-    
-    // Expand chat area after first few messages
-    const messageCount = chatMessages.querySelectorAll('.message').length;
-    if (messageCount >= 9) {
-        chatMessages.classList.add('expanded');
-    }
-    
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-        
-        function showTyping() {
-            typingIndicator.style.display = 'block';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-        
-        function hideTyping() {
-            typingIndicator.style.display = 'none';
-        }
-        
+        // Temperature conversion functions
         function litersToGallons(liters) {
             return liters / 3.78541;
         }
@@ -650,6 +660,59 @@
             return (fahrenheit - 32) * 5/9;
         }
         
+        /* ===================================
+           CORE CHAT FUNCTIONS
+           =================================== */
+        
+        // Initialize chat interface
+        function startChat() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('chatInterface').classList.remove('hidden');
+            
+            setTimeout(() => {
+                addMessage("Hi! 👋 I'm your solar hot water assistant.");
+                setTimeout(() => {
+                    addMessage('Which unit system do you prefer?<br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)');
+                    conversationStep = 0.5;
+                    chatMessages.scrollTop = 0; // Keep view at top on mobile
+                    userInput.focus();
+                }, 1000);
+            }, 500);
+        }
+        
+        // Add message to chat (bot or user)
+        function addMessage(text, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = text;
+            
+            messageDiv.appendChild(contentDiv);
+            chatMessages.appendChild(messageDiv);
+            
+            // Expand chat area after 9 messages (allows initial messages to fit compactly)
+            const messageCount = chatMessages.querySelectorAll('.message').length;
+            if (messageCount >= 9) {
+                chatMessages.classList.add('expanded');
+            }
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Show typing indicator
+        function showTyping() {
+            typingIndicator.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Hide typing indicator
+        function hideTyping() {
+            typingIndicator.style.display = 'none';
+        }
+        
+        // Handle water amount selection (from buttons)
         function selectWaterAmount(amount) {
             if (unitSystem === 'metric') {
                 // Use exact gallon conversions from the lookup table
@@ -670,17 +733,22 @@
                     const displayAmount = unitSystem === 'metric' ? 
                         `${amount} liters` : `${amount} gallons`;
                     addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your solar energy modeling scenario:</strong><br>• Type <strong>"annual"</strong> for year-round average conditions<br>• Type a season, <strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong> for seasonal conditions<br>• Type <strong>"custom"</strong> to enter your own specific values<br><br>Need help deciding? Type <strong>"help"</strong> for guidance!`);
-conversationStep = 3;
-userInput.focus();
+                    conversationStep = 3;
+                    userInput.focus();
                 }, 800);
             }, 300);
         }
+        
+        /* ===================================
+           EVENT LISTENERS
+           =================================== */
         
         sendBtn.addEventListener('click', handleUserInput);
         userInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleUserInput();
         });
         
+        // Handle user input submission
         async function handleUserInput() {
             const message = userInput.value.trim();
             if (!message) return;
@@ -695,9 +763,13 @@ userInput.focus();
                 await processMessage(message);
             }, 800);
         }
+        /* ===================================
+           CONVERSATION FLOW - Main Message Processing
+           =================================== */
         
         async function processMessage(message) {
             switch (conversationStep) {
+                // Step 0.5: Unit System Selection
                 case 0.5:
                     const choice = message.toLowerCase();
                     if (choice === 'metric' || choice === 'm') {
@@ -722,6 +794,7 @@ userInput.focus();
                     }
                     break;
                 
+                // Step 1: Location Entry
                 case 1:
                     // Parse and correct the location
                     pendingLocation = parseAndCorrectLocation(message);
@@ -730,6 +803,7 @@ userInput.focus();
                     userInput.focus();
                     break;
                 
+                // Step 1.5: Location Confirmation
                 case 1.5:
                     const confirmation = message.toLowerCase();
                     if (confirmation === 'yes' || confirmation === 'y') {
@@ -739,47 +813,48 @@ userInput.focus();
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
-const usageNote = unitSystem === 'metric' ? 
-    'Note: Most consumers use 60-75 liters of hot water per day. Usage varies by individual.' : 
-    'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
-addMessage(`Perfect! Now, how many ${unit} of hot water do you use per day?<br><br><em>${usageNote}</em>`);
+                                const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+                                const usageNote = unitSystem === 'metric' ? 
+                                    'Note: Most consumers use 60-75 liters of hot water per day. Usage varies by individual.' : 
+                                    'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
+                                addMessage(`Perfect! Now, how many ${unit} of hot water do you use per day?<br><br><em>${usageNote}</em>`);
 
-// Wait 800ms, then show "Choose from options" and buttons
-setTimeout(() => {
-    showTyping();
-    setTimeout(() => {
-        hideTyping();
-        addMessage(`Choose from the options:`);
-        
-        if (unitSystem === 'metric') {
-            gallonButtons.innerHTML = `
-                <button class="gallon-btn" onclick="selectWaterAmount(150)">150 L</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(200)">200 L</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(250)">250 L</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(300)">300 L</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(400)">400 L</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(500)">500 L</button>
-            `;
-        } else {
-            gallonButtons.innerHTML = `
-                <button class="gallon-btn" onclick="selectWaterAmount(20)">20 gal</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button>
-                <button class="gallon-btn" onclick="selectWaterAmount(120)">120 gal</button>
-            `;
-        }
-        
-        gallonButtons.style.display = 'grid';
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        conversationStep = 2;
-        userInput.focus();
-    }, 800);
-}, 500);
+                                // Wait 500ms, then show "Choose from options" and buttons (two-step display for mobile)
+                                setTimeout(() => {
+                                    showTyping();
+                                    setTimeout(() => {
+                                        hideTyping();
+                                        addMessage(`Choose from the options:`);
+                                        
+                                        // Populate appropriate buttons based on unit system
+                                        if (unitSystem === 'metric') {
+                                            gallonButtons.innerHTML = `
+                                                <button class="gallon-btn" onclick="selectWaterAmount(150)">150 L</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(200)">200 L</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(250)">250 L</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(300)">300 L</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(400)">400 L</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(500)">500 L</button>
+                                            `;
+                                        } else {
+                                            gallonButtons.innerHTML = `
+                                                <button class="gallon-btn" onclick="selectWaterAmount(20)">20 gal</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button>
+                                                <button class="gallon-btn" onclick="selectWaterAmount(120)">120 gal</button>
+                                            `;
+                                        }
+                                        
+                                        gallonButtons.style.display = 'grid';
+                                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                                        conversationStep = 2;
+                                        userInput.focus();
+                                    }, 800);
+                                }, 500);
                             }, 1000);
                         }, 500);
                     } else {
@@ -790,6 +865,7 @@ setTimeout(() => {
                     }
                     break;
                 
+                // Step 2: Water Amount (typed input validation)
                 case 2:
                     const amount = parseFloat(message);
                     if (unitSystem === 'metric') {
@@ -811,12 +887,13 @@ setTimeout(() => {
                     }
                     break;
                 
+                // Step 3: Modeling Scenario Selection
                 case 3:
                     const scenario = message.toLowerCase().trim();
                     
+                    // Help for modeling scenarios
                     if (scenario === 'help') {
-    // Show help for modeling scenarios
-    addMessage(`<strong>📚 MODELING SCENARIOS EXPLAINED:</strong><br><br>
+                        addMessage(`<strong>📚 MODELING SCENARIOS EXPLAINED:</strong><br><br>
         
         <strong>"Annual"</strong><br>
         Annual sizing uses year-round average solar radiation and groundwater temperature at your location. This provides a balanced system that performs well most of the year. Choose <strong>"annual"</strong> if the system will be used year-round. It is the most common and cost-effective approach for most homes.<br><br>
@@ -829,10 +906,11 @@ setTimeout(() => {
         Custom sizing allows you to manually enter your own peak sun hours and cold-water temperature values. Select <strong>"custom"</strong> if you have unique data for your site or want to model a specific scenario. This gives you full control over the sizing inputs and performance assumptions.<br><br>
         
         Now, which scenario would you like? Type <strong>"annual"</strong>, <strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>, or <strong>"custom"</strong>.`);
-    userInput.focus();
-    return;
-}
+                        userInput.focus();
+                        return;
+                    }
                     
+                    // Annual scenario
                     if (scenario === 'annual') {
                         userData.season = '';
                         userData.useAIClimate = true;
@@ -850,7 +928,9 @@ setTimeout(() => {
                                 userInput.focus();
                             }, 800);
                         }, 500);
-                    } else if (['winter', 'spring', 'summer', 'fall'].includes(scenario)) {
+                    } 
+                    // Seasonal scenarios
+                    else if (['winter', 'spring', 'summer', 'fall'].includes(scenario)) {
                         userData.season = scenario;
                         userData.useAIClimate = true;
                         
@@ -867,7 +947,9 @@ setTimeout(() => {
                                 userInput.focus();
                             }, 800);
                         }, 500);
-                    } else if (scenario === 'custom') {
+                    } 
+                    // Custom scenario
+                    else if (scenario === 'custom') {
                         userData.season = '';
                         userData.useAIClimate = false;
                         
@@ -888,9 +970,9 @@ setTimeout(() => {
                     }
                     break;
                 
+                // Step 3.1: Custom Peak Sun Hours
                 case 3.1:
                     if (message.toLowerCase().trim() === 'help') {
-                        // Show help for peak sun hours
                         addMessage(`<strong>📚 PEAK SUN HOURS EXPLAINED:</strong><br><br>
                             Peak sun hours measure the equivalent hours per day of full-strength sunlight (1,000 W/m²)—not total daylight hours. Most U.S. locations average 3-7 peak sun hours. Find your location's data at pvwatts.nrel.gov or similar solar databases.<br><br>
                             
@@ -920,9 +1002,9 @@ setTimeout(() => {
                     }
                     break;
                 
+                // Step 3.2: Custom Cold Water Temperature
                 case 3.2:
                     if (message.toLowerCase().trim() === 'help') {
-                        // Show help for cold water temperature
                         const tempRange = unitSystem === 'metric' ? '4-27°C' : '40-80°F';
                         addMessage(`<strong>📚 COLD WATER TEMPERATURE EXPLAINED:</strong><br><br>
                             Cold water temperature is your incoming water supply temperature from underground pipes. It affects how much energy is needed to heat your water. Most locations average 40-80°F or 4-27°C annually. Measure it by running cold tap water for a few minutes with a thermometer.<br><br>
@@ -961,6 +1043,7 @@ setTimeout(() => {
                     }
                     break;
                 
+                // Step 4: Hot Water Temperature
                 case 4:
                     const hotTemp = parseFloat(message);
                     const minHot = unitSystem === 'metric' ? 38 : 100;
@@ -989,6 +1072,7 @@ setTimeout(() => {
                     }
                     break;
                 
+                // Step 5: Panel Wattage
                 case 5:
                     const watts = parseInt(message);
                     if (!isNaN(watts) && watts >= 250 && watts <= 550) {
@@ -1015,6 +1099,7 @@ setTimeout(() => {
                     }
                     break;
                 
+                // Step 6: High Limit Temperature
                 case 6:
                     const highLimit = parseFloat(message);
                     const minLimit = unitSystem === 'metric' ? 50 : 120;
@@ -1042,6 +1127,9 @@ setTimeout(() => {
                     break;
             }
         }
+        /* ===================================
+           WEBHOOK COMMUNICATION
+           =================================== */
         
         async function sendToWebhook() {
             try {
@@ -1069,6 +1157,10 @@ setTimeout(() => {
             }
         }
         
+        /* ===================================
+           RESULTS DISPLAY - Router Function
+           =================================== */
+        
         function displayResults(data) {
             // Hide the input area after displaying results
             chatInputArea.style.display = 'none';
@@ -1085,31 +1177,31 @@ setTimeout(() => {
                 return;
             }
             
-            // Check if panels exceed maximum count (panels field will contain "Exceeds Count" text instead of a number)
-const sys1250Exceeds = typeof sys1250.panels === 'string' && sys1250.panels.toLowerCase().includes('exceeds');
-const sys1500Exceeds = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
+            // Check if panels exceed maximum count (panels field will contain "Exceeds Count" text)
+            const sys1250Exceeds = typeof sys1250.panels === 'string' && sys1250.panels.toLowerCase().includes('exceeds');
+            const sys1500Exceeds = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
             
             // If BOTH systems exceed panel count - show error message
-if (sys1250Exceeds && sys1500Exceeds) {
-    const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-    const displayGallons = unitSystem === 'metric' ? 
-        Math.round(gallonsToLiters(parseFloat(userData.gallons))) : 
-        Math.round(userData.gallons);
-    const displayHotTemp = unitSystem === 'metric' ? 
-        Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
-        Math.round(userData.hotWaterTemp);
-    const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
-    const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
-    
-    addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
-        The system cannot provide sufficient energy for your hot water specifications:<br><br>
-        • Daily Usage: ${displayGallons} ${unit}<br>
-        • Target Temperature: ${displayHotTemp}${tempUnit}<br>
-        • Peak Sun Hours: ${actualPeakSun} hrs/day<br>
-        • Panel Wattage: ${userData.panelWatts}W<br><br>
-        <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong>`);
-    return;
-}
+            if (sys1250Exceeds && sys1500Exceeds) {
+                const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+                const displayGallons = unitSystem === 'metric' ? 
+                    Math.round(gallonsToLiters(parseFloat(userData.gallons))) : 
+                    Math.round(userData.gallons);
+                const displayHotTemp = unitSystem === 'metric' ? 
+                    Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
+                    Math.round(userData.hotWaterTemp);
+                const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+                const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
+                
+                addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
+                    The system cannot provide sufficient energy for your hot water specifications:<br><br>
+                    • Daily Usage: ${displayGallons} ${unit}<br>
+                    • Target Temperature: ${displayHotTemp}${tempUnit}<br>
+                    • Peak Sun Hours: ${actualPeakSun} hrs/day<br>
+                    • Panel Wattage: ${userData.panelWatts}W<br><br>
+                    <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong>`);
+                return;
+            }
             
             // If only 1500H exceeds, show only 1200H
             if (sys1500Exceeds && !sys1250Exceeds) {
@@ -1126,6 +1218,10 @@ if (sys1250Exceeds && sys1500Exceeds) {
             // Both systems work - Show recommendation logic
             displayBothSystems(data);
         }
+        
+        /* ===================================
+           SINGLE SYSTEM DISPLAY
+           =================================== */
         
         function displaySingleSystem(data, system, inverterModel, systemData) {
             const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
@@ -1227,6 +1323,9 @@ if (sys1250Exceeds && sys1500Exceeds) {
                 }, 100);
             }
         }
+        /* ===================================
+           BOTH SYSTEMS DISPLAY (WITH RECOMMENDATION LOGIC)
+           =================================== */
         
         function displayBothSystems(data) {
             const sys1250 = data.system_1250w;
@@ -1245,6 +1344,7 @@ if (sys1250Exceeds && sys1500Exceeds) {
                 const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
                 const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
                 
+                // Recommendation logic - choose best system based on inverters and panels
                 let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
                 const inv1250 = parseInt(sys1250.inverters);
                 const inv1500 = parseInt(sys1500.inverters);
@@ -1353,6 +1453,7 @@ if (sys1250Exceeds && sys1500Exceeds) {
                 }, 100);
                 
             } else {
+                // IMPERIAL VERSION (same logic as metric, different units)
                 const displayGallons = Math.round(userData.gallons);
                 const displayColdTemp = Math.round(actualColdTemp);
                 const displayHotTemp = Math.round(userData.hotWaterTemp);
