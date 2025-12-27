@@ -672,7 +672,7 @@
             setTimeout(() => {
                 addMessage("Hi! 👋 I'm your solar hot water assistant.");
                 setTimeout(() => {
-                    addMessage('Which unit system do you prefer?<br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)');
+                    addMessage('<strong>Which unit system do you prefer?</strong><br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)');
                     conversationStep = 0.5;
                     chatMessages.scrollTop = 0; // Keep view at top on mobile
                     userInput.focus();
@@ -784,7 +784,7 @@
                         unitSystem = 'imperial';
                         addMessage("Great! We'll use imperial units (gallons and Fahrenheit).");
                         setTimeout(() => {
-                            addMessage("What's your location? (City, State/Country)");
+                            addMessage("<strong>What's your location?</strong> (City, State/Country)");
                             conversationStep = 1;
                             userInput.focus();
                         }, 800);
