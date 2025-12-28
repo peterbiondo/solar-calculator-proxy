@@ -675,8 +675,8 @@
         
         // Reusable results disclaimer message
         function getOptimalConditionsMessage(direction) {
-            return `<em><strong>Results shown reflect optimal conditions.</strong><br>Panels face within 35° of due ${direction}, are tilted at an angle within ±15° of your site’s latitude, and free from shading 9am - 3pm.</em><br><br>`;
-        }
+    return `<em><strong>Results shown reflect optimal conditions.</strong><br>Panels face within 35° of due ${direction}, are tilted at an angle within ±15° of your site's latitude, and free from shading 9am - 3pm.</em><br><br>`;
+}
         
         /* ===================================
            CORE CHAT FUNCTIONS
@@ -1175,7 +1175,7 @@
             }
         }
         
-        /* ===================================
+       /* ===================================
            RESULTS DISPLAY - Router Function
            =================================== */
         
@@ -1283,7 +1283,7 @@
                     
                     <em>This system can meet your hot water requirements.</em><br><br>
                     
-                    ${getOptimalConditionsMessage(direction)}<em><strong>Results shown reflect optimal conditions.</strong><br>Panels face within 30° of due ${direction}, are tilted within ±15° of your latitude, and are free from shading.</em><br><br>
+                    ${getOptimalConditionsMessage(direction)}
                     
                     <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
                 
@@ -1325,7 +1325,7 @@
                     
                     <em>This system can meet your hot water requirements.</em><br><br>
                     
-                    ${getOptimalConditionsMessage(direction)}<em><strong>Results shown reflect optimal conditions.</strong><br>Panels face within 30° of due ${direction}, are tilted within ±15° of your latitude, and are free from shading.</em><br><br>
+                    ${getOptimalConditionsMessage(direction)}
                     
                     <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
                 
@@ -1341,6 +1341,7 @@
                 }, 100);
             }
         }
+        
         /* ===================================
            BOTH SYSTEMS DISPLAY (WITH RECOMMENDATION LOGIC)
            =================================== */
@@ -1455,7 +1456,7 @@
                     • kWh/day: ${alternative.kwh_day}<br>
                     • kWh Max: ${alternative.kwh_max}<br><br>
                     
-                    ${getOptimalConditionsMessage(direction)}<em><strong>Results shown reflect optimal conditions.</strong><br>Panels face within 30° of due ${direction}, are tilted within ±15° of your latitude, and are free from shading.</em><br><br>
+                    ${getOptimalConditionsMessage(direction)}
                     
                     <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #667eea; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em>`;
                 
