@@ -1345,7 +1345,12 @@
                 const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
                 const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
                 const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
-                const tankDisplay = Math.round(gallonsToLiters(parseFloat(system.tank_size)));
+                const tankDisplay = calculateOptimalMetricTank(
+                    parseFloat(userData.gallons),
+                    parseFloat(userData.hotWaterTemp),
+                    parseFloat(userData.highLimit),
+                    actualColdTemp
+                );
                 
                 let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
                     📍 <strong>Location:</strong> ${userData.location}<br>
@@ -1498,8 +1503,18 @@
                     reason = "This system is the most cost-effective choice with a less expensive inverter.";
                 }
                 
-                const recTankDisplay = Math.round(gallonsToLiters(parseFloat(recommended.tank_size)));
-                const altTankDisplay = Math.round(gallonsToLiters(parseFloat(alternative.tank_size)));
+                const recTankDisplay = calculateOptimalMetricTank(
+                    parseFloat(userData.gallons),
+                    parseFloat(userData.hotWaterTemp),
+                    parseFloat(userData.highLimit),
+                    actualColdTemp
+                );
+                const altTankDisplay = calculateOptimalMetricTank(
+                    parseFloat(userData.gallons),
+                    parseFloat(userData.hotWaterTemp),
+                    parseFloat(userData.highLimit),
+                    actualColdTemp
+                );
                 
                 let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
                     📍 <strong>Location:</strong> ${userData.location}<br>
