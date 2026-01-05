@@ -1175,12 +1175,11 @@
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                const tempRange = unitSystem === 'metric' ? '50-65°C' : '120-150°F';
-                                const limitTemp = unitSystem === 'metric' ? '65°C' : '150°F';
-                                const warningText = unitSystem === 'metric' ? 
-                                    '<br><br>⚠️ <strong style="color: #FFA500;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.' :
-                                    '<br><br>⚠️ <strong style="color: #FFA500;">WARNING:</strong> High limit above 120°F requires an anti-scald mixing valve on the water heater.';
-                                addMessage(`<strong>Enter the high-limit temperature for the water heater. Choose between ${tempRange}.</strong><br>Electric water heaters have a thermostat limit of about ${limitTemp}. Raising the high-limit above the setpoint allows the tank to store more energy when excess solar is available, delivering more hot water.${warningText}`);
+const tempRange = unitSystem === 'metric' ? '50-70°C' : '120-160°F';
+const warningText = unitSystem === 'metric' ? 
+    '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.' :
+    '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 120°F requires an anti-scald mixing valve on the water heater.';
+addMessage(`<strong>Enter the high-limit temperature for the water heater.</strong> Setting a high limit to 150°F enables smaller tank sizing by storing water at higher temperatures. Smaller tank = lower cost, easier retrofit, and less space required. You get the same daily hot water at your desired temperature, just from a smaller tank. <strong>Choose between ${tempRange}.</strong>${warningText}`);
                                 conversationStep = 6;
                                 userInput.focus();
                             }, 800);
