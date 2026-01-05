@@ -802,6 +802,21 @@
             return 500;
         }
         
+        // Convert gallons back to exact metric button value
+        function gallonsToExactLiters(gallons) {
+            const reverseTable = {
+                40: 150,
+                52: 200,
+                66: 250,
+                79: 300,
+                105: 400,
+                132: 500
+            };
+            
+            const roundedGallons = Math.round(gallons);
+            return reverseTable[roundedGallons] || Math.round(gallons * 3.78541);
+        }
+        
         /* ===================================
            CORE CHAT FUNCTIONS
            =================================== */
@@ -1341,7 +1356,7 @@
                 'https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf';
             
             if (unitSystem === 'metric') {
-                const displayGallons = Math.round(gallonsToLiters(parseFloat(userData.gallons)));
+                const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
                 const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
                 const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
                 const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
@@ -1442,7 +1457,7 @@
             const direction = actualLat < 0 ? 'north' : 'south';
             
             if (unitSystem === 'metric') {
-                const displayGallons = Math.round(gallonsToLiters(parseFloat(userData.gallons)));
+                const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
                 const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
                 const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
                 const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
