@@ -776,6 +776,32 @@
             return `<em><strong>Results shown reflect optimal conditions.</strong><br>Panels face within 35° of due ${direction}, are tilted at an angle within ±15° of your site's latitude, and free from shading 9am - 3pm.</em><br><br>`;
         }
         
+        // Calculate optimal metric tank using energy formula
+        function calculateOptimalMetricTank(dailyGallons, setpointF, highLimitF, incomingF) {
+            // Available metric tank sizes in gallons
+            const metricTankGallons = [40, 52, 66, 79, 105, 132]; // = [150, 200, 250, 300, 400, 500] liters
+            const metricTankLiters = [150, 200, 250, 300, 400, 500];
+            
+            // Step 1: Calculate daily energy needed
+            const dailyEnergy = dailyGallons * (setpointF - incomingF);
+            
+            // Step 2: Apply 5% margin (tank operates at 95% capacity)
+            const minimumEnergy = dailyEnergy / 1.05;
+            
+            // Step 3: Calculate minimum tank size in gallons
+            const minimumTankGallons = minimumEnergy / (highLimitF - incomingF);
+            
+            // Step 4: Find smallest metric tank that meets requirement
+            for (let i = 0; i < metricTankGallons.length; i++) {
+                if (metricTankGallons[i] >= minimumTankGallons) {
+                    return metricTankLiters[i]; // Return in liters
+                }
+            }
+            
+            // If exceeds largest tank, return 500L
+            return 500;
+        }
+        
         /* ===================================
            CORE CHAT FUNCTIONS
            =================================== */
