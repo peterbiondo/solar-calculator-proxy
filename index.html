@@ -1384,7 +1384,7 @@
                     • Panel Wattage: ${userData.panelWatts}W<br>
                     • Tank Size: ${tankDisplay} liters<br>
                     • Element Size: ${system.element_size}W<br>
-                    ${parseFloat(userData.highLimit) > 50 ? '• Mixing Valve: Required<br>' : ''}
+                    ${parseFloat(userData.highLimit) > 120 ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: ${system.kwh_day}<br>
                     ${parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
                     
@@ -1550,7 +1550,7 @@
                     • Panel Wattage: ${userData.panelWatts}W<br>
                     • Tank Size: ${recTankDisplay} liters<br>
                     • Element Size: ${recommended.element_size}W<br>
-                    ${parseFloat(userData.highLimit) > 50 ? '• Mixing Valve: Required<br>' : ''}
+                    ${parseFloat(userData.highLimit) > 120 ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: ${recommended.kwh_day}<br>
                     ${parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: ${recommended.kwh_max}<br>` : ''}<br>
                     
@@ -1564,7 +1564,7 @@
                     • Panel Wattage: ${userData.panelWatts}W<br>
                     • Tank Size: ${altTankDisplay} liters<br>
                     • Element Size: ${alternative.element_size}W<br>
-                    ${parseFloat(userData.highLimit) > 50 ? '• Mixing Valve: Required<br>' : ''}
+                    ${parseFloat(userData.highLimit) > 120 ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: ${alternative.kwh_day}<br>
                     ${parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
                     
