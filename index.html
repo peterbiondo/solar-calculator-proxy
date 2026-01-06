@@ -1219,7 +1219,7 @@
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                const tempRange = unitSystem === 'metric' ? '50-70°C' : '120-160°F';
+                                const tempRange = unitSystem === 'metric' ? '50-65°C' : '120-150°F';
                                 const limitTemp = unitSystem === 'metric' ? '65°C' : '150°F';
                                 const warningText = unitSystem === 'metric' ? 
                                     '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.' :
@@ -1238,7 +1238,7 @@
                 case 6:
                     const highLimit = parseFloat(message);
                     const minLimit = unitSystem === 'metric' ? 50 : 120;
-                    const maxLimit = unitSystem === 'metric' ? 70 : 160;
+                    const maxLimit = unitSystem === 'metric' ? 70 : 150;
                     
                     if (!isNaN(highLimit) && highLimit >= minLimit && highLimit <= maxLimit) {
                         userData.highLimit = unitSystem === 'metric' ? 
@@ -1255,7 +1255,7 @@
                             }, 1000);
                         }, 500);
                     } else {
-                        const limitRange = unitSystem === 'metric' ? '50-70°C' : '120-160°F';
+                        const limitRange = unitSystem === 'metric' ? '50-70°C' : '120-150°F';
                         addMessage(`Please enter a high limit between ${limitRange}.`);
                         userInput.focus();
                     }
