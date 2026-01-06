@@ -866,20 +866,6 @@
         }
         
         function selectWaterAmount(amount) {
-            function selectScenario(scenario) {
-            const displayText = scenario.charAt(0).toUpperCase() + scenario.slice(1);
-            addMessage(displayText, true);
-            
-            document.getElementById('scenarioButtons').style.display = 'none';
-            
-            setTimeout(() => {
-                showTyping();
-                setTimeout(() => {
-                    hideTyping();
-                    processMessage(scenario);
-                }, 800);
-            }, 300);
-        }
             if (unitSystem === 'metric') {
                 userData.gallons = metricTankConversions[amount];
                 addMessage(`${amount} liters`, true);
@@ -923,11 +909,25 @@
                         }, 800);
                     }, 500);
 
-CHANGE 4: HIDE BUTTONS WHEN USER TYPES
+
                 }, 800);
             }, 300);
         }
-        
+
+        function selectScenario(scenario) {
+            const displayText = scenario.charAt(0).toUpperCase() + scenario.slice(1);
+            addMessage(displayText, true);
+            
+            document.getElementById('scenarioButtons').style.display = 'none';
+            
+            setTimeout(() => {
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    processMessage(scenario);
+                }, 800);
+            }, 300);
+        }
         /* ===================================
            EVENT LISTENERS
            =================================== */
@@ -1069,7 +1069,6 @@ CHANGE 4: HIDE BUTTONS WHEN USER TYPES
                     break;
                 
                 case 3:
-                    case 3:
                     const scenario = message.toLowerCase().trim();
                     document.getElementById('scenarioButtons').style.display = 'none';
                     
@@ -1279,7 +1278,7 @@ CHANGE 4: HIDE BUTTONS WHEN USER TYPES
                 case 6:
                     const highLimit = parseFloat(message);
                     const minLimit = unitSystem === 'metric' ? 50 : 120;
-                    const maxLimit = unitSystem === 'metric' ? 70 : 150;
+                    const maxLimit = unitSystem === 'metric' ? 65 : 150;
                     
                     if (!isNaN(highLimit) && highLimit >= minLimit && highLimit <= maxLimit) {
                         userData.highLimit = unitSystem === 'metric' ? 
@@ -1296,7 +1295,7 @@ CHANGE 4: HIDE BUTTONS WHEN USER TYPES
                             }, 1000);
                         }, 500);
                     } else {
-                        const limitRange = unitSystem === 'metric' ? '50-70°C' : '120-150°F';
+                        const limitRange = unitSystem === 'metric' ? '50-65°C' : '120-150°F';
                         addMessage(`Please enter a high limit between ${limitRange}.`);
                         userInput.focus();
                     }
