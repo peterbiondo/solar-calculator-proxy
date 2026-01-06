@@ -1386,7 +1386,7 @@
                     • Element Size: ${system.element_size}W<br>
                     ${parseFloat(userData.highLimit) > 50 ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: ${system.kwh_day}<br>
-                    • kWh Max: ${system.kwh_max}<br><br>
+                    ${parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
                     
                     <em>This system can meet your hot water requirements.</em><br><br>
                     
@@ -1428,7 +1428,7 @@
                     • Element Size: ${system.element_size}W<br>
                     ${parseFloat(userData.highLimit) > 120 ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: ${system.kwh_day}<br>
-                    • kWh Max: ${system.kwh_max}<br><br>
+                    ${parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
                     
                     <em>This system can meet your hot water requirements.</em><br><br>
                     
@@ -1552,7 +1552,7 @@
                     • Element Size: ${recommended.element_size}W<br>
                     ${parseFloat(userData.highLimit) > 50 ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: ${recommended.kwh_day}<br>
-                    • kWh Max: ${recommended.kwh_max}<br><br>
+                    ${parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: ${recommended.kwh_max}<br>` : ''}<br>
                     
                     <em>${reason}</em><br><br>
                     
@@ -1566,7 +1566,7 @@
                     • Element Size: ${alternative.element_size}W<br>
                     ${parseFloat(userData.highLimit) > 50 ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: ${alternative.kwh_day}<br>
-                    • kWh Max: ${alternative.kwh_max}<br><br>
+                    ${parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
                     
                     <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
                     
@@ -1663,7 +1663,7 @@
                     • Element Size: ${recommended.element_size}W<br>
                     ${parseFloat(userData.highLimit) > 120 ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: ${recommended.kwh_day}<br>
-                    • kWh Max: ${recommended.kwh_max}<br><br>
+                    ${parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: ${recommended.kwh_max}<br>` : ''}<br>
                     
                     <em>${reason}</em><br><br>
                     
@@ -1677,7 +1677,7 @@
                     • Element Size: ${alternative.element_size}W<br>
                     ${parseFloat(userData.highLimit) > 120 ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: ${alternative.kwh_day}<br>
-                    • kWh Max: ${alternative.kwh_max}<br><br>
+                    ${parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
                     
                     <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
                     
