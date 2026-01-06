@@ -1312,7 +1312,7 @@
             if (sys1250Exceeds && sys1500Exceeds) {
                 const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
                 const displayGallons = unitSystem === 'metric' ? 
-                    Math.round(gallonsToLiters(parseFloat(userData.gallons))) : 
+                    gallonsToExactLiters(parseFloat(userData.gallons)) : 
                     Math.round(userData.gallons);
                 const displayHotTemp = unitSystem === 'metric' ? 
                     Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
