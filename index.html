@@ -532,6 +532,7 @@
             
             <div class="chat-input-area" id="chatInputArea">
                 <div id="gallonButtons" class="gallon-buttons"></div>
+                <div id="scenarioButtons" class="gallon-buttons"></div>
                 
                 <div class="input-group">
                     <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
@@ -865,6 +866,20 @@
         }
         
         function selectWaterAmount(amount) {
+            function selectScenario(scenario) {
+            const displayText = scenario.charAt(0).toUpperCase() + scenario.slice(1);
+            addMessage(displayText, true);
+            
+            document.getElementById('scenarioButtons').style.display = 'none';
+            
+            setTimeout(() => {
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    processMessage(scenario);
+                }, 800);
+            }, 300);
+        }
             if (unitSystem === 'metric') {
                 userData.gallons = metricTankConversions[amount];
                 addMessage(`${amount} liters`, true);
@@ -882,9 +897,33 @@
                     hideTyping();
                     const displayAmount = unitSystem === 'metric' ? 
                         `${amount} liters` : `${amount} gallons`;
-                    addMessage(`Perfect! ${displayAmount} per day.<br><br><strong>Choose your solar energy modeling scenario:</strong><br>• Type <strong>"annual"</strong> for year-round average conditions<br>• Type a season, <strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong> for seasonal conditions<br>• Type <strong>"custom"</strong> to enter your own specific values<br><br>Need help deciding? Type <strong>"help"</strong> for guidance!`);
-                    conversationStep = 3;
-                    userInput.focus();
+                    addMessage(`Perfect! ${displayAmount} per day.`);
+                    
+                    setTimeout(() => {
+                        showTyping();
+                        setTimeout(() => {
+                            hideTyping();
+                            addMessage(`<strong>Choose your solar energy modeling scenario. Click a button or enter</strong><br><br>• Type <strong>"annual"</strong> for year-round average conditions<br>• Type a season, <strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong> for seasonal conditions<br>• Type <strong>"custom"</strong> to enter your own specific values<br><br>Need help deciding? Type <strong>"help"</strong> for guidance!`);
+                            
+                            const scenarioButtons = document.getElementById('scenarioButtons');
+                            scenarioButtons.innerHTML = `
+                                <button class="gallon-btn" onclick="selectScenario('annual')">Annual</button>
+                                <button class="gallon-btn" onclick="selectScenario('winter')">Winter</button>
+                                <button class="gallon-btn" onclick="selectScenario('spring')">Spring</button>
+                                <button class="gallon-btn" onclick="selectScenario('summer')">Summer</button>
+                                <button class="gallon-btn" onclick="selectScenario('fall')">Fall</button>
+                                <button class="gallon-btn" onclick="selectScenario('custom')">Custom</button>
+                                <button class="gallon-btn" onclick="selectScenario('help')">Help</button>
+                            `;
+                            
+                            scenarioButtons.style.display = 'grid';
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                            conversationStep = 3;
+                            userInput.focus();
+                        }, 800);
+                    }, 500);
+
+CHANGE 4: HIDE BUTTONS WHEN USER TYPES
                 }, 800);
             }, 300);
         }
@@ -1030,7 +1069,9 @@
                     break;
                 
                 case 3:
+                    case 3:
                     const scenario = message.toLowerCase().trim();
+                    document.getElementById('scenarioButtons').style.display = 'none';
                     
                     if (scenario === 'help') {
                         addMessage(`<strong>📚 MODELING SCENARIOS EXPLAINED:</strong><br><br>
