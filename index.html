@@ -1264,436 +1264,430 @@
         }
         
         /* ===================================
-           WEBHOOK & RESULTS (keeping existing logic)
-           =================================== */
+   WEBHOOK & RESULTS (keeping existing logic)
+   =================================== */
+
+async function sendToWebhook() {
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData)
+        });
         
-        async function sendToWebhook() {
-            try {
-                const response = await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(userData)
-                });
-                
-                const data = await response.json();
-                
-                hideTyping();
-                
-                if (data.success && data.system_1250w && data.system_1500w) {
-                    displayResults(data);
-                } else {
-                    addMessage("I apologize, but I encountered an issue calculating your system. Please try again or contact support.");
-                }
-            } catch (error) {
-                hideTyping();
-                addMessage("Connection error. Please check your internet and try again.");
-                console.error('Error:', error);
-            }
+        const data = await response.json();
+        
+        hideTyping();
+        
+        if (data.success && data.system_1250w && data.system_1500w) {
+            displayResults(data);
+        } else {
+            addMessage("I apologize, but I encountered an issue calculating your system. Please try again or contact support.");
         }
+    } catch (error) {
+        hideTyping();
+        addMessage("Connection error. Please check your internet and try again.");
+        console.error('Error:', error);
+    }
+}
+
+function displayResults(data) {
+    chatInputArea.style.display = 'none';
+    
+    const sys1250 = data.system_1250w;
+    const sys1500 = data.system_1500w;
+    
+    const sys1250InverterNull = !sys1250.inverters || sys1250.inverters === null || sys1250.inverters === 'null';
+    
+    if (sys1250InverterNull) {
+        displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
+        return;
+    }
+    
+    const sys1250Exceeds = typeof sys1250.panels === 'string' && sys1250.panels.toLowerCase().includes('exceeds');
+    const sys1500Exceeds = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
+    
+    if (sys1250Exceeds && sys1500Exceeds) {
+        const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+        const displayGallons = unitSystem === 'metric' ? 
+            gallonsToExactLiters(parseFloat(userData.gallons)) : 
+            Math.round(userData.gallons);
+        const displayHotTemp = unitSystem === 'metric' ? 
+            Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
+            Math.round(userData.hotWaterTemp);
+        const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+        const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
         
-        function displayResults(data) {
-            chatInputArea.style.display = 'none';
-            
-            const sys1250 = data.system_1250w;
-            const sys1500 = data.system_1500w;
-            
-            const sys1250InverterNull = !sys1250.inverters || sys1250.inverters === null || sys1250.inverters === 'null';
-            
-            if (sys1250InverterNull) {
-                displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
-                return;
-            }
-            
-            const sys1250Exceeds = typeof sys1250.panels === 'string' && sys1250.panels.toLowerCase().includes('exceeds');
-            const sys1500Exceeds = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
-            
-            if (sys1250Exceeds && sys1500Exceeds) {
-                const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-                const displayGallons = unitSystem === 'metric' ? 
-                    gallonsToExactLiters(parseFloat(userData.gallons)) : 
-                    Math.round(userData.gallons);
-                const displayHotTemp = unitSystem === 'metric' ? 
-                    Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
-                    Math.round(userData.hotWaterTemp);
-                const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
-                const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
-                
-                addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
-                    The system cannot provide sufficient energy for your hot water specifications:<br><br>
-                    • Daily Usage: ${displayGallons} ${unit}<br>
-                    • Target Temperature: ${displayHotTemp}${tempUnit}<br>
-                    • Peak Sun Hours: ${actualPeakSun} hrs/day<br>
-                    • Panel Wattage: ${userData.panelWatts}W<br><br>
-                    <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong>`);
-                return;
-            }
-            
-            if (sys1500Exceeds && !sys1250Exceeds) {
-                displaySingleSystem(data, sys1250, '1200H', data.system_1250w);
-                return;
-            }
-            
-            if (sys1250Exceeds && !sys1500Exceeds) {
-                displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
-                return;
-            }
-            
-            displayBothSystems(data);
-        }
+        addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
+            The system cannot provide sufficient energy for your hot water specifications:<br><br>
+            • Daily Usage: ${displayGallons} ${unit}<br>
+            • Target Temperature: ${displayHotTemp}${tempUnit}<br>
+            • Peak Sun Hours: ${actualPeakSun} hrs/day<br>
+            • Panel Wattage: ${userData.panelWatts}W<br><br>
+            <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong>`);
+        return;
+    }
+    
+    if (sys1500Exceeds && !sys1250Exceeds) {
+        displaySingleSystem(data, sys1250, '1200H', data.system_1250w);
+        return;
+    }
+    
+    if (sys1250Exceeds && !sys1500Exceeds) {
+        displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
+        return;
+    }
+    
+    displayBothSystems(data);
+}
+
+function displaySingleSystem(data, system, inverterModel, systemData) {
+    const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+    const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
+    const actualLat = data.latitude_actual || 35;
+    
+    const latDisplay = Math.abs(Math.round(actualLat));
+    const direction = actualLat < 0 ? 'north' : 'south';
+    
+    const modelUrl = inverterModel === '1200H' ? 
+        'https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf' :
+        'https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf';
+    
+    if (unitSystem === 'metric') {
+        const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
+        const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
+        const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
+        const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
+        const tankDisplay = calculateOptimalMetricTank(
+            parseFloat(userData.gallons),
+            parseFloat(userData.hotWaterTemp),
+            parseFloat(userData.highLimit),
+            actualColdTemp
+        );
         
-        function displaySingleSystem(data, system, inverterModel, systemData) {
-            const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-            const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
-            const actualLat = data.latitude_actual || 35;
+        let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+            📍 <strong>Location:</strong> ${userData.location}<br>
+            💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
+            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C<br>
+            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
+            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+            📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
             
-            const latDisplay = Math.abs(Math.round(actualLat));
-            const direction = actualLat < 0 ? 'north' : 'south';
+            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
             
-            const modelUrl = inverterModel === '1200H' ? 
-                'https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf' :
-                'https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf';
+            <strong><a href="${modelUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">Use the Off-Grid CIM ${inverterModel} Inverter</a>:</strong><br>
+            • Inverters: ${system.inverters}<br>
+            • Panels: ${system.panels}<br>
+            • Panel Wattage: ${userData.panelWatts}W<br>
+            • Tank Size: ${tankDisplay} liters<br>
+            • Element Size: ${system.element_size}W<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${system.kwh_day}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
             
-            if (unitSystem === 'metric') {
-                const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
-                const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
-                const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
-                const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
-                const tankDisplay = calculateOptimalMetricTank(
-                    parseFloat(userData.gallons),
-                    parseFloat(userData.hotWaterTemp),
-                    parseFloat(userData.highLimit),
-                    actualColdTemp
-                );
-                
-                let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
-                    📍 <strong>Location:</strong> ${userData.location}<br>
-                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
-                    ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C<br>
-                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
-                    ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                    📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
-                    
-                    <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-                    
-                    <strong><a href="${modelUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">Use the Off-Grid CIM ${inverterModel} Inverter</a>:</strong><br>
-                    • Inverters: ${system.inverters}<br>
-                    • Panels: ${system.panels}<br>
-                    • Panel Wattage: ${userData.panelWatts}W<br>
-                    • Tank Size: ${tankDisplay} liters<br>
-                    • Element Size: ${system.element_size}W<br>
-                    ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}
-                    • kWh/day: ${system.kwh_day}<br>
-                    ${parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
-                    
-                    <em>This system can meet your hot water requirements.</em><br><br>
-                    
-                    <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
-                    
-                    ${getOptimalConditionsMessage(direction)}`;
-                
-                addMessage(messageContent);
-                 
-                setTimeout(() => {
-                    const messages = chatMessages.querySelectorAll('.message');
-                    const lastMessage = messages[messages.length - 1];
-                    if (lastMessage) {
-                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 100);
+            <em>This system can meet your hot water requirements.</em><br><br>
+            
+            <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
+            
+            ${getOptimalConditionsMessage(direction)}`;
+        
+        addMessage(messageContent);
+         
+        setTimeout(() => {
+            const messages = chatMessages.querySelectorAll('.message');
+            const lastMessage = messages[messages.length - 1];
+            if (lastMessage) {
+                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
+    } else {
+        const displayGallons = Math.round(userData.gallons);
+        const displayColdTemp = Math.round(actualColdTemp);
+        const displayHotTemp = Math.round(userData.hotWaterTemp);
+        const displayHighLimit = Math.round(userData.highLimit);
+        
+        let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+            📍 <strong>Location:</strong> ${userData.location}<br>
+            💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
+            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F<br>
+            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
+            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+            📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
+            
+            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+            
+            <strong><a href="${modelUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">Use the Off-Grid CIM ${inverterModel} Inverter</a>:</strong><br>
+            • Inverters: ${system.inverters}<br>
+            • Panels: ${system.panels}<br>
+            • Panel Wattage: ${userData.panelWatts}W<br>
+            • Tank Size: ${system.tank_size} gallons<br>
+            • Element Size: ${system.element_size}W<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${system.kwh_day}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
+            
+            <em>This system can meet your hot water requirements.</em><br><br>
+            
+            <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
+            
+            ${getOptimalConditionsMessage(direction)}`;
+        
+        addMessage(messageContent);
+   
+        setTimeout(() => {
+            const messages = chatMessages.querySelectorAll('.message');
+            const lastMessage = messages[messages.length - 1];
+            if (lastMessage) {
+                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
+    }
+}
+
+function displayBothSystems(data) {
+    const sys1250 = data.system_1250w;
+    const sys1500 = data.system_1500w;
+    const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+    const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
+    const actualLat = data.latitude_actual || 35;
+    
+    const latDisplay = Math.abs(Math.round(actualLat));
+    const direction = actualLat < 0 ? 'north' : 'south';
+    
+    if (unitSystem === 'metric') {
+        const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
+        const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
+        const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
+        const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
+        
+        let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
+        const inv1250 = parseInt(sys1250.inverters);
+        const inv1500 = parseInt(sys1500.inverters);
+        const panel1250 = parseInt(sys1250.panels);
+        const panel1500 = parseInt(sys1500.panels);
+        
+        if (inv1250 < inv1500) {
+            recommended = sys1250;
+            alternative = sys1500;
+            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            if (panel1250 < panel1500) {
+                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
             } else {
-                const displayGallons = Math.round(userData.gallons);
-                const displayColdTemp = Math.round(actualColdTemp);
-                const displayHotTemp = Math.round(userData.hotWaterTemp);
-                const displayHighLimit = Math.round(userData.highLimit);
-                
-                let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
-                    📍 <strong>Location:</strong> ${userData.location}<br>
-                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
-                    ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F<br>
-                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
-                    ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                    📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
-                    
-                    <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-                    
-                    <strong><a href="${modelUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">Use the Off-Grid CIM ${inverterModel} Inverter</a>:</strong><br>
-                    • Inverters: ${system.inverters}<br>
-                    • Panels: ${system.panels}<br>
-                    • Panel Wattage: ${userData.panelWatts}W<br>
-                    • Tank Size: ${system.tank_size} gallons<br>
-                    • Element Size: ${system.element_size}W<br>
-                    {parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}
-                    • kWh/day: ${system.kwh_day}<br>
-                    ${parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
-                    
-                    <em>This system can meet your hot water requirements.</em><br><br>
-                    
-                    <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
-                    
-                    ${getOptimalConditionsMessage(direction)}`;
-                
-                addMessage(messageContent);
-           
-                setTimeout(() => {
-                    const messages = chatMessages.querySelectorAll('.message');
-                    const lastMessage = messages[messages.length - 1];
-                    if (lastMessage) {
-                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 100);
+                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
             }
+        } else if (inv1500 < inv1250) {
+            recommended = sys1500;
+            alternative = sys1250;
+            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            if (panel1500 < panel1250) {
+                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+            } else {
+                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+            }
+        } else if (panel1250 < panel1500) {
+            recommended = sys1250;
+            alternative = sys1500;
+            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+        } else if (panel1500 < panel1250) {
+            recommended = sys1500;
+            alternative = sys1250;
+            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+        } else {
+            recommended = sys1250;
+            alternative = sys1500;
+            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            reason = "This system is the most cost-effective choice with a less expensive inverter.";
         }
         
-        function displayBothSystems(data) {
-            const sys1250 = data.system_1250w;
-            const sys1500 = data.system_1500w;
-            const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-            const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
-            const actualLat = data.latitude_actual || 35;
+        const recTankDisplay = calculateOptimalMetricTank(
+            parseFloat(userData.gallons),
+            parseFloat(userData.hotWaterTemp),
+            parseFloat(userData.highLimit),
+            actualColdTemp
+        );
+        const altTankDisplay = calculateOptimalMetricTank(
+            parseFloat(userData.gallons),
+            parseFloat(userData.hotWaterTemp),
+            parseFloat(userData.highLimit),
+            actualColdTemp
+        );
+        
+        let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+            📍 <strong>Location:</strong> ${userData.location}<br>
+            💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
+            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C<br>
+            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
+            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+            📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
             
-            const latDisplay = Math.abs(Math.round(actualLat));
-            const direction = actualLat < 0 ? 'north' : 'south';
+            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
             
-            if (unitSystem === 'metric') {
-                const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
-                const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
-                const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
-                const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
-                
-                let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
-                const inv1250 = parseInt(sys1250.inverters);
-                const inv1500 = parseInt(sys1500.inverters);
-                const panel1250 = parseInt(sys1250.panels);
-                const panel1500 = parseInt(sys1500.panels);
-                
-                if (inv1250 < inv1500) {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    if (panel1250 < panel1500) {
-                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                    } else {
-                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-                    }
-                } else if (inv1500 < inv1250) {
-                    recommended = sys1500;
-                    alternative = sys1250;
-                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    if (panel1500 < panel1250) {
-                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                    } else {
-                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-                    }
-                } else if (panel1250 < panel1500) {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                } else if (panel1500 < panel1250) {
-                    recommended = sys1500;
-                    alternative = sys1250;
-                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                } else {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    reason = "This system is the most cost-effective choice with a less expensive inverter.";
-                }
-                
-                const recTankDisplay = calculateOptimalMetricTank(
-                    parseFloat(userData.gallons),
-                    parseFloat(userData.hotWaterTemp),
-                    parseFloat(userData.highLimit),
-                    actualColdTemp
-                );
-                const altTankDisplay = calculateOptimalMetricTank(
-                    parseFloat(userData.gallons),
-                    parseFloat(userData.hotWaterTemp),
-                    parseFloat(userData.highLimit),
-                    actualColdTemp
-                );
-                
-                let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
-                    📍 <strong>Location:</strong> ${userData.location}<br>
-                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
-                    ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C<br>
-                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
-                    ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                    📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
-                    
-                    <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-                    
-                    <strong><a href="${recommendedUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${recommendedName}</a>:</strong><br>
-                    • Inverters: ${recommended.inverters}<br>
-                    • Panels: ${recommended.panels}<br>
-                    • Panel Wattage: ${userData.panelWatts}W<br>
-                    • Tank Size: ${recTankDisplay} liters<br>
-                    • Element Size: ${recommended.element_size}W<br>
-                    ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}}
-                    • kWh/day: ${recommended.kwh_day}<br>
-                    ${parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: ${recommended.kwh_max}<br>` : ''}<br>
-                    
-                    <em>${reason}</em><br><br>
-                    
-                    <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
-                    
-                    <strong><a href="${alternativeUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${alternativeName}</a>:</strong><br>
-                    • Inverters: ${alternative.inverters}<br>
-                    • Panels: ${alternative.panels}<br>
-                    • Panel Wattage: ${userData.panelWatts}W<br>
-                    • Tank Size: ${altTankDisplay} liters<br>
-                    • Element Size: ${alternative.element_size}W<br>
-                    ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}
-                    • kWh/day: ${alternative.kwh_day}<br>
-                    ${parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
-                    
-                    <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
-                    
-                    ${getOptimalConditionsMessage(direction)}`;
-                
-                addMessage(messageContent);
-                 
-                setTimeout(() => {
-                    const messages = chatMessages.querySelectorAll('.message');
-                    const lastMessage = messages[messages.length - 1];
-                    if (lastMessage) {
-                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 100);
-                
-            } else {
-                const displayGallons = Math.round(userData.gallons);
-                const displayColdTemp = Math.round(actualColdTemp);
-                const displayHotTemp = Math.round(userData.hotWaterTemp);
-                const displayHighLimit = Math.round(userData.highLimit);
-                
-                let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
-                const inv1250 = parseInt(sys1250.inverters);
-                const inv1500 = parseInt(sys1500.inverters);
-                const panel1250 = parseInt(sys1250.panels);
-                const panel1500 = parseInt(sys1500.panels);
-                
-                if (inv1250 < inv1500) {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    if (panel1250 < panel1500) {
-                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                    } else {
-                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-                    }
-                } else if (inv1500 < inv1250) {
-                    recommended = sys1500;
-                    alternative = sys1250;
-                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    if (panel1500 < panel1250) {
-                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                    } else {
-                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-                    }
-                } else if (panel1250 < panel1500) {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                } else if (panel1500 < panel1250) {
-                    recommended = sys1500;
-                    alternative = sys1250;
-                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-                } else {
-                    recommended = sys1250;
-                    alternative = sys1500;
-                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-                    recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-                    alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-                    reason = "This system is the most cost-effective choice with a less expensive inverter.";
-                }
-                
-                let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
-                    📍 <strong>Location:</strong> ${userData.location}<br>
-                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
-                    ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F<br>
-                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
-                    ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-                    📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
-                    
-                    <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-                    
-                    <strong><a href="${recommendedUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${recommendedName}</a>:</strong><br>
-                    • Inverters: ${recommended.inverters}<br>
-                    • Panels: ${recommended.panels}<br>
-                    • Panel Wattage: ${userData.panelWatts}W<br>
-                    • Tank Size: ${recommended.tank_size} gallons<br>
-                    • Element Size: ${recommended.element_size}W<br>
-                    ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}
-                    • kWh/day: ${recommended.kwh_day}<br>
-                    ${parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: ${recommended.kwh_max}<br>` : ''}<br>
-                    
-                    <em>${reason}</em><br><br>
-                    
-                    <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
-                    
-                    <strong><a href="${alternativeUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${alternativeName}</a>:</strong><br>
-                    • Inverters: ${alternative.inverters}<br>
-                    • Panels: ${alternative.panels}<br>
-                    • Panel Wattage: ${userData.panelWatts}W<br>
-                    • Tank Size: ${alternative.tank_size} gallons<br>
-                    • Element Size: ${alternative.element_size}W<br>
-                    ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}
-                    • kWh/day: ${alternative.kwh_day}<br>
-                    ${parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
-                    
-                    <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
-                    
-                    ${getOptimalConditionsMessage(direction)}`;
-                
-                addMessage(messageContent);
-           
-                setTimeout(() => {
-                    const messages = chatMessages.querySelectorAll('.message');
-                    const lastMessage = messages[messages.length - 1];
-                    if (lastMessage) {
-                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 100);
+            <strong><a href="${recommendedUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${recommendedName}</a>:</strong><br>
+            • Inverters: ${recommended.inverters}<br>
+            • Panels: ${recommended.panels}<br>
+            • Panel Wattage: ${userData.panelWatts}W<br>
+            • Tank Size: ${recTankDisplay} liters<br>
+            • Element Size: ${recommended.element_size}W<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${recommended.kwh_day}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: ${recommended.kwh_max}<br>` : ''}<br>
+            
+            <em>${reason}</em><br><br>
+            
+            <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
+            
+            <strong><a href="${alternativeUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${alternativeName}</a>:</strong><br>
+            • Inverters: ${alternative.inverters}<br>
+            • Panels: ${alternative.panels}<br>
+            • Panel Wattage: ${userData.panelWatts}W<br>
+            • Tank Size: ${altTankDisplay} liters<br>
+            • Element Size: ${alternative.element_size}W<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${alternative.kwh_day}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
+            
+            <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
+            
+            ${getOptimalConditionsMessage(direction)}`;
+        
+        addMessage(messageContent);
+         
+        setTimeout(() => {
+            const messages = chatMessages.querySelectorAll('.message');
+            const lastMessage = messages[messages.length - 1];
+            if (lastMessage) {
+                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
+        }, 100);
+        
+    } else {
+        const displayGallons = Math.round(userData.gallons);
+        const displayColdTemp = Math.round(actualColdTemp);
+        const displayHotTemp = Math.round(userData.hotWaterTemp);
+        const displayHighLimit = Math.round(userData.highLimit);
+        
+        let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
+        const inv1250 = parseInt(sys1250.inverters);
+        const inv1500 = parseInt(sys1500.inverters);
+        const panel1250 = parseInt(sys1250.panels);
+        const panel1500 = parseInt(sys1500.panels);
+        
+        if (inv1250 < inv1500) {
+            recommended = sys1250;
+            alternative = sys1500;
+            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            if (panel1250 < panel1500) {
+                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+            } else {
+                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+            }
+        } else if (inv1500 < inv1250) {
+            recommended = sys1500;
+            alternative = sys1250;
+            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            if (panel1500 < panel1250) {
+                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+            } else {
+                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+            }
+        } else if (panel1250 < panel1500) {
+            recommended = sys1250;
+            alternative = sys1500;
+            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+        } else if (panel1500 < panel1250) {
+            recommended = sys1500;
+            alternative = sys1250;
+            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+        } else {
+            recommended = sys1250;
+            alternative = sys1500;
+            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
+            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
+            reason = "This system is the most cost-effective choice with a less expensive inverter.";
         }
+        
+        let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+            📍 <strong>Location:</strong> ${userData.location}<br>
+            💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
+            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F<br>
+            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
+            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+            📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
+            
+            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+            
+            <strong><a href="${recommendedUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${recommendedName}</a>:</strong><br>
+            • Inverters: ${recommended.inverters}<br>
+            • Panels: ${recommended.panels}<br>
+            • Panel Wattage: ${userData.panelWatts}W<br>
+            • Tank Size: ${recommended.tank_size} gallons<br>
+            • Element Size: ${recommended.element_size}W<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${recommended.kwh_day}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: ${recommended.kwh_max}<br>` : ''}<br>
+            
+            <em>${reason}</em><br><br>
+            
+            <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
+            
+            <strong><a href="${alternativeUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${alternativeName}</a>:</strong><br>
+            • Inverters: ${alternative.inverters}<br>
+            • Panels: ${alternative.panels}<br>
+            • Panel Wattage: ${userData.panelWatts}W<br>
+            • Tank Size: ${alternative.tank_size} gallons<br>
+            • Element Size: ${alternative.element_size}W<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${alternative.kwh_day}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
+            
+            <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
+            
+            ${getOptimalConditionsMessage(direction)}`;
+        
+        addMessage(messageContent);
+   
+        setTimeout(() => {
+            const messages = chatMessages.querySelectorAll('.message');
+            const lastMessage = messages[messages.length - 1];
+            if (lastMessage) {
+                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
+    }
+}
     </script>
 </body>
 </html>
