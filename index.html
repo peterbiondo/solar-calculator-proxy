@@ -825,9 +825,13 @@
            =================================== */
         
         function startChat() {
+            // ALWAYS show the interface first
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('chatInterface').classList.remove('hidden');
+            
             // Check if user has reached limit
             if (tryCount >= 10) {
-                addMessage(`<strong>🎉 You've reached the maximum of 10 calculations!</strong><br>You've explored many scenarios! Ready to take the next step?<br><br>
+                addMessage(`<strong>🎉 You've reached the maximum of 10 calculations!</strong>...
                 
                 <strong style="color: #FFFFFF; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
                 
