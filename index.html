@@ -1417,7 +1417,8 @@ function displayResults(data) {
             • Target Temperature: ${displayHotTemp}${tempUnit}<br>
             • Peak Sun Hours: ${actualPeakSun} hrs/day<br>
             • Panel Wattage: ${userData.panelWatts}W<br><br>
-            <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong>`);
+            <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong><br><br>
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`);
         return;
     }
     
