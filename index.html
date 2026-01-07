@@ -972,28 +972,6 @@
             location.reload();
         }
         
-        function tryAgain() {
-            tryCount++;
-            
-            if (tryCount === 5) {
-                addMessage(`<strong>🎯 You've completed 5 calculations!</strong><br><br>Want to explore more scenarios? You have <strong>5 more tries</strong> to refine your system design!<br><br><button class="gallon-btn" onclick="continueCalculating()" style="margin-top: 10px;">5 More</button>`);
-                return;
-            }
-            
-            if (tryCount >= 10) {
-                addMessage(`<strong>🎉 You've reached 10 calculations!</strong><br><br>You've explored many scenarios! Ready to take the next step?<br><br><em>Time to move forward with your solar hot water system design.</em>`);
-                // NO return - keeps working so you can reload from browser
-            }
-            
-            // Reload the page (works even at try 10)
-            location.reload();
-        }
-        
-        function continueCalculating() {
-            // Reload to continue
-            location.reload();
-        }
-        
         /* ===================================
            EVENT LISTENERS
            =================================== */
