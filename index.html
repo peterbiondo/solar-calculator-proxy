@@ -558,6 +558,7 @@
         let estimatedAnnualColdWater = 68;
         let unitSystem = '';
         let pendingLocation = '';
+        let tryCount = 0;
         
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
@@ -928,6 +929,52 @@
                 }, 800);
             }, 300);
         }
+        
+        function copyResults() {
+            const messages = chatMessages.querySelectorAll('.message.bot .message-content');
+            const lastMessage = messages[messages.length - 1];
+            
+            if (lastMessage) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = lastMessage.innerHTML;
+                
+                // Remove buttons from copy
+                const buttons = tempDiv.querySelectorAll('button');
+                buttons.forEach(btn => btn.remove());
+                
+                const textToCopy = tempDiv.innerText;
+                
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    alert('Results copied to clipboard!');
+                }).catch(err => {
+                    console.error('Copy failed:', err);
+                    alert('Copy failed. Please try selecting and copying manually.');
+                });
+            }
+        }
+        
+        function tryAgain() {
+            tryCount++;
+            
+            if (tryCount === 5) {
+                addMessage(`<strong>🎯 You've completed 5 calculations!</strong><br><br>Want to explore more scenarios? You have <strong>5 more tries</strong> to refine your system design!<br><br><button class="gallon-btn" onclick="continueCalculating()" style="margin-top: 10px;">5 More</button>`);
+                return;
+            }
+            
+            if (tryCount >= 10) {
+                addMessage(`<strong>🎉 You've reached 10 calculations!</strong><br><br>You've explored many scenarios! Ready to take the next step?<br><br><em>Time to move forward with your solar hot water system design.</em>`);
+                // NO return - keeps working so you can reload from browser
+            }
+            
+            // Reload the page (works even at try 10)
+            location.reload();
+        }
+        
+        function continueCalculating() {
+            // Reload to continue
+            location.reload();
+        }
+        
         /* ===================================
            EVENT LISTENERS
            =================================== */
@@ -1431,9 +1478,11 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             
             <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
             
-            ${getOptimalConditionsMessage(direction)}`;
-        
-        addMessage(messageContent);
+            ${getOptimalConditionsMessage(direction)}<br>
+            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`;
+
+            addMessage(messageContent);
          
         setTimeout(() => {
             const messages = chatMessages.querySelectorAll('.message');
@@ -1472,9 +1521,11 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             
             <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
             
-            ${getOptimalConditionsMessage(direction)}`;
-        
-        addMessage(messageContent);
+            ${getOptimalConditionsMessage(direction)}<br>
+            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`;
+
+            addMessage(messageContent);
    
         setTimeout(() => {
             const messages = chatMessages.querySelectorAll('.message');
@@ -1606,9 +1657,11 @@ function displayBothSystems(data) {
             
             <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
             
-            ${getOptimalConditionsMessage(direction)}`;
-        
-        addMessage(messageContent);
+            ${getOptimalConditionsMessage(direction)}<br>
+            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`;
+
+            addMessage(messageContent);
          
         setTimeout(() => {
             const messages = chatMessages.querySelectorAll('.message');
@@ -1715,10 +1768,12 @@ function displayBothSystems(data) {
             
             <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
             
-            ${getOptimalConditionsMessage(direction)}`;
+            ${getOptimalConditionsMessage(direction)}<br>
+            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`;
         
         addMessage(messageContent);
-   
+         
         setTimeout(() => {
             const messages = chatMessages.querySelectorAll('.message');
             const lastMessage = messages[messages.length - 1];
