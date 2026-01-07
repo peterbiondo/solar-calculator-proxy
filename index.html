@@ -824,6 +824,12 @@
            =================================== */
         
         function startChat() {
+            // Check if user has reached limit
+            if (tryCount >= 10) {
+                alert('You have reached the maximum of 10 calculations. To use the calculator again, please clear your browser data or contact us for assistance.');
+                return; // Stop here, don't start chat
+            }
+            
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('chatInterface').classList.remove('hidden');
             
@@ -962,7 +968,8 @@
             }
             
             if (tryCount >= 10) {
-                addMessage(`<strong>🎉 You've reached 10 calculations!</strong><br><br>You've explored many scenarios! Ready to take the next step?<br><br><em>Time to move forward with your solar hot water system design.</em>`);
+                addMessage(`<strong>🎉 You've reached the maximum of 10 calculations!</strong><br><br>You've explored many scenarios! Ready to take the next step?<br><br><em>Time to move forward with your solar hot water system design.</em><br><br><strong>The calculator will now be locked. Contact us to continue or clear your browser data to reset.</strong>`);
+                return; // Don't reload - calculator is now locked
             }
             
             location.reload();
