@@ -1478,14 +1478,18 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${system.kwh_day}<br>
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
             
-            <em>This system can meet your hot water requirements.</em><br><br>
-            
-            <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
-            
-            ${getOptimalConditionsMessage(direction)}<br>
+            <em>This system can meet your hot water requirements.</em><br>
+            ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`;
-
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
+            
+            <em>No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of once 'perfect' PV candidates?</em><br><br>
+            
+            <em><strong>Turn the hard 'No' into a 'Yes.'</strong><br>
+            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value hot-water upgrade priced at $12–13k for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+            
+            <em>Click here to win more projects.</em><br>
+            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button>`;
             addMessage(messageContent);
          
         setTimeout(() => {
@@ -1521,13 +1525,18 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${system.kwh_day}<br>
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
             
-            <em>This system can meet your hot water requirements.</em><br><br>
-            
-            <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
-            
-            ${getOptimalConditionsMessage(direction)}<br>
+            <em>This system can meet your hot water requirements.</em><br>
+            ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`;
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
+            
+            <em>No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of once 'perfect' PV candidates?</em><br><br>
+            
+            <em><strong>Turn the hard 'No' into a 'Yes.'</strong><br>
+            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value hot-water upgrade priced at $12–13k for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+            
+            <em>Click here to win more projects.</em><br>
+            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button>`;
 
             addMessage(messageContent);
    
@@ -1659,11 +1668,18 @@ function displayBothSystems(data) {
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${alternative.kwh_day}<br>
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
             
-            <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
-            
-            ${getOptimalConditionsMessage(direction)}<br>
+            <em>This system can meet your hot water requirements.</em><br>
+            ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`;
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
+            
+            <em>No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of once 'perfect' PV candidates?</em><br><br>
+            
+            <em><strong>Turn the hard 'No' into a 'Yes.'</strong><br>
+            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value hot-water upgrade priced at $12–13k for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+            
+            <em>Click here to win more projects.</em><br>
+            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button>`;
 
             addMessage(messageContent);
          
@@ -1770,11 +1786,18 @@ function displayBothSystems(data) {
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${alternative.kwh_day}<br>
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
             
-            <em>Real-world performance depends on YOUR roof's actual tilt, direction, and shade patterns. Ready to get a customized calculation for your specific setup? <a href="#" style="color: #FFA500; text-decoration: underline; font-weight: 600;" onclick="alert('Coming soon! This will open an email form.'); return false;">Click here to learn more</a></em><br><br>
-            
-            ${getOptimalConditionsMessage(direction)}<br>
+            <em>This system can meet your hot water requirements.</em><br>
+            ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`;
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
+            
+            <em>No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of once 'perfect' PV candidates?</em><br><br>
+            
+            <em><strong>Turn the hard 'No' into a 'Yes.'</strong><br>
+            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value hot-water upgrade priced at $12–13k for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+            
+            <em>Click here to win more projects.</em><br>
+            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button>`;
         
         addMessage(messageContent);
          
