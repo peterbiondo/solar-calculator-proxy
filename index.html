@@ -173,7 +173,7 @@
         .start-screen button {
             margin-top: 30px;
             background: #FFA500; /* Solar Orange */
-            color: #FFFFFF;
+            color: #0F0F0F; /* Black text on orange button */
             border: none;
             padding: 15px 40px;
             border-radius: 30px;
@@ -342,7 +342,7 @@
         .gallon-btn {
             padding: 12px;
             background: #FFA500; /* Solar Orange */
-            color: #0F0F0F;
+            color: #0F0F0F; /* Black text on orange button */
             border: none;
             border-radius: 15px;
             cursor: pointer;
@@ -392,7 +392,7 @@
         
         #sendBtn {
             background: #FFA500; /* Solar Orange */
-            color: #FFFFFF;
+            color: #0F0F0F; /* Black text on orange button */
             border: none;
             padding: 12px 24px;
             border-radius: 25px;
@@ -825,22 +825,36 @@
            =================================== */
         
         function startChat() {
+            // ALWAYS show interface first (even if locked)
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('chatInterface').classList.remove('hidden');
+            
             // Check if user has reached limit
             if (tryCount >= 10) {
                 addMessage(`<strong>🎉 You've reached the maximum of 10 calculations!</strong><br>You've explored many scenarios! Ready to take the next step?<br><br>
                 
+                <strong style="color: #FFA500; font-size: 17px;">📢 FOR SOLAR CONTRACTORS</strong><br>
                 <strong style="color: #FFFFFF; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
                 
                 <strong style="font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                 I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value $12–13k system for homeowners who won't commit to a $25–50k PV system.<br><br>
                 
                 <em>Click here to win more projects.</em><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button>`);
+                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+                <hr style="border: none; border-top: 1px solid #2A2A2A; margin: 20px 0;">
+                <div style="text-align: center;">
+                    <strong style="color: #FFA500; font-size: 16px;">📺 Learn More About PV Water Heating</strong><br><br>
+                    <em style="color: #E8E8E8;">What PV Water Heaters Actually Are (and Why They Matter)</em><br><br>
+                    <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
+                        <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
+                             alt="PV Water Heating Video" 
+                             style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.2s;" 
+                             onmouseover="this.style.transform='scale(1.02)'" 
+                             onmouseout="this.style.transform='scale(1)'">
+                    </a>
+                </div>`);
                 return; // Don't reload - calculator is now locked
             }
-            
-            document.getElementById('startScreen').classList.add('hidden');
-            document.getElementById('chatInterface').classList.remove('hidden');
             
             setTimeout(() => {
                 addMessage("<strong>Hi! <span class='wave-emoji'>👋</span> I'm your solar hot water assistant.</strong>");
@@ -1364,7 +1378,7 @@
         }
         
         /* ===================================
-   WEBHOOK & RESULTS (keeping existing logic)
+   WEBHOOK & RESULTS
    =================================== */
 
 async function sendToWebhook() {
@@ -1493,15 +1507,28 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
             <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
             
-            <strong style="color: #FFA500; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+            <strong style="color: #FFA500; font-size: 17px;">📢 FOR SOLAR CONTRACTORS</strong><br>
             <strong style="color: #FFFFFF; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
             
             <strong style="font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value $12–13k system for homeowners who won’t commit to a $25–50k PV system.<br><br>
+            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value $12–13k system for homeowners who won't commit to a $25–50k PV system.<br><br>
             
             <em>Click here to win more projects.</em><br>
-            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button>`;
-            addMessage(messageContent);
+            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+            <hr style="border: none; border-top: 1px solid #2A2A2A; margin: 20px 0;">
+            <div style="text-align: center;">
+                <strong style="color: #FFA500; font-size: 16px;">📺 Learn More About PV Water Heating</strong><br><br>
+                <em style="color: #E8E8E8;">What PV Water Heaters Actually Are (and Why They Matter)</em><br><br>
+                <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
+                    <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
+                         alt="PV Water Heating Video" 
+                         style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.2s;" 
+                         onmouseover="this.style.transform='scale(1.02)'" 
+                         onmouseout="this.style.transform='scale(1)'">
+                </a>
+            </div>`;
+            
+        addMessage(messageContent);
          
         setTimeout(() => {
             const messages = chatMessages.querySelectorAll('.message');
@@ -1541,16 +1568,28 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
             <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
             
-            <strong style="color: #FFA500; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+            <strong style="color: #FFA500; font-size: 17px;">📢 FOR SOLAR CONTRACTORS</strong><br>
             <strong style="color: #FFFFFF; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
             
             <strong style="font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value $12–13k system for homeowners who won’t commit to a $25–50k PV system.<br><br>
+            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value $12–13k system for homeowners who won't commit to a $25–50k PV system.<br><br>
             
             <em>Click here to win more projects.</em><br>
-            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button>`;
+            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+            <hr style="border: none; border-top: 1px solid #2A2A2A; margin: 20px 0;">
+            <div style="text-align: center;">
+                <strong style="color: #FFA500; font-size: 16px;">📺 Learn More About PV Water Heating</strong><br><br>
+                <em style="color: #E8E8E8;">What PV Water Heaters Actually Are (and Why They Matter)</em><br><br>
+                <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
+                    <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
+                         alt="PV Water Heating Video" 
+                         style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.2s;" 
+                         onmouseover="this.style.transform='scale(1.02)'" 
+                         onmouseout="this.style.transform='scale(1)'">
+                </a>
+            </div>`;
 
-            addMessage(messageContent);
+        addMessage(messageContent);
    
         setTimeout(() => {
             const messages = chatMessages.querySelectorAll('.message');
@@ -1684,15 +1723,28 @@ function displayBothSystems(data) {
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
             <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
             
-            <strong style="color: #FFA500; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+            <strong style="color: #FFA500; font-size: 17px;">📢 FOR SOLAR CONTRACTORS</strong><br>
             <strong style="color: #FFFFFF; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
             
             <strong style="font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value $12–13k system for homeowners who won’t commit to a $25–50k PV system.<br><br>
+            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value $12–13k system for homeowners who won't commit to a $25–50k PV system.<br><br>
             
             <em>Click here to win more projects.</em><br>
-            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button>`;
-            addMessage(messageContent);
+            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+            <hr style="border: none; border-top: 1px solid #2A2A2A; margin: 20px 0;">
+            <div style="text-align: center;">
+                <strong style="color: #FFA500; font-size: 16px;">📺 Learn More About PV Water Heating</strong><br><br>
+                <em style="color: #E8E8E8;">What PV Water Heaters Actually Are (and Why They Matter)</em><br><br>
+                <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
+                    <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
+                         alt="PV Water Heating Video" 
+                         style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.2s;" 
+                         onmouseover="this.style.transform='scale(1.02)'" 
+                         onmouseout="this.style.transform='scale(1)'">
+                </a>
+            </div>`;
+            
+        addMessage(messageContent);
          
         setTimeout(() => {
             const messages = chatMessages.querySelectorAll('.message');
@@ -1801,14 +1853,26 @@ function displayBothSystems(data) {
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
             <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
             
-            <strong style="color: #FFA500; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+            <strong style="color: #FFA500; font-size: 17px;">📢 FOR SOLAR CONTRACTORS</strong><br>
             <strong style="color: #FFFFFF; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
             
             <strong style="font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value $12–13k system for homeowners who won’t commit to a $25–50k PV system.<br><br>
+            I help solar companies lose fewer leads and win more projects by adding a mid-tier PV hot water system — a high-value $12–13k system for homeowners who won't commit to a $25–50k PV system.<br><br>
             
             <em>Click here to win more projects.</em><br>
-            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button>`;
+            <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+            <hr style="border: none; border-top: 1px solid #2A2A2A; margin: 20px 0;">
+            <div style="text-align: center;">
+                <strong style="color: #FFA500; font-size: 16px;">📺 Learn More About PV Water Heating</strong><br><br>
+                <em style="color: #E8E8E8;">What PV Water Heaters Actually Are (and Why They Matter)</em><br><br>
+                <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
+                    <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
+                         alt="PV Water Heating Video" 
+                         style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.2s;" 
+                         onmouseover="this.style.transform='scale(1.02)'" 
+                         onmouseout="this.style.transform='scale(1)'">
+                </a>
+            </div>`;
         
         addMessage(messageContent);
          
