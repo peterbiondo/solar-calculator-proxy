@@ -1039,7 +1039,7 @@
                 textToCopy = textToCopy.replace(/\n\s*\n\s*\n/g, '\n\n');
                 
                 // Clean up any remaining excessive whitespace
-                textToCopy = textToCopy.replace(/\n{3,}/g, '\n\n');
+                textToCopy = textToCopy.replace(/\n{2,}/g, '\n\n');
                 
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     alert('Results copied to clipboard!');
