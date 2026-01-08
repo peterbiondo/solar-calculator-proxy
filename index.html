@@ -129,7 +129,7 @@
         }
         
         .chat-header p:first-child {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 500; /* Inter Medium */
             color: #FFA500; /* Solar Orange */
             margin-bottom: 5px;
@@ -861,12 +861,37 @@
             setTimeout(() => {
                 addMessage("<strong>Hi! <span class='wave-emoji'>👋</span> I'm your solar hot water assistant.</strong>");
                 setTimeout(() => {
-                    addMessage('<strong>Which unit system do you prefer?</strong><br>• Type <strong>"Imperial"</strong> for US units (gallons, °F)<br>• Type <strong>"Metric"</strong> for international units (liters, °C)');
+                    addMessage('<strong>Which unit system do you prefer? Click a button or enter</strong><br>• <strong>"Imperial"</strong> for US units (gallons, °F)<br>• <strong>"Metric"</strong> for international units (liters, °C)');
+                    
+                    // Add unit system buttons
+                    const unitButtons = document.getElementById('gallonButtons');
+                    unitButtons.innerHTML = `
+                        <button class="gallon-btn" onclick="selectUnitSystem('imperial')">Imperial</button>
+                        <button class="gallon-btn" onclick="selectUnitSystem('metric')">Metric</button>
+                    `;
+                    unitButtons.style.display = 'grid';
+                    unitButtons.style.gridTemplateColumns = 'repeat(2, 1fr)';
+                    
                     conversationStep = 0.5;
                     chatMessages.scrollTop = 0;
                     userInput.focus();
                 }, 1000);
             }, 500);
+        }
+        
+        function selectUnitSystem(system) {
+            const displayText = system.charAt(0).toUpperCase() + system.slice(1);
+            addMessage(displayText, true);
+            
+            document.getElementById('gallonButtons').style.display = 'none';
+            
+            setTimeout(() => {
+                showTyping();
+                setTimeout(() => {
+                    hideTyping();
+                    processMessage(system);
+                }, 800);
+            }, 300);
         }
         
         function addMessage(text, isUser = false) {
