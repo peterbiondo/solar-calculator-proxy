@@ -129,7 +129,7 @@
         }
         
         .chat-header p:first-child {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500; /* Inter Medium */
             color: #FFA500; /* Solar Orange */
             margin-bottom: 5px;
@@ -831,7 +831,7 @@
             
             // Check if user has reached limit
             if (tryCount >= 10) {
-                addMessage(`<strong>🎉 You've reached the maximum of 10 calculations!</strong><br>You've explored many scenarios! Ready to take the next step?<br><br>
+                addMessage(`<strong><span style="color: #00E676;">🎉</span> You've reached the maximum of 10 calculations!</strong><br>You've explored many scenarios! Ready to take the next step?<br><br>
                 
                 <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
                     <strong style="color: #FF8C00; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
@@ -840,8 +840,8 @@
                     <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                     <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                     
-                    <em style="color: #000000;">Click here to win more projects.</em><br>
-                    <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+                    <strong style="color: #000000;">Win more projects</strong><br>
+                    <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
                     
                     <div style="text-align: center; margin-top: 30px;">
                         <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
@@ -1551,7 +1551,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             actualColdTemp
         );
         
-        let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+        let messageContent = `<strong><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
             💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
             ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
@@ -1568,8 +1568,8 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Tank Size: ${tankDisplay} liters<br>
             • Element Size: ${system.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${system.kwh_day}<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>` : ''}<br>
             
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
@@ -1583,8 +1583,8 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
                 <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
-                <em style="color: #000000;">Click here to win more projects.</em><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+                <strong style="color: #000000;">Win more projects</strong><br>
+                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
                     <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
@@ -1614,7 +1614,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
         const displayHotTemp = Math.round(userData.hotWaterTemp);
         const displayHighLimit = Math.round(userData.highLimit);
         
-        let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+        let messageContent = `<strong><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
             💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
             ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
@@ -1631,8 +1631,8 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Tank Size: ${system.tank_size} gallons<br>
             • Element Size: ${system.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${system.kwh_day}<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: ${system.kwh_max}<br>` : ''}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>` : ''}<br>
             
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
@@ -1646,8 +1646,8 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
                 <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
-                <em style="color: #000000;">Click here to win more projects.</em><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+                <strong style="color: #000000;">Win more projects</strong><br>
+                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
                     <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
@@ -1759,7 +1759,7 @@ function displayBothSystems(data) {
             actualColdTemp
         );
         
-        let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+        let messageContent = `<strong><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
             💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
             ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
@@ -1776,8 +1776,8 @@ function displayBothSystems(data) {
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Tank Size: ${recTankDisplay} liters<br>
             • Element Size: ${recommended.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${recommended.kwh_day}<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: ${recommended.kwh_max}<br>` : ''}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>` : ''}<br>
             
             <em>${reason}</em><br><br>
             
@@ -1789,8 +1789,8 @@ function displayBothSystems(data) {
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Tank Size: ${altTankDisplay} liters<br>
             • Element Size: ${alternative.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${alternative.kwh_day}<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>` : ''}<br>
             
             ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
@@ -1803,8 +1803,8 @@ function displayBothSystems(data) {
                 <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
-                <em style="color: #000000;">Click here to win more projects.</em><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+                <strong style="color: #000000;">Win more projects</strong><br>
+                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
                     <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
@@ -1891,7 +1891,7 @@ function displayBothSystems(data) {
             reason = "This system is the most cost-effective choice with a less expensive inverter.";
         }
         
-        let messageContent = `<strong>✅ Your Solar Hot Water System Results!</strong><br><br>
+        let messageContent = `<strong><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
             💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
             ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
@@ -1908,8 +1908,8 @@ function displayBothSystems(data) {
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Tank Size: ${recommended.tank_size} gallons<br>
             • Element Size: ${recommended.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${recommended.kwh_day}<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: ${recommended.kwh_max}<br>` : ''}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>` : ''}<br>
             
             <em>${reason}</em><br><br>
             
@@ -1921,25 +1921,25 @@ function displayBothSystems(data) {
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Tank Size: ${alternative.tank_size} gallons<br>
             • Element Size: ${alternative.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: ${alternative.kwh_day}<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: ${alternative.kwh_max}<br>` : ''}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>` : ''}<br>
             
             ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
             <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #FF8C00; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
                 <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
                 
                 <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
-                <em style="color: #000000;">Click here to win more projects.</em><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px;">Continue</button><br><br>
+                <strong style="color: #000000;">Win more projects</strong><br>
+                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                    <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
                     <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
                     <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
                         <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
