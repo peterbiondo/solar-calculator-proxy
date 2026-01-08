@@ -967,10 +967,52 @@
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = lastMessage.innerHTML;
                 
+                // Remove everything after the optimal conditions message
+                // This includes: buttons, marketing message, and YouTube section
+                
+                // Find the optimal conditions paragraph (contains "Results shown reflect optimal conditions")
+                const allElements = tempDiv.querySelectorAll('*');
+                let foundOptimalConditions = false;
+                
+                for (let i = 0; i < allElements.length; i++) {
+                    const element = allElements[i];
+                    
+                    // Check if this element contains the optimal conditions text
+                    if (element.textContent.includes('Results shown reflect optimal conditions')) {
+                        foundOptimalConditions = true;
+                        // Remove all siblings after this element
+                        let nextSibling = element.nextSibling;
+                        while (nextSibling) {
+                            const toRemove = nextSibling;
+                            nextSibling = nextSibling.nextSibling;
+                            if (toRemove.parentNode) {
+                                toRemove.parentNode.removeChild(toRemove);
+                            }
+                        }
+                        break;
+                    }
+                    
+                    // If we've already passed the optimal conditions, remove this element
+                    if (foundOptimalConditions) {
+                        element.remove();
+                    }
+                }
+                
+                // Also remove any remaining buttons just to be safe
                 const buttons = tempDiv.querySelectorAll('button');
                 buttons.forEach(btn => btn.remove());
                 
-                const textToCopy = tempDiv.innerText;
+                // Remove any HR elements (horizontal rules)
+                const hrs = tempDiv.querySelectorAll('hr');
+                hrs.forEach(hr => hr.remove());
+                
+                let textToCopy = tempDiv.innerText.trim();
+                
+                // Tighten spacing: replace multiple consecutive blank lines with single blank line
+                textToCopy = textToCopy.replace(/\n\s*\n\s*\n/g, '\n\n');
+                
+                // Clean up any remaining excessive whitespace
+                textToCopy = textToCopy.replace(/\n{3,}/g, '\n\n');
                 
                 navigator.clipboard.writeText(textToCopy).then(() => {
                     alert('Results copied to clipboard!');
