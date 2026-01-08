@@ -950,7 +950,7 @@
                             
                             const scenarioButtons = document.getElementById('scenarioButtons');
                             scenarioButtons.innerHTML = `
-                                <button class="gallon-btn" onclick="selectScenario('annual')" style="font-weight: 700;">Annual</button>
+                                <button class="gallon-btn" onclick="selectScenario('annual')" style="font-weight: 900; font-size: 17px;">Annual</button>
                                 <button class="gallon-btn" onclick="selectScenario('winter')">Winter</button>
                                 <button class="gallon-btn" onclick="selectScenario('spring')">Spring</button>
                                 <button class="gallon-btn" onclick="selectScenario('summer')">Summer</button>
@@ -1143,8 +1143,8 @@
                                 hideTyping();
                                 const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
                                 const usageNote = unitSystem === 'metric' ? 
-                                    'Note: Most consumers use 60-75 liters of hot water per day. Usage varies by individual.' : 
-                                    'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
+                                    'Note: Most consumers use 60-75 liters per person of hot water each day. Usage varies by individual.': 
+                                    'Note: Most consumers use 15-20 gallons per person of hot water each day. Usage varies by individual.';
                                 const waterQuestion = unitSystem === 'metric' ?
                                     'How many liters of hot water does your household use each day?' :
                                     'How many gallons of hot water does your household use each day?';
