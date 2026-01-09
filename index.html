@@ -21,25 +21,83 @@
         }
         
         /* ===================================
-           MOBILE OPTIMIZATION - Quick Wins
+           MOBILE OPTIMIZATION - Enhanced (Tier 1 & 2)
+           Based on cross-platform testing: iOS Safari, Chrome Android, Samsung Internet
            =================================== */
         
-        /* Prevent iOS Safari from zooming on input focus */
-        input,
-        select,
-        textarea {
-            font-size: 16px !important;
+        /* TIER 1: Touch-friendly sizing - 48px for better Android/iOS support */
+        button,
+        a,
+        input[type="submit"],
+        input[type="button"] {
+            min-height: 48px;
+            min-width: 48px;
+            padding: 12px;
+            margin: 4px; /* 8px total spacing between elements */
         }
         
-        /* Remove iOS tap highlight (looks more professional) */
-        * {
+        /* TIER 1: Prevent iOS Safari zoom on input focus - MOBILE ONLY */
+        @media (max-width: 767px) {
+            input,
+            select,
+            textarea {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* TIER 2: Remove tap highlight - scoped to interactive elements for performance */
+        a,
+        button,
+        input,
+        select {
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* Touch-friendly button sizing (44x44px minimum for thumbs) */
-        button {
-            min-height: 44px;
-            min-width: 44px;
+        /* TIER 1: Safe areas for notched phones (iPhone X+, modern Android) */
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+        
+        /* TIER 2: Prevent overscroll bounce on iOS (app-like feel) */
+        body {
+            overscroll-behavior: none;
+        }
+        
+        /* ===================================
+           TIER 1: RESPONSIVE BREAKPOINTS
+           Mobile-first approach for all screen sizes
+           =================================== */
+        
+        /* Phone portrait (base styles - up to 479px) */
+        /* Your existing styles work great here */
+        
+        /* Phone landscape / phablet (480px - 767px) */
+        @media (min-width: 480px) and (max-width: 767px) {
+            .gallon-btn,
+            .scenario-btn {
+                font-size: 15px;
+            }
+        }
+        
+        /* Tablet (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .chat-container {
+                max-width: 700px;
+            }
+        }
+        
+        /* Phone landscape specific - prevent height issues */
+        @media (orientation: landscape) and (max-width: 767px) {
+            body {
+                padding: 10px;
+            }
+            
+            .chat-container {
+                max-height: 90vh;
+            }
         }
         
         body {
