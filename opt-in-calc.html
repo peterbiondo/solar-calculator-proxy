@@ -367,8 +367,12 @@
         
         /* Tablets and smaller */
         @media (max-width: 768px) {
+            body {
+                padding: 10px; /* Reduced from 20px for fuller width */
+            }
+            
             .container {
-                padding: 30px 20px;
+                padding: 25px 15px; /* Reduced from 30px 20px */
             }
             
             h1 {
@@ -382,6 +386,14 @@
         
         /* Small phones - stack cards vertically */
         @media (max-width: 600px) {
+            body {
+                padding: 8px; /* Even less on small phones */
+            }
+            
+            .container {
+                padding: 20px 12px; /* Tighter padding for more width */
+            }
+            
             .avatar-grid {
                 grid-template-columns: 1fr;
                 gap: 12px;
@@ -393,10 +405,6 @@
             
             .avatar-icon {
                 font-size: 40px;
-            }
-            
-            .container {
-                padding: 25px 15px;
             }
             
             h1 {
@@ -411,12 +419,13 @@
         /* Landscape phones */
         @media (orientation: landscape) and (max-width: 767px) {
             body {
-                padding: 15px 10px;
+                padding: 10px 8px; /* Minimal padding in landscape */
             }
             
             .container {
                 max-height: 95vh;
                 overflow-y: auto;
+                padding: 20px 15px; /* Tighter padding */
             }
         }
 </style>
