@@ -1,149 +1,651 @@
-═══════════════════════════════════════════════════════════════
-AVATAR CARD SIZE COMPARISON - TEST VERSION
-═══════════════════════════════════════════════════════════════
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Get Your Free PV Solar Hot Water Calculator - iSolar Hot Water Academy</title>
+    
+    <!-- Inter Font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+<style>
+        /* ===================================
+           RESET & BASE STYLES - iSolar Branding
+           =================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* ===================================
+           MOBILE OPTIMIZATION
+           =================================== */
+        
+        /* Touch-friendly sizing */
+        button,
+        input[type="submit"],
+        input[type="button"] {
+            min-height: 48px;
+            min-width: 48px;
+        }
+        
+        /* Prevent iOS Safari zoom on input focus - MOBILE ONLY */
+        @media (max-width: 767px) {
+            input,
+            select,
+            textarea {
+                font-size: 16px !important;
+            }
+        }
+        
+        /* Remove tap highlight */
+        a,
+        button,
+        input,
+        select,
+        .avatar-card {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Safe areas for notched phones */
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+        
+        /* Prevent overscroll bounce on iOS */
+        body {
+            overscroll-behavior: none;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0F0F0F; /* iSolar Black */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Main glow - Left side (Energy Green to Violet) */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(
+                circle at 30% 50%, 
+                rgba(0, 230, 118, 0.15) 0%, 
+                rgba(124, 77, 255, 0.15) 50%, 
+                transparent 100%
+            );
+            top: 50%;
+            left: 0;
+            transform: translate(-40%, -50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Secondary glow - Right side (Solar Orange to Red) */
+        body::after {
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(
+                circle at 70% 50%, 
+                rgba(230, 81, 0, 0.12) 0%, 
+                rgba(211, 47, 47, 0.12) 50%, 
+                transparent 100%
+            );
+            top: 50%;
+            right: 0;
+            transform: translate(40%, -50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* ===================================
+           CONTAINER
+           =================================== */
+        .container {
+            background: rgba(255, 255, 255, 0.97);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 40px 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ===================================
+           HEADER
+           =================================== */
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #BF360C; /* Deep Orange */
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        h1 {
+            color: #0F0F0F;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            color: #424242; /* Dark Gray */
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        
+        .instruction {
+            color: #0F0F0F;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .section-title {
+            color: #0F0F0F;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        /* ===================================
+           AVATAR CARDS
+           =================================== */
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px; /* Reduced from 15px - tighter, more refined */
+            margin-bottom: 30px;
+        }
+        
+        .avatar-card {
+            background: #FFFFFF;
+            border: 3px solid #E8E8E8;
+            border-radius: 12px;
+            padding: 14px 8px; /* Even tighter - ultra compact */
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .avatar-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(230, 81, 0, 0.2);
+            border-color: #E65100; /* Solar Orange */
+        }
+        
+        .avatar-card.selected {
+            border-color: #E65100; /* Solar Orange */
+            background: rgba(230, 81, 0, 0.05);
+            box-shadow: 0 4px 16px rgba(230, 81, 0, 0.3);
+        }
+        
+        .avatar-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: #00E676; /* Energy Green */
+            color: #0F0F0F;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .avatar-icon {
+            font-size: 32px; /* Even smaller - ultra refined */
+            margin-bottom: 8px; /* Tighter spacing */
+        }
+        
+        .avatar-title {
+            font-size: 14px; /* Slightly smaller for elegance */
+            font-weight: 600;
+            color: #0F0F0F;
+            margin-bottom: 4px; /* Tighter */
+        }
+        
+        .avatar-card.selected .avatar-title {
+            color: #BF360C; /* Deep Orange */
+        }
+        
+        .avatar-description {
+            font-size: 11px; /* Slightly smaller, more refined */
+            color: #424242;
+            line-height: 1.3;
+        }
+        
+        /* ===================================
+           FORM
+           =================================== */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            color: #0F0F0F;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        input[type="email"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #E8E8E8;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: #FFFFFF;
+            color: #0F0F0F;
+        }
+        
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #E65100; /* Solar Orange */
+            box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.1);
+        }
+        
+        input[type="email"]::placeholder {
+            color: #999;
+        }
+        
+        /* ===================================
+           SUBMIT BUTTON
+           =================================== */
+        .submit-btn {
+            width: 100%;
+            padding: 16px 24px;
+            margin: 4px; /* 8px total spacing - consistent with calculator */
+            background: #E65100; /* Solar Orange */
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .submit-btn:hover {
+            background: #FF6F00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 81, 0, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .submit-btn:disabled {
+            background: #CCCCCC;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* ===================================
+           ERROR MESSAGE
+           =================================== */
+        .error-message {
+            background: #FFEBEE;
+            color: #C62828;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border-left: 4px solid #C62828;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        /* ===================================
+           PRIVACY NOTE
+           =================================== */
+        .privacy-note {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+        
+        .privacy-note a {
+            color: #BF360C; /* Deep Orange */
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .privacy-note a:hover {
+            text-decoration: underline;
+        }
+        
+        /* ===================================
+           RESPONSIVE BREAKPOINTS
+           =================================== */
+        
+        /* Tablets and smaller */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px; /* Reduced from 20px for fuller width */
+            }
+            
+            .container {
+                max-width: none; /* Remove width limit on mobile! */
+                padding: 25px 15px; /* Reduced from 30px 20px */
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .subtitle {
+                font-size: 15px;
+            }
+        }
+        
+        /* Small phones - stack cards vertically */
+        @media (max-width: 600px) {
+            body {
+                padding: 8px; /* Even less on small phones */
+            }
+            
+            .container {
+                max-width: none; /* Full width on phones! */
+                padding: 20px 12px; /* Tighter padding for more width */
+            }
+            
+            .avatar-grid {
+                grid-template-columns: 1fr;
+                gap: 10px; /* Reduced from 12px - tighter vertical stack */
+            }
+            
+            .avatar-card {
+                padding: 10px 8px; /* Even tighter - ultra compact */
+            }
+            
+            .avatar-icon {
+                font-size: 28px; /* Even smaller for mobile - very refined */
+                margin-bottom: 6px;
+            }
+            
+            .avatar-title {
+                font-size: 13px; /* Slightly smaller for mobile */
+            }
+            
+            .avatar-description {
+                font-size: 11px; /* Keep readable but refined */
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .submit-btn {
+                font-size: 16px;
+            }
+        }
+        
+        /* Landscape phones */
+        @media (orientation: landscape) and (max-width: 767px) {
+            body {
+                padding: 10px 8px; /* Minimal padding in landscape */
+            }
+            
+            .container {
+                max-height: 95vh;
+                overflow-y: auto;
+                padding: 20px 15px; /* Tighter padding */
+            }
+        }
+</style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="logo">
+            <div class="logo-text">iSolar Hot Water Academy</div>
+        </div>
+        
+        <h1>Get Free Access to the PV Hot Water Calculator</h1>
+        <p class="subtitle">Size and design your solar PV water heater in minutes<br><br><strong>We Tailor Your Experience</strong></p>
+        
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message"></div>
+        
+        <!-- Form -->
+        <form id="optinForm">
+            <!-- Avatar Selection -->
+            <p class="instruction">Click one:</p>
+            
+            <div class="avatar-grid">
+                <!-- Solar Contractor Card (Left) -->
+                <div class="avatar-card" data-avatar="contractor" onclick="selectAvatar('contractor')">
+                    <div class="avatar-icon">⚡</div>
+                    <div class="avatar-title">PV Contractor</div>
+                    <div class="avatar-description">Grow your solar business</div>
+                </div>
+                
+                <!-- DIY Homeowner Card (Middle) -->
+                <div class="avatar-card" data-avatar="diy" onclick="selectAvatar('diy')">
+                    <div class="avatar-icon">🏠</div>
+                    <div class="avatar-title">DIY Homeowner</div>
+                    <div class="avatar-description">Self-install your own system</div>
+                </div>
+                
+                <!-- Solar Career Starter Card (Right) -->
+                <div class="avatar-card" data-avatar="career" onclick="selectAvatar('career')">
+                    <div class="avatar-icon">🔄</div>
+                    <div class="avatar-title">Solar Career Starter</div>
+                    <div class="avatar-description">Enter the solar industry</div>
+                </div>
+            </div>
+            
+            <!-- Email Input -->
+            <div class="form-group">
+                <label for="email">Your Email Address</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="you@example.com" 
+                    required
+                >
+            </div>
+            
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn" id="submitBtn">
+                Get Direct Access Now
+            </button>
+        </form>
+        
+        <!-- Privacy Note -->
+        <p class="privacy-note">
+            We respect your inbox. We'll never spam you or share your email with anyone.
+        </p>
+    </div>
 
-THIS IS A TEST VERSION TO SEE HOW SMALLER CARDS LOOK!
+    <script>
+        // ===================================
+        // STATE MANAGEMENT
+        // ===================================
+        let selectedAvatar = null;
 
-═══════════════════════════════════════════════════════════════
-SIZE PROGRESSION
-═══════════════════════════════════════════════════════════════
+        // ===================================
+        // AVATAR SELECTION
+        // ===================================
+        function selectAvatar(avatar) {
+            selectedAvatar = avatar;
+            
+            // Remove selected class from all cards
+            document.querySelectorAll('.avatar-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            document.querySelector(`[data-avatar="${avatar}"]`).classList.add('selected');
+            
+            // Clear any error messages
+            hideError();
+        }
 
-ORIGINAL (What you had):
-Desktop icons: 48px
-Mobile icons:  40px
-Card padding:  20px 10px
-Result: CHUNKY, dominated the page
+        // ===================================
+        // ERROR HANDLING
+        // ===================================
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            
+            // Scroll to error
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
 
-PROFESSIONAL (Previous version):
-Desktop icons: 40px
-Mobile icons:  32px
-Card padding:  16px 8px
-Result: REFINED, elegant, balanced
+        function hideError() {
+            document.getElementById('errorMessage').classList.remove('show');
+        }
 
-SMALLER TEST (This version):
-Desktop icons: 32px ← EVEN SMALLER
-Mobile icons:  28px ← EVEN SMALLER
-Card padding:  14px 8px / 10px 8px ← TIGHTER
-Result: ULTRA COMPACT, minimal
+        // ===================================
+        // FORM SUBMISSION
+        // ===================================
+        document.getElementById('optinForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate avatar selection
+            if (!selectedAvatar) {
+                showError('Please select who you are before continuing.');
+                return;
+            }
+            
+            // Get email
+            const email = document.getElementById('email').value;
+            
+            // Validate email
+            if (!email || !email.includes('@')) {
+                showError('Please enter a valid email address.');
+                return;
+            }
+            
+            // Disable submit button
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+            
+            // ===================================
+            // KAJABI INTEGRATION - PLACEHOLDER
+            // ===================================
+            
+            // TODO: Replace with actual Kajabi form submission URLs
+            const kajabiFormUrls = {
+                diy: 'YOUR_KAJABI_DIY_FORM_URL_HERE',
+                contractor: 'YOUR_KAJABI_CONTRACTOR_FORM_URL_HERE',
+                career: 'YOUR_KAJABI_CAREER_FORM_URL_HERE'
+            };
+            
+            const targetUrl = kajabiFormUrls[selectedAvatar];
+            
+            // FOR NOW: Redirect directly to calculator with URL parameters
+            // LATER: Submit to Kajabi form programmatically
+            
+            // Temporary redirect (until Kajabi is set up)
+            const calculatorUrls = {
+                diy: `/calc/diy.html?email=${encodeURIComponent(email)}&avatar=diy`,
+                contractor: `/calc/contractor.html?email=${encodeURIComponent(email)}&avatar=contractor`,
+                career: `/calc/career.html?email=${encodeURIComponent(email)}&avatar=career`
+            };
+            
+            // Redirect to calculator
+            window.location.href = calculatorUrls[selectedAvatar];
+            
+            // ===================================
+            // WHEN KAJABI IS READY, USE THIS:
+            // ===================================
+            /*
+            // Programmatic form submission to Kajabi
+            fetch(targetUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    avatar: selectedAvatar
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Kajabi will handle redirect
+                    // Or we can redirect manually here
+                    window.location.href = calculatorUrls[selectedAvatar];
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            })
+            .catch(error => {
+                showError('Something went wrong. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Get Direct Access Now';
+            });
+            */
+        });
 
-═══════════════════════════════════════════════════════════════
-VISUAL COMPARISON - DESKTOP
-═══════════════════════════════════════════════════════════════
+        // ===================================
+        // KEYBOARD ACCESSIBILITY
+        // ===================================
+        document.addEventListener('keydown', function(e) {
+            // Allow Enter key to select avatar card when focused
+            if (e.key === 'Enter' && e.target.classList.contains('avatar-card')) {
+                const avatar = e.target.getAttribute('data-avatar');
+                selectAvatar(avatar);
+            }
+        });
 
-ORIGINAL:
-┌──────────────────┐
-│                  │
-│       ⚡         │  48px
-│                  │
-│  PV Contractor   │
-│                  │
-│   Grow your      │
-│  solar business  │
-│                  │
-└──────────────────┘
-
-PROFESSIONAL:
-┌────────────────┐
-│      ⚡        │  40px
-│                │
-│ PV Contractor  │
-│  Grow your     │
-│solar business  │
-└────────────────┘
-
-SMALLER TEST:
-┌──────────────┐
-│     ⚡       │  32px (same size as mobile!)
-│              │
-│PV Contractor │
-│ Grow your    │
-│solar business│
-└──────────────┘
-↑ Very compact!
-
-═══════════════════════════════════════════════════════════════
-VISUAL COMPARISON - MOBILE
-═══════════════════════════════════════════════════════════════
-
-ORIGINAL:
-┌─────────────┐
-│     ⚡      │  40px - big
-│             │
-│PV Contractor│
-│ Grow your   │
-│   solar     │
-│  business   │
-└─────────────┘
-
-PROFESSIONAL:
-┌────────────┐
-│    ⚡      │  32px - nice
-│            │
-│PV Contract.│
-│Grow your   │
-│solar busin.│
-└────────────┘
-
-SMALLER TEST:
-┌───────────┐
-│   ⚡      │  28px - tiny!
-│           │
-│PV Contrac.│
-│Grow solar │
-│ business  │
-└───────────┘
-↑ Very tight!
-
-═══════════════════════════════════════════════════════════════
-WHAT TO LOOK FOR WHEN TESTING
-═══════════════════════════════════════════════════════════════
-
-✅ POSITIVE SIGNS:
-• Cards feel refined and elegant
-• Button stands out more
-• Page feels more spacious
-• Icons still clear and recognizable
-• Faster to scan all three options
-
-⚠️ WARNING SIGNS:
-• Icons too small to recognize quickly
-• Text feels cramped or hard to read
-• Cards feel insignificant or ignored
-• Loses visual impact
-• Too much white space around cards
-
-═══════════════════════════════════════════════════════════════
-MY PROFESSIONAL OPINION
-═══════════════════════════════════════════════════════════════
-
-DESKTOP:
-32px icons might be TOO small for desktop
-40px (professional version) is probably the sweet spot
-
-MOBILE:
-28px icons are very compact
-Could work well if you want ultra-minimal
-But 32px (professional version) is safer
-
-RECOMMENDATION:
-Test this smaller version, but I think the "professional" 
-version (40px desktop / 32px mobile) is the optimal balance 
-between refinement and usability.
-
-═══════════════════════════════════════════════════════════════
-DECISION GUIDE
-═══════════════════════════════════════════════════════════════
-
-USE SMALLER TEST IF:
-• You want absolute minimal design
-• Button needs to be THE star
-• Target audience is young/tech-savvy
-• Mobile-first priority
-
-USE PROFESSIONAL IF:
-• You want balanced, elegant design
-• Cards should be clear but not dominant
-• Broader age range audience
-• Industry standard best practice
-
-═══════════════════════════════════════════════════════════════
+        // Make avatar cards keyboard accessible
+        document.querySelectorAll('.avatar-card').forEach(card => {
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+        });
+    </script>
+</body>
+</html>
