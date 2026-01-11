@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>Get Your Free PV Solar Hot Water Designer - iSolar Hot Water Academy</title>
+    <title>Get Your Free PV Solar Hot Water Calculator - iSolar Hot Water Academy</title>
     
     <!-- Inter Font from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -183,7 +183,7 @@
         .avatar-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 12px; /* Reduced from 15px - tighter, more refined */
             margin-bottom: 30px;
         }
         
@@ -191,7 +191,7 @@
             background: #FFFFFF;
             border: 3px solid #E8E8E8;
             border-radius: 12px;
-            padding: 20px 10px;
+            padding: 16px 8px; /* Reduced from 20px 10px - more compact */
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -228,15 +228,15 @@
         }
         
         .avatar-icon {
-            font-size: 48px;
-            margin-bottom: 10px;
+            font-size: 40px; /* Reduced from 48px - more refined */
+            margin-bottom: 8px; /* Tighter spacing */
         }
         
         .avatar-title {
-            font-size: 15px;
+            font-size: 14px; /* Slightly smaller for elegance */
             font-weight: 600;
             color: #0F0F0F;
-            margin-bottom: 5px;
+            margin-bottom: 4px; /* Tighter */
         }
         
         .avatar-card.selected .avatar-title {
@@ -244,7 +244,7 @@
         }
         
         .avatar-description {
-            font-size: 12px;
+            font-size: 11px; /* Slightly smaller, more refined */
             color: #424242;
             line-height: 1.3;
         }
@@ -398,15 +398,24 @@
             
             .avatar-grid {
                 grid-template-columns: 1fr;
-                gap: 12px;
+                gap: 10px; /* Reduced from 12px - tighter vertical stack */
             }
             
             .avatar-card {
-                padding: 16px;
+                padding: 12px 10px; /* Reduced from 16px - more compact on mobile */
             }
             
             .avatar-icon {
-                font-size: 40px;
+                font-size: 32px; /* Reduced from 40px - much more elegant! */
+                margin-bottom: 6px;
+            }
+            
+            .avatar-title {
+                font-size: 13px; /* Slightly smaller for mobile */
+            }
+            
+            .avatar-description {
+                font-size: 11px; /* Keep readable but refined */
             }
             
             h1 {
@@ -439,7 +448,7 @@
             <div class="logo-text">iSolar Hot Water Academy</div>
         </div>
         
-        <h1>Get Free Access to the PV Hot Water Designer</h1>
+        <h1>Get Free Access to the PV Hot Water Calculator</h1>
         <p class="subtitle">Size and design your solar PV water heater in minutes<br><br><strong>We Tailor Your Experience</strong></p>
         
         <!-- Error Message -->
@@ -453,21 +462,21 @@
             <div class="avatar-grid">
                 <!-- Solar Contractor Card (Left) -->
                 <div class="avatar-card" data-avatar="contractor" onclick="selectAvatar('contractor')">
-                    <div class="avatar-icon">⚡🔆</div>
+                    <div class="avatar-icon">⚡</div>
                     <div class="avatar-title">PV Contractor</div>
                     <div class="avatar-description">Grow your solar business</div>
                 </div>
                 
                 <!-- DIY Homeowner Card (Middle) -->
                 <div class="avatar-card" data-avatar="diy" onclick="selectAvatar('diy')">
-                    <div class="avatar-icon">🏠☀️</div>
+                    <div class="avatar-icon">🏠</div>
                     <div class="avatar-title">DIY Homeowner</div>
                     <div class="avatar-description">Self-install your own system</div>
                 </div>
                 
                 <!-- Solar Career Starter Card (Right) -->
                 <div class="avatar-card" data-avatar="career" onclick="selectAvatar('career')">
-                    <div class="avatar-icon">👤🔆</div>
+                    <div class="avatar-icon">🔄</div>
                     <div class="avatar-title">Solar Career Starter</div>
                     <div class="avatar-description">Enter the solar industry</div>
                 </div>
@@ -487,7 +496,7 @@
             
             <!-- Submit Button -->
             <button type="submit" class="submit-btn" id="submitBtn">
-                Get Direct Access 
+                Get Direct Access Now
             </button>
         </form>
         
@@ -616,7 +625,7 @@
             .catch(error => {
                 showError('Something went wrong. Please try again.');
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Get Direct Access';
+                submitBtn.textContent = 'Get Direct Access Now';
             });
             */
         });
