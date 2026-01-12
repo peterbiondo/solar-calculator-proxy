@@ -20,86 +20,6 @@
             box-sizing: border-box;
         }
         
-        /* ===================================
-           MOBILE OPTIMIZATION - Enhanced (Tier 1 & 2)
-           Based on cross-platform testing: iOS Safari, Chrome Android, Samsung Internet
-           =================================== */
-        
-        /* TIER 1: Touch-friendly sizing - 48px for better Android/iOS support */
-        button,
-        a,
-        input[type="submit"],
-        input[type="button"] {
-            min-height: 48px;
-            min-width: 48px;
-            padding: 12px;
-            margin: 4px; /* 8px total spacing between elements */
-        }
-        
-        /* TIER 1: Prevent iOS Safari zoom on input focus - MOBILE ONLY */
-        @media (max-width: 767px) {
-            input,
-            select,
-            textarea {
-                font-size: 16px !important;
-            }
-        }
-        
-        /* TIER 2: Remove tap highlight - scoped to interactive elements for performance */
-        a,
-        button,
-        input,
-        select {
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        /* TIER 1: Safe areas for notched phones (iPhone X+, modern Android) */
-        body {
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-        }
-        
-        /* TIER 2: Prevent overscroll bounce on iOS (app-like feel) */
-        body {
-            overscroll-behavior: none;
-        }
-        
-        /* ===================================
-           TIER 1: RESPONSIVE BREAKPOINTS
-           Mobile-first approach for all screen sizes
-           =================================== */
-        
-        /* Phone portrait (base styles - up to 479px) */
-        /* Your existing styles work great here */
-        
-        /* Phone landscape / phablet (480px - 767px) */
-        @media (min-width: 480px) and (max-width: 767px) {
-            .gallon-btn,
-            .scenario-btn {
-                font-size: 15px;
-            }
-        }
-        
-        /* Tablet (768px - 1023px) */
-        @media (min-width: 768px) and (max-width: 1023px) {
-            .chat-container {
-                max-width: 700px;
-            }
-        }
-        
-        /* Phone landscape specific - prevent height issues */
-        @media (orientation: landscape) and (max-width: 767px) {
-            body {
-                padding: 10px;
-            }
-            
-            .chat-container {
-                max-height: 90vh;
-            }
-        }
-        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0F0F0F; /* iSolar Black */
@@ -530,7 +450,7 @@
         }
         
         .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: #FF8C00;
+            background: #E65100;
         }
     </style>
     
@@ -914,17 +834,17 @@
                 addMessage(`<strong><span style="color: #00E676;">🎉</span> You've reached the maximum of 10 calculations!</strong><br>You've explored many scenarios! Ready to take the next step?<br><br>
                 
                 <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                    <strong style="color: #FF8C00; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                    <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                    <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                    <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
                     
                     <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                     <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                     
                     <strong style="color: #000000;">Win more projects</strong><br>
-                    <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
+                    <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                     
                     <div style="text-align: center; margin-top: 30px;">
-                        <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                        <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
                         <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
                         <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
                             <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
@@ -1031,12 +951,12 @@
                             const scenarioButtons = document.getElementById('scenarioButtons');
                             scenarioButtons.innerHTML = `
                                 <button class="gallon-btn" onclick="selectScenario('annual')" style="font-weight: 700;">Annual</button>
-                                <button class="gallon-btn" onclick="selectScenario('winter')">Winter</button>
+                                <button class="gallon-btn" onclick="selectScenario('custom')">Custom</button>
+                                <button class="gallon-btn" onclick="selectScenario('help')">Help</button>
                                 <button class="gallon-btn" onclick="selectScenario('spring')">Spring</button>
                                 <button class="gallon-btn" onclick="selectScenario('summer')">Summer</button>
                                 <button class="gallon-btn" onclick="selectScenario('fall')">Fall</button>
-                                <button class="gallon-btn" onclick="selectScenario('custom')">Custom</button>
-                                <button class="gallon-btn" onclick="selectScenario('help')">Help</button>
+                                <button class="gallon-btn" onclick="selectScenario('winter')">Winter</button>
                             `;
                             
                             scenarioButtons.style.display = 'grid';
@@ -1223,8 +1143,8 @@
                                 hideTyping();
                                 const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
                                 const usageNote = unitSystem === 'metric' ? 
-                                    'Note: Most consumers use 60-75 liters of hot water per day. Usage varies by individual.' : 
-                                    'Note: Most consumers use 15-20 gallons of hot water per day. Usage varies by individual.';
+                                    'Note: Most consumers use 60-75 liters per person of hot water each day. Usage varies by individual.': 
+                                    'Note: Most consumers use 15-20 gallons per person of hot water each day. Usage varies by individual.';
                                 const waterQuestion = unitSystem === 'metric' ?
                                     'How many liters of hot water does your household use each day?' :
                                     'How many gallons of hot water does your household use each day?';
@@ -1329,7 +1249,7 @@
                                 const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
                                 const scaldTemp = unitSystem === 'metric' ? '55°C' : '130°F';
                                 const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong> <strong>${defaultTemp} is recommended to prevent scalding risk.</strong> Temperatures above ${scaldTemp} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tempRange}).`);
+                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><strong>${defaultTemp} is recommended to prevent scalding risk.</strong> Temperatures above ${scaldTemp} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tempRange}).`);
                                 conversationStep = 4;
                                 userInput.focus();
                             }, 800);
@@ -1348,7 +1268,7 @@
                                 const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
                                 const scaldTemp = unitSystem === 'metric' ? '55°C' : '130°F';
                                 const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong> <strong>${defaultTemp} is recommended to prevent scalding risk.</strong> Temperatures above ${scaldTemp} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tempRange}).`);
+                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><strong>${defaultTemp} is recommended to prevent scalding risk.</strong> Temperatures above ${scaldTemp} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tempRange}).`);
                                 conversationStep = 4;
                                 userInput.focus();
                             }, 800);
@@ -1435,7 +1355,7 @@
                                 const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
                                 const scaldTemp = unitSystem === 'metric' ? '55°C' : '130°F';
                                 const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong> <strong>${defaultTemp} is recommended to prevent scalding risk.</strong> Temperatures above ${scaldTemp} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tempRange}).`);
+                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><strong>${defaultTemp} is recommended to prevent scalding risk.</strong> Temperatures above ${scaldTemp} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tempRange}).`);
                                 conversationStep = 4;
                                 userInput.focus();
                             }, 800);
@@ -1660,17 +1580,17 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #FF8C00; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
                 
                 <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
                 <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
+                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                    <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
                     <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
                     <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
                         <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
@@ -1723,17 +1643,17 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #FF8C00; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
                 
                 <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
                 <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
+                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                    <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
                     <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
                     <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
                         <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
@@ -1880,17 +1800,17 @@ function displayBothSystems(data) {
             <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #FF8C00; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
                 
                 <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
                 <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
+                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                    <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
                     <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
                     <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
                         <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
@@ -2012,17 +1932,17 @@ function displayBothSystems(data) {
             <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #FF8C00; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer competing in a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
                 
                 <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
                 <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br><br>
+                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #FF8C00; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                    <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
                     <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
                     <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
                         <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
