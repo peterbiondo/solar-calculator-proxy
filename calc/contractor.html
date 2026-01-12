@@ -1160,29 +1160,6 @@
             if (e.key === 'Enter') handleUserInput();
         });
         
-        // ===================================
-        // FIX: Hide buttons immediately when user starts typing
-        // ===================================
-        userInput.addEventListener('input', () => {
-            const gallonBtns = document.getElementById('gallonButtons');
-            const scenarioBtns = document.getElementById('scenarioButtons');
-            
-            // Hide Imperial/Metric buttons (step 0.5)
-            if (gallonBtns.style.display === 'grid' && conversationStep === 0.5) {
-                gallonBtns.style.display = 'none';
-            }
-            
-            // Hide gallon amount buttons (step 2)
-            if (gallonBtns.style.display === 'grid' && conversationStep === 2) {
-                gallonBtns.style.display = 'none';
-            }
-            
-            // Hide scenario buttons (step 3)
-            if (scenarioBtns.style.display === 'grid' && conversationStep === 3) {
-                scenarioBtns.style.display = 'none';
-            }
-        });
-        
         async function handleUserInput() {
             const message = userInput.value.trim();
             if (!message) return;
