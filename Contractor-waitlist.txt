@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Join the Waitlist | iSolar Hot Water Academy</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* CSS VARIABLES - iSolar Brand Colors */
+        /* ═══════════════════════════════════════════════════════════════ */
+        :root {
+            --isolar-black: #0F0F0F;
+            --solar-orange: #E65100;
+            --deep-orange: #BF360C;
+            --energy-green: #00E676;
+            --soft-gray: #E8E8E8;
+            --dark-gray: #424242;
+            --pure-white: #FFFFFF;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* GLOBAL RESET & BASE STYLES */
+        /* ═══════════════════════════════════════════════════════════════ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--isolar-black);
+            color: var(--isolar-black);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* DUAL-GLOW BACKGROUND EFFECTS (Matching opt-in page) */
+        /* ═══════════════════════════════════════════════════════════════ */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Orange glow - top right */
+        body::before {
+            background: var(--solar-orange);
+            top: -200px;
+            right: -200px;
+        }
+
+        /* Green glow - bottom left */
+        body::after {
+            background: var(--energy-green);
+            bottom: -200px;
+            left: -200px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* MAIN CONTAINER */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* WHITE CARD */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* HEADER */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .logo {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .headline {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--isolar-black);
+            margin-bottom: 12px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .subheadline {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--dark-gray);
+            margin-bottom: 32px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* CHECKBOX SECTION */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .checkbox-container {
+            margin-bottom: 24px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            padding: 16px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .checkbox-wrapper:hover {
+            background: rgba(230, 81, 0, 0.05);
+        }
+
+        /* Custom checkbox styling */
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            border: 2px solid var(--dark-gray);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            margin-top: 2px;
+        }
+
+        input[type="checkbox"]:hover {
+            border-color: var(--solar-orange);
+        }
+
+        input[type="checkbox"]:checked {
+            background: var(--solar-orange);
+            border-color: var(--solar-orange);
+        }
+
+        input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        input[type="checkbox"]:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .checkbox-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--isolar-black);
+            cursor: pointer;
+            line-height: 1.5;
+            user-select: none;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* ACCORDION */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .accordion {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+        }
+
+        .accordion.open {
+            max-height: 500px;
+            opacity: 1;
+            transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
+        }
+
+        .accordion-content {
+            padding: 20px;
+            background: rgba(230, 81, 0, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--solar-orange);
+        }
+
+        .accordion-message {
+            font-size: 16px;
+            color: var(--isolar-black);
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .email-highlight {
+            font-weight: 600;
+            color: var(--solar-orange);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* SUCCESS STATE */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .success-message {
+            display: none;
+            padding: 16px 20px;
+            background: rgba(0, 230, 118, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--energy-green);
+            margin-top: 16px;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--energy-green);
+            margin: 0;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* FOOTER */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .footer {
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .privacy-note {
+            font-size: 12px;
+            color: var(--dark-gray);
+            line-height: 1.5;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* LOADING STATE */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--soft-gray);
+            border-top-color: var(--solar-orange);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* MOBILE OPTIMIZATION */
+        /* ═══════════════════════════════════════════════════════════════ */
+        @media (max-width: 600px) {
+            .container {
+                margin: 16px;
+            }
+
+            .card {
+                padding: 32px 24px;
+            }
+
+            .headline {
+                font-size: 28px;
+            }
+
+            .subheadline {
+                font-size: 15px;
+            }
+
+            /* Touch target optimization */
+            .checkbox-wrapper {
+                min-height: 48px;
+                padding: 12px;
+            }
+
+            input[type="checkbox"] {
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+            }
+
+            input[type="checkbox"]:checked::after {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .card {
+                padding: 24px 20px;
+            }
+
+            .headline {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- Header -->
+            <div class="logo">iSolar Hot Water Academy</div>
+            <h1 class="headline" id="headline">Join the Waitlist</h1>
+            <p class="subheadline" id="subheadline">
+                Thanks for exploring the PV Hot Water Calculator. Be the first to know when our comprehensive contractor training launches.
+            </p>
+
+            <!-- Checkbox Section -->
+            <div class="checkbox-container">
+                <label class="checkbox-wrapper" for="waitlistCheckbox">
+                    <input type="checkbox" id="waitlistCheckbox">
+                    <span class="checkbox-label" id="checkboxLabel">
+                        Yes, notify me when the PV Hot Water Training launches
+                    </span>
+                </label>
+            </div>
+
+            <!-- Accordion (Hidden by Default) -->
+            <div class="accordion" id="accordion">
+                <div class="accordion-content">
+                    <p class="accordion-message" id="accordionMessage">
+                        Perfect! We'll send you an email at <span class="email-highlight" id="userEmailDisplay"></span> as soon as we launch. Watch for updates in your inbox.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <p class="success-text">✓ You're on the waitlist!</p>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p class="privacy-note">
+                    We respect your privacy. Unsubscribe anytime.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* CONTENT CONFIGURATION - Easy to change all text here */
+        /* ═══════════════════════════════════════════════════════════════ */
+        const CONTENT = {
+            headline: "Join the Waitlist",
+            subheadline: "Thanks for exploring the PV Hot Water Calculator. Be the first to know when our comprehensive contractor training launches.",
+            checkboxLabel: "Yes, notify me when the PV Hot Water Training launches",
+            accordionMessage: "Perfect! We'll send you an email at {EMAIL} as soon as we launch. Watch for updates in your inbox.",
+            successMessage: "✓ You're on the waitlist!",
+            privacyNote: "We respect your privacy. Unsubscribe anytime."
+        };
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* KAJABI CONFIGURATION - Replace with your actual form URL */
+        /* ═══════════════════════════════════════════════════════════════ */
+        const KAJABI_FORM_URL = 'YOUR_KAJABI_FORM_URL_HERE';
+        // Example: 'https://yoursite.kajabi.com/forms/abc123/submit'
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* GET EMAIL FROM URL PARAMETERS */
+        /* ═══════════════════════════════════════════════════════════════ */
+        function getEmailFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            
+            if (!email) {
+                console.warn('⚠️ No email found in URL parameters');
+                return null;
+            }
+            
+            console.log('✅ Email loaded from URL:', email);
+            return email;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* SUBMIT TO KAJABI FORM */
+        /* ═══════════════════════════════════════════════════════════════ */
+        async function submitToKajabi(email) {
+            console.log('📤 Submitting to Kajabi...', { email, tags: ['waitlist'] });
+
+            // Check if Kajabi URL is configured
+            if (KAJABI_FORM_URL === 'YOUR_KAJABI_FORM_URL_HERE') {
+                console.log('⏸️ Kajabi URL not configured yet - showing demo mode');
+                console.log('✅ [DEMO MODE] Would submit:', { email, tags: ['waitlist'] });
+                return { success: true, demo: true };
+            }
+
+            try {
+                const response = await fetch(KAJABI_FORM_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        tags: ['waitlist']
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Successfully submitted to Kajabi');
+                    return { success: true };
+                } else {
+                    console.error('❌ Kajabi submission failed:', response.status);
+                    return { success: false, error: response.status };
+                }
+            } catch (error) {
+                console.error('❌ Error submitting to Kajabi:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* INITIALIZE PAGE */
+        /* ═══════════════════════════════════════════════════════════════ */
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Waitlist page loaded');
+
+            // Get email from URL
+            const userEmail = getEmailFromURL();
+
+            // Get DOM elements
+            const checkbox = document.getElementById('waitlistCheckbox');
+            const accordion = document.getElementById('accordion');
+            const emailDisplay = document.getElementById('userEmailDisplay');
+            const successMessage = document.getElementById('successMessage');
+
+            // Display user email in accordion
+            if (userEmail) {
+                emailDisplay.textContent = userEmail;
+            } else {
+                emailDisplay.textContent = 'your email address';
+            }
+
+            // Checkbox change handler
+            checkbox.addEventListener('change', async function() {
+                if (this.checked) {
+                    console.log('✅ Checkbox checked - opening accordion');
+                    
+                    // Open accordion
+                    accordion.classList.add('open');
+
+                    // Submit to Kajabi (if email exists)
+                    if (userEmail) {
+                        const result = await submitToKajabi(userEmail);
+                        
+                        if (result.success) {
+                            // Show success message after brief delay
+                            setTimeout(() => {
+                                successMessage.classList.add('show');
+                                checkbox.disabled = true;
+                                console.log('✅ Waitlist submission complete!');
+                            }, 500);
+                        } else {
+                            console.error('❌ Submission failed - keeping checkbox enabled for retry');
+                        }
+                    } else {
+                        console.warn('⚠️ No email available - cannot submit to Kajabi');
+                    }
+                } else {
+                    // Close accordion if unchecked
+                    accordion.classList.remove('open');
+                    successMessage.classList.remove('show');
+                }
+            });
+
+            // Log ready state
+            console.log('✅ Waitlist page ready');
+            console.log('📧 User email:', userEmail || 'Not provided');
+            console.log('🔗 Kajabi URL:', KAJABI_FORM_URL);
+        });
+    </script>
+</body>
+</html>
