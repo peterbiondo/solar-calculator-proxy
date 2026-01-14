@@ -549,6 +549,18 @@
         
         const WEBHOOK_URL = 'https://solar-calculator-proxy.vercel.app/api/webhook-proxy';
         
+        /* ===================================
+   WAITLIST REDIRECT FUNCTION
+   =================================== */
+function redirectToWaitlist() {
+    // Get email from URL parameters (passed from opt-in page)
+    const urlParams = new URLSearchParams(window.location.search);
+    const userEmail = urlParams.get('email') || 'unknown@example.com';
+    
+    // Redirect to waitlist page with email and avatar
+    window.location.href = `../Contractor-waitlist.html?email=${encodeURIComponent(userEmail)}&avatar=contractor`;
+}
+        
         let conversationStep = 0;
         let userData = {
             season: '',
@@ -841,7 +853,7 @@
                     <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                     
                     <strong style="color: #000000;">Win more projects</strong><br>
-                    <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                    <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                     
                     <div style="text-align: center; margin-top: 30px;">
                         <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
@@ -1610,7 +1622,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
                 <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
                     <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
@@ -1673,7 +1685,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
                 <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
                     <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
@@ -1830,7 +1842,7 @@ function displayBothSystems(data) {
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
                 <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
                     <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
@@ -1962,7 +1974,7 @@ function displayBothSystems(data) {
                 <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
                 
                 <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="alert('Coming soon! This will open an email form.'); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
                     <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
