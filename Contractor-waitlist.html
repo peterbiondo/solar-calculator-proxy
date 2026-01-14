@@ -48,33 +48,45 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
-        /* DUAL-GLOW BACKGROUND EFFECTS (Matching opt-in page) */
+        /* DUAL-GLOW BACKGROUND EFFECTS (Matching opt-in page exactly) */
         /* ═══════════════════════════════════════════════════════════════ */
-        body::before,
-        body::after {
+        
+        /* Main glow - Left side (Energy Green to Violet) */
+        body::before {
             content: '';
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
+            position: absolute;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(
+                circle at 30% 50%, 
+                rgba(0, 230, 118, 0.15) 0%, 
+                rgba(124, 77, 255, 0.15) 50%, 
+                transparent 100%
+            );
+            top: 50%;
+            left: 0;
+            transform: translate(-40%, -50%);
             pointer-events: none;
             z-index: 0;
         }
-
-        /* Orange glow - top right */
-        body::before {
-            background: var(--solar-orange);
-            top: -200px;
-            right: -200px;
-        }
-
-        /* Green glow - bottom left */
+        
+        /* Secondary glow - Right side (Solar Orange to Red) */
         body::after {
-            background: var(--energy-green);
-            bottom: -200px;
-            left: -200px;
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(
+                circle at 70% 50%, 
+                rgba(230, 81, 0, 0.12) 0%, 
+                rgba(211, 47, 47, 0.12) 50%, 
+                transparent 100%
+            );
+            top: 50%;
+            right: 0;
+            transform: translate(40%, -50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
@@ -105,7 +117,7 @@
         .logo {
             font-size: 14px;
             font-weight: 600;
-            color: var(--dark-gray);
+            color: #BF360C; /* Deep Orange - matching opt-in page */
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 24px;
