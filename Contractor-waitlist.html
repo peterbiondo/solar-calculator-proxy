@@ -94,22 +94,21 @@
         /* ═══════════════════════════════════════════════════════════════ */
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 650px; /* Professional landing page width for copy + checkbox */
             margin: 20px;
             position: relative;
             z-index: 1;
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
-        /* WHITE CARD */
+        /* WHITE CARD - Matching Calculator Bot Styling */
         /* ═══════════════════════════════════════════════════════════════ */
         .card {
-            background: rgba(255, 255, 255, 0.97);
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Added to match opt-in page */
-            border-radius: 16px;
+            background: #1A1A1A; /* Card Charcoal - matches calculator */
+            border: 1px solid #2A2A2A; /* Matches calculator */
+            border-radius: 20px; /* Matches calculator */
             padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5); /* Matches calculator */
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
@@ -118,8 +117,7 @@
         .logo {
             font-size: 14px;
             font-weight: 600;
-            color: #BF360C; /* Deep Orange - matching opt-in page */
-            text-transform: uppercase;
+            color: #FFA500; /* Solar Orange - matching Join the Waitlist */
             letter-spacing: 1px;
             margin-bottom: 24px;
             text-align: center;
@@ -128,7 +126,7 @@
         .headline {
             font-size: 32px;
             font-weight: 700;
-            color: var(--isolar-black);
+            color: #FFFFFF; /* White text on dark background */
             margin-bottom: 12px;
             text-align: center;
             line-height: 1.2;
@@ -137,10 +135,19 @@
         .subheadline {
             font-size: 16px;
             font-weight: 400;
-            color: var(--dark-gray);
+            color: #E0E0E0; /* Light gray text on dark background */
             margin-bottom: 32px;
             text-align: center;
             line-height: 1.5;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF; /* White text on dark background */
+            margin-bottom: 16px;
+            text-align: center;
+            line-height: 1.2;
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
@@ -171,12 +178,13 @@
             width: 24px;
             height: 24px;
             min-width: 24px;
-            border: 2px solid var(--dark-gray);
+            border: 2px solid #FFFFFF; /* White border on dark background */
             border-radius: 4px;
             cursor: pointer;
             position: relative;
             transition: all 0.2s ease;
             margin-top: 2px;
+            background: transparent;
         }
 
         input[type="checkbox"]:hover {
@@ -207,7 +215,7 @@
         .checkbox-label {
             font-size: 16px;
             font-weight: 500;
-            color: var(--isolar-black);
+            color: #FFFFFF; /* White text on dark background */
             cursor: pointer;
             line-height: 1.5;
             user-select: none;
@@ -238,7 +246,7 @@
 
         .accordion-message {
             font-size: 16px;
-            color: var(--isolar-black);
+            color: #FFFFFF; /* White text on dark background */
             line-height: 1.6;
             margin-bottom: 0;
         }
@@ -281,7 +289,7 @@
 
         .privacy-note {
             font-size: 12px;
-            color: var(--dark-gray);
+            color: #AAAAAA; /* Light gray for privacy text */
             line-height: 1.5;
         }
 
@@ -357,17 +365,38 @@
         <div class="card">
             <!-- Header -->
             <div class="logo">iSolar Hot Water Academy</div>
-            <h1 class="headline" id="headline">Join the Waitlist</h1>
-            <p class="subheadline" id="subheadline">
-                Thanks for exploring the PV Hot Water Calculator. Be the first to know when our comprehensive contractor training launches.
+            
+            <h1 class="headline" id="headline" style="margin-bottom: 16px; color: #FFA500;">☀️ Join the Waitlist</h1>
+            
+            <p class="subheadline" style="margin-bottom: 16px; font-weight: 700;">
+                This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close — while keeping your crews working.
             </p>
+            
+            <p class="subheadline" style="margin-bottom: 8px; font-weight: 600; text-align: left;">
+                You'll see:
+            </p>
+            
+            <ul style="list-style: none; padding-left: 0; margin-bottom: 32px; text-align: left;">
+                <li style="margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
+                    <span style="position: absolute; left: 0;">•</span>
+                    how the systems are built and sized
+                </li>
+                <li style="margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
+                    <span style="position: absolute; left: 0;">•</span>
+                    what role they play when a full system isn't the right next step
+                </li>
+                <li style="margin-bottom: 0; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
+                    <span style="position: absolute; left: 0;">•</span>
+                    when they're the better option for homeowners
+                </li>
+            </ul>
 
             <!-- Checkbox Section -->
             <div class="checkbox-container">
                 <label class="checkbox-wrapper" for="waitlistCheckbox">
                     <input type="checkbox" id="waitlistCheckbox">
                     <span class="checkbox-label" id="checkboxLabel">
-                        Yes, notify me when the PV Hot Water Training launches
+                        Notify me when the webinar opens
                     </span>
                 </label>
             </div>
@@ -375,9 +404,27 @@
             <!-- Accordion (Hidden by Default) -->
             <div class="accordion" id="accordion">
                 <div class="accordion-content">
-                    <p class="accordion-message" id="accordionMessage">
-                        Perfect! We'll send you an email at <span class="email-highlight" id="userEmailDisplay"></span> as soon as we launch. Watch for updates in your inbox.
+                    <p class="accordion-message" style="margin-bottom: 16px;">
+                        We'll notify you when the webinar is open.
                     </p>
+                    
+                    <p class="accordion-message" style="margin-bottom: 8px;">
+                        Want to move sooner? Request group or one-on-one training.
+                    </p>
+                    
+                    <p class="accordion-message" style="margin-bottom: 16px;">
+                        We'll contact you directly.
+                    </p>
+                    
+                    <!-- Second Checkbox for One-on-One Training -->
+                    <div class="checkbox-container" style="margin-bottom: 0;">
+                        <label class="checkbox-wrapper" for="oneOnOneCheckbox" style="padding: 12px; background: rgba(230, 81, 0, 0.05); border-radius: 8px;">
+                            <input type="checkbox" id="oneOnOneCheckbox">
+                            <span class="checkbox-label" style="font-size: 15px;">
+                                Request group or one-on-one training
+                            </span>
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -401,9 +448,9 @@
         /* ═══════════════════════════════════════════════════════════════ */
         const CONTENT = {
             headline: "Join the Waitlist",
-            subheadline: "Thanks for exploring the PV Hot Water Calculator. Be the first to know when our comprehensive contractor training launches.",
-            checkboxLabel: "Yes, notify me when the PV Hot Water Training launches",
-            accordionMessage: "Perfect! We'll send you an email at {EMAIL} as soon as we launch. Watch for updates in your inbox.",
+            subheadline: "This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close — while keeping your crews working.",
+            checkboxLabel: "Notify me when the webinar opens",
+            accordionMessage: "We'll notify you when the webinar is open. Want to move sooner? Request group or one-on-one training. We'll contact you directly.",
             successMessage: "✓ You're on the waitlist!",
             privacyNote: "We respect your privacy. Unsubscribe anytime."
         };
@@ -479,16 +526,9 @@
 
             // Get DOM elements
             const checkbox = document.getElementById('waitlistCheckbox');
+            const oneOnOneCheckbox = document.getElementById('oneOnOneCheckbox');
             const accordion = document.getElementById('accordion');
-            const emailDisplay = document.getElementById('userEmailDisplay');
             const successMessage = document.getElementById('successMessage');
-
-            // Display user email in accordion
-            if (userEmail) {
-                emailDisplay.textContent = userEmail;
-            } else {
-                emailDisplay.textContent = 'your email address';
-            }
 
             // Checkbox change handler
             checkbox.addEventListener('change', async function() {
@@ -519,6 +559,48 @@
                     // Close accordion if unchecked
                     accordion.classList.remove('open');
                     successMessage.classList.remove('show');
+                }
+            });
+
+            // One-on-One Training Checkbox Handler
+            oneOnOneCheckbox.addEventListener('change', async function() {
+                if (this.checked) {
+                    console.log('✅ Group/one-on-one training requested');
+                    
+                    // Submit to Kajabi with "one-on-one-training" tag
+                    if (userEmail) {
+                        console.log('📤 Submitting training request to Kajabi...');
+                        
+                        // Check if Kajabi URL is configured
+                        if (KAJABI_FORM_URL === 'YOUR_KAJABI_FORM_URL_HERE') {
+                            console.log('⏸️ Kajabi URL not configured yet - showing demo mode');
+                            console.log('✅ [DEMO MODE] Would submit:', { email: userEmail, tags: ['waitlist', 'one-on-one-training'] });
+                        } else {
+                            try {
+                                const response = await fetch(KAJABI_FORM_URL, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        email: userEmail,
+                                        tags: ['one-on-one-training'] // Add training request tag
+                                    })
+                                });
+
+                                if (response.ok) {
+                                    console.log('✅ Training request submitted successfully');
+                                    oneOnOneCheckbox.disabled = true; // Disable after submission
+                                } else {
+                                    console.error('❌ Training request submission failed:', response.status);
+                                }
+                            } catch (error) {
+                                console.error('❌ Error submitting training request:', error);
+                            }
+                        }
+                    } else {
+                        console.warn('⚠️ No email available - cannot submit training request');
+                    }
                 }
             });
 
