@@ -525,97 +525,110 @@
             }
         }
 
-        /* ═══════════════════════════════════════════════════════════════ */
+                /* ═══════════════════════════════════════════════════════════════ */
         /* INITIALIZE PAGE */
         /* ═══════════════════════════════════════════════════════════════ */
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             console.log('🚀 Waitlist page loaded');
 
-            // Get email from URL
+            /* Get email from URL */
             const userEmail = getEmailFromURL();
 
-            // Get DOM elements
-            const checkbox = document.getElementById('waitlistCheckbox');
-            const oneOnOneCheckbox = document.getElementById('oneOnOneCheckbox');
+            /* DOM elements */
+            const waitlistCheckbox = document.getElementById('waitlistCheckbox');
+            const trainingCheckbox = document.getElementById('oneOnOneCheckbox');
             const accordion = document.getElementById('accordion');
             const successMessage = document.getElementById('successMessage');
 
-            // Checkbox change handler
-            checkbox.addEventListener('change', async function() {
-                if (this.checked) {
-                    console.log('✅ Checkbox checked - opening accordion');
-                    
-                    // Open accordion
-                    accordion.classList.add('open');
-
-                    // Submit to Kajabi (if email exists)
-                    if (userEmail) {
-                        const result = await submitToKajabi(userEmail);
-                        
-                        if (result.success) {
-                            // Show success message after brief delay
-                            setTimeout(() => {
-                                successMessage.classList.add('show');
-                                checkbox.disabled = true;
-                                console.log('✅ Waitlist submission complete!');
-                            }, 500);
-                        } else {
-                            console.error('❌ Submission failed - keeping checkbox enabled for retry');
-                        }
-                    } else {
-                        console.warn('⚠️ No email available - cannot submit to Kajabi');
-                    }
-                } else {
-                    // Close accordion if unchecked
+            /* ─────────────────────────────────────────────────────────── */
+            /* WAITLIST CHECKBOX HANDLER */
+            /* ─────────────────────────────────────────────────────────── */
+            waitlistCheckbox.addEventListener('change', async function () {
+                if (!this.checked) {
                     accordion.classList.remove('open');
                     successMessage.classList.remove('show');
+                    return;
+                }
+
+                console.log('✅ Waitlist checkbox checked');
+
+                /* Open accordion immediately */
+                accordion.classList.add('open');
+
+                /* No email — still show confirmation visually */
+                if (!userEmail) {
+                    console.warn('⚠️ No email found — skipping submission');
+                    successMessage.classList.add('show');
+                    return;
+                }
+
+                /* Submit to Kajabi */
+                const result = await submitToKajabi(userEmail);
+
+                if (result.success) {
+                    setTimeout(() => {
+                        successMessage.classList.add('show');
+                        waitlistCheckbox.disabled = true;
+                        console.log('✅ Waitlist confirmed');
+                    }, 300);
+                } else {
+                    console.error('❌ Waitlist submission failed');
                 }
             });
 
-            // One-on-One Training Checkbox Handler
-            oneOnOneCheckbox.addEventListener('change', async function() {
-                if (this.checked) {
-                    console.log('✅ Group/one-on-one training requested');
-                    
-                    // Submit to Kajabi with "one-on-one-training" tag
-                    if (userEmail) {
-                        console.log('📤 Submitting training request to Kajabi...');
-                        
-                        // Check if Kajabi URL is configured
-                        if (KAJABI_FORM_URL === 'YOUR_KAJABI_FORM_URL_HERE') {
-                            console.log('⏸️ Kajabi URL not configured yet - showing demo mode');
-                            console.log('✅ [DEMO MODE] Would submit:', { email: userEmail, tags: ['waitlist', 'one-on-one-training'] });
-                        } else {
-                            try {
-                                const response = await fetch(KAJABI_FORM_URL, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                    body: JSON.stringify({
-                                        email: userEmail,
-                                        tags: ['one-on-one-training'] // Add training request tag
-                                    })
-                                });
+            /* ─────────────────────────────────────────────────────────── */
+            /* GROUP / ONE-ON-ONE TRAINING CHECKBOX HANDLER */
+            /* ─────────────────────────────────────────────────────────── */
+            trainingCheckbox.addEventListener('change', async function () {
+                if (!this.checked) {
+                    return;
+                }
 
-                                if (response.ok) {
-                                    console.log('✅ Training request submitted successfully');
-                                    oneOnOneCheckbox.disabled = true; // Disable after submission
-                                } else {
-                                    console.error('❌ Training request submission failed:', response.status);
-                                }
-                            } catch (error) {
-                                console.error('❌ Error submitting training request:', error);
-                            }
-                        }
+                console.log('✅ Training request checked');
+
+                if (!userEmail) {
+                    console.warn('⚠️ No email found — cannot submit training request');
+                    return;
+                }
+
+                /* Demo mode */
+                if (KAJABI_FORM_URL === 'YOUR_KAJABI_FORM_URL_HERE') {
+                    console.log('⏸️ Demo mode — training request not submitted');
+                    console.log('📨 Would submit:', {
+                        email: userEmail,
+                        tags: ['one-on-one-training']
+                    });
+                    trainingCheckbox.disabled = true;
+                    return;
+                }
+
+                try {
+                    const response = await fetch(KAJABI_FORM_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: userEmail,
+                            tags: ['one-on-one-training']
+                        })
+                    });
+
+                    if (response.ok) {
+                        console.log('✅ Training request submitted');
+                        trainingCheckbox.disabled = true;
                     } else {
-                        console.warn('⚠️ No email available - cannot submit training request');
+                        console.error('❌ Training request failed:', response.status);
                     }
+                } catch (error) {
+                    console.error('❌ Error submitting training request:', error);
                 }
             });
 
-            // Log ready state
-            console.log('✅ Waitlist page ready');
+            /* ─────────────────────────────────────────────────────────── */
+            /* READY STATE LOG */
+            /* ─────────────────────────────────────────────────────────── */
+            console.log('✅ Page ready');
             console.log('📧 User email:', userEmail || 'Not provided');
             console.log('🔗 Kajabi URL:', KAJABI_FORM_URL);
         });
