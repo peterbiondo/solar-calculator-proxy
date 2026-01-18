@@ -48,15 +48,15 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
-        /* DUAL-GLOW BACKGROUND EFFECTS (Matching opt-in page exactly) */
+        /* DUAL-GLOW BACKGROUND EFFECTS (Wrapping around card) */
         /* ═══════════════════════════════════════════════════════════════ */
         
-        /* Main glow - Left side (Energy Green to Violet) */
+        /* Main glow - Left of center (Energy Green to Violet) */
         body::before {
             content: '';
             position: fixed;
-            width: 900px;
-            height: 900px;
+            width: 1000px;
+            height: 1000px;
             background: radial-gradient(
                 circle at 30% 50%, 
                 rgba(0, 230, 118, 0.15) 0%, 
@@ -64,18 +64,18 @@
                 transparent 100%
             );
             top: 50%;
-            left: 0;
-            transform: translate(-40%, -50%);
+            left: 50%;
+            transform: translate(-80%, -50%); /* Positions left of card center */
             pointer-events: none;
             z-index: 0;
         }
         
-        /* Secondary glow - Right side (Solar Orange to Red) */
+        /* Secondary glow - Right of center (Solar Orange to Red) */
         body::after {
             content: '';
             position: fixed;
-            width: 800px;
-            height: 800px;
+            width: 900px;
+            height: 900px;
             background: radial-gradient(
                 circle at 70% 50%, 
                 rgba(230, 81, 0, 0.12) 0%, 
@@ -83,8 +83,8 @@
                 transparent 100%
             );
             top: 50%;
-            right: 0;
-            transform: translate(40%, -50%);
+            left: 50%;
+            transform: translate(-20%, -50%); /* Positions right of card center */
             pointer-events: none;
             z-index: 0;
         }
@@ -154,7 +154,7 @@
         /* CHECKBOX SECTION */
         /* ═══════════════════════════════════════════════════════════════ */
         .checkbox-container {
-            margin-bottom: 8px;
+            margin-bottom: 24px;
         }
 
         .checkbox-wrapper {
@@ -238,12 +238,11 @@
         }
 
         .accordion-content {
-            padding: 0 20px 20px 20px; /* top right bottom left */
+            padding: 20px;
             background: rgba(230, 81, 0, 0.05);
             border-radius: 8px;
             border-left: 4px solid var(--solar-orange);
         }
-
 
         .accordion-message {
             font-size: 16px;
@@ -262,12 +261,11 @@
         /* ═══════════════════════════════════════════════════════════════ */
         .success-message {
             display: none;
-            padding: 16px 16px;
+            padding: 16px 20px;
             background: rgba(0, 230, 118, 0.1);
             border-radius: 8px;
-            border-left: 3px solid var(--energy-green);
-            margin-top: 0px;
-            margin-bottom: 28px;
+            border-left: 4px solid var(--energy-green);
+            margin-top: 16px;
         }
 
         .success-message.show {
@@ -367,39 +365,31 @@
         <div class="card">
             <!-- Header -->
             <div class="logo">iSolar Hot Water Academy</div>
-
-            <h2 class="section-title" style="margin-bottom: 10px; color: #FFA500;">
-                How PV Water Heating Keeps Deals Moving
-            </h2>
-
-            <p class="subheadline" style="margin-bottom: 32px; font-weight: 700;">
-                This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close - while keeping your crews busy.
+            
+            <h1 class="headline" id="headline" style="margin-bottom: 16px; color: #FFA500;">☀️ Join the Waitlist</h1>
+            
+            <p class="subheadline" style="margin-bottom: 16px; font-weight: 700;">
+                This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close — while keeping your crews working.
             </p>
             
             <p class="subheadline" style="margin-bottom: 8px; font-weight: 600; text-align: left;">
                 You'll see:
             </p>
             
-            <ul style="list-style: none; padding-left: 0; margin-bottom: 40px; text-align: left;">
+            <ul style="list-style: none; padding-left: 0; margin-bottom: 32px; text-align: left;">
                 <li style="margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
                     <span style="position: absolute; left: 0;">•</span>
                     how the systems are built and sized
                 </li>
                 <li style="margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
                     <span style="position: absolute; left: 0;">•</span>
-                    what role they play in making systems more affordable
+                    what role they play when a full system isn't the right next step
                 </li>
                 <li style="margin-bottom: 0; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
                     <span style="position: absolute; left: 0;">•</span>
-                    when they make strong financial sense for homeowners
+                    when they're the better option for homeowners
                 </li>
             </ul>
-            
-            <h1 class="headline" id="headline"
-                style="margin-bottom: 22px; color: #FFA500; text-align: center; font-size: 26px;">
-                ☀️ Join the Waitlist
-            </h1>
-
 
             <!-- Checkbox Section -->
             <div class="checkbox-container">
@@ -414,26 +404,24 @@
             <!-- Accordion (Hidden by Default) -->
             <div class="accordion" id="accordion">
                 <div class="accordion-content">
-
-            <div class="success-message" id="successMessage">
-            <p class="success-text">✓ You're on the waitlist!</p>
-            </div>
-
-            <p class="accordion-message" style="margin-bottom: 8px;">
-                Want to move sooner? Request group or one-on-one training.
-            </p>
-
-            <p class="accordion-message" style="margin-bottom: 16px;">
-                We'll contact you directly.
-            </p>
-
+                    <p class="accordion-message" style="margin-bottom: 16px;">
+                        We'll notify you when the webinar is open.
+                    </p>
+                    
+                    <p class="accordion-message" style="margin-bottom: 8px;">
+                        Want to move sooner? Request group or one-on-one training.
+                    </p>
+                    
+                    <p class="accordion-message" style="margin-bottom: 16px;">
+                        We'll contact you directly.
+                    </p>
                     
                     <!-- Second Checkbox for One-on-One Training -->
                     <div class="checkbox-container" style="margin-bottom: 0;">
                         <label class="checkbox-wrapper" for="oneOnOneCheckbox" style="padding: 12px; background: rgba(230, 81, 0, 0.05); border-radius: 8px;">
                             <input type="checkbox" id="oneOnOneCheckbox">
                             <span class="checkbox-label" style="font-size: 15px;">
-                                Learn more about group or one-on-one training
+                                Request group or one-on-one training
                             </span>
                         </label>
                     </div>
@@ -527,110 +515,97 @@
             }
         }
 
-                /* ═══════════════════════════════════════════════════════════════ */
+        /* ═══════════════════════════════════════════════════════════════ */
         /* INITIALIZE PAGE */
         /* ═══════════════════════════════════════════════════════════════ */
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 Waitlist page loaded');
 
-            /* Get email from URL */
+            // Get email from URL
             const userEmail = getEmailFromURL();
 
-            /* DOM elements */
-            const waitlistCheckbox = document.getElementById('waitlistCheckbox');
-            const trainingCheckbox = document.getElementById('oneOnOneCheckbox');
+            // Get DOM elements
+            const checkbox = document.getElementById('waitlistCheckbox');
+            const oneOnOneCheckbox = document.getElementById('oneOnOneCheckbox');
             const accordion = document.getElementById('accordion');
             const successMessage = document.getElementById('successMessage');
 
-            /* ─────────────────────────────────────────────────────────── */
-            /* WAITLIST CHECKBOX HANDLER */
-            /* ─────────────────────────────────────────────────────────── */
-            waitlistCheckbox.addEventListener('change', async function () {
-                if (!this.checked) {
+            // Checkbox change handler
+            checkbox.addEventListener('change', async function() {
+                if (this.checked) {
+                    console.log('✅ Checkbox checked - opening accordion');
+                    
+                    // Open accordion
+                    accordion.classList.add('open');
+
+                    // Submit to Kajabi (if email exists)
+                    if (userEmail) {
+                        const result = await submitToKajabi(userEmail);
+                        
+                        if (result.success) {
+                            // Show success message after brief delay
+                            setTimeout(() => {
+                                successMessage.classList.add('show');
+                                checkbox.disabled = true;
+                                console.log('✅ Waitlist submission complete!');
+                            }, 500);
+                        } else {
+                            console.error('❌ Submission failed - keeping checkbox enabled for retry');
+                        }
+                    } else {
+                        console.warn('⚠️ No email available - cannot submit to Kajabi');
+                    }
+                } else {
+                    // Close accordion if unchecked
                     accordion.classList.remove('open');
                     successMessage.classList.remove('show');
-                    return;
-                }
-
-                console.log('✅ Waitlist checkbox checked');
-
-                /* Open accordion immediately */
-                accordion.classList.add('open');
-
-                /* No email — still show confirmation visually */
-                if (!userEmail) {
-                    console.warn('⚠️ No email found — skipping submission');
-                    successMessage.classList.add('show');
-                    return;
-                }
-
-                /* Submit to Kajabi */
-                const result = await submitToKajabi(userEmail);
-
-                if (result.success) {
-                    setTimeout(() => {
-                        successMessage.classList.add('show');
-                        waitlistCheckbox.disabled = true;
-                        console.log('✅ Waitlist confirmed');
-                    }, 300);
-                } else {
-                    console.error('❌ Waitlist submission failed');
                 }
             });
 
-            /* ─────────────────────────────────────────────────────────── */
-            /* GROUP / ONE-ON-ONE TRAINING CHECKBOX HANDLER */
-            /* ─────────────────────────────────────────────────────────── */
-            trainingCheckbox.addEventListener('change', async function () {
-                if (!this.checked) {
-                    return;
-                }
+            // One-on-One Training Checkbox Handler
+            oneOnOneCheckbox.addEventListener('change', async function() {
+                if (this.checked) {
+                    console.log('✅ Group/one-on-one training requested');
+                    
+                    // Submit to Kajabi with "one-on-one-training" tag
+                    if (userEmail) {
+                        console.log('📤 Submitting training request to Kajabi...');
+                        
+                        // Check if Kajabi URL is configured
+                        if (KAJABI_FORM_URL === 'YOUR_KAJABI_FORM_URL_HERE') {
+                            console.log('⏸️ Kajabi URL not configured yet - showing demo mode');
+                            console.log('✅ [DEMO MODE] Would submit:', { email: userEmail, tags: ['waitlist', 'one-on-one-training'] });
+                        } else {
+                            try {
+                                const response = await fetch(KAJABI_FORM_URL, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        email: userEmail,
+                                        tags: ['one-on-one-training'] // Add training request tag
+                                    })
+                                });
 
-                console.log('✅ Training request checked');
-
-                if (!userEmail) {
-                    console.warn('⚠️ No email found — cannot submit training request');
-                    return;
-                }
-
-                /* Demo mode */
-                if (KAJABI_FORM_URL === 'YOUR_KAJABI_FORM_URL_HERE') {
-                    console.log('⏸️ Demo mode — training request not submitted');
-                    console.log('📨 Would submit:', {
-                        email: userEmail,
-                        tags: ['one-on-one-training']
-                    });
-                    trainingCheckbox.disabled = true;
-                    return;
-                }
-
-                try {
-                    const response = await fetch(KAJABI_FORM_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            email: userEmail,
-                            tags: ['one-on-one-training']
-                        })
-                    });
-
-                    if (response.ok) {
-                        console.log('✅ Training request submitted');
-                        trainingCheckbox.disabled = true;
+                                if (response.ok) {
+                                    console.log('✅ Training request submitted successfully');
+                                    oneOnOneCheckbox.disabled = true; // Disable after submission
+                                } else {
+                                    console.error('❌ Training request submission failed:', response.status);
+                                }
+                            } catch (error) {
+                                console.error('❌ Error submitting training request:', error);
+                            }
+                        }
                     } else {
-                        console.error('❌ Training request failed:', response.status);
+                        console.warn('⚠️ No email available - cannot submit training request');
                     }
-                } catch (error) {
-                    console.error('❌ Error submitting training request:', error);
                 }
             });
 
-            /* ─────────────────────────────────────────────────────────── */
-            /* READY STATE LOG */
-            /* ─────────────────────────────────────────────────────────── */
-            console.log('✅ Page ready');
+            // Log ready state
+            console.log('✅ Waitlist page ready');
             console.log('📧 User email:', userEmail || 'Not provided');
             console.log('🔗 Kajabi URL:', KAJABI_FORM_URL);
         });
