@@ -48,45 +48,48 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
-        /* DUAL-GLOW BACKGROUND EFFECTS (Wrapping around card) */
+        /* DUAL-GLOW BACKGROUND EFFECTS (Matching calculator bot exactly) */
         /* ═══════════════════════════════════════════════════════════════ */
         
-        /* Main glow - Left of center (Energy Green to Violet) */
+        /* Main glow - Left side (Energy Green to Violet) */
         body::before {
             content: '';
-            position: fixed;
-            width: 1000px;
-            height: 1000px;
-            background: radial-gradient(
-                circle at 30% 50%, 
-                rgba(0, 230, 118, 0.15) 0%, 
-                rgba(124, 77, 255, 0.15) 50%, 
-                transparent 100%
-            );
-            top: 50%;
-            left: 50%;
-            transform: translate(-80%, -50%); /* Positions left of card center */
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        /* Secondary glow - Right of center (Solar Orange to Red) */
-        body::after {
-            content: '';
-            position: fixed;
+            position: absolute;
             width: 900px;
             height: 900px;
             background: radial-gradient(
-                circle at 70% 50%, 
-                rgba(230, 81, 0, 0.12) 0%, 
-                rgba(211, 47, 47, 0.12) 50%, 
-                transparent 100%
+                circle at 30% 50%, 
+                rgba(0, 230, 118, 0.12) 0%,      /* Energy Green #00E676 */
+                rgba(0, 217, 255, 0.08) 30%,     /* Electric Cyan */
+                rgba(118, 75, 162, 0.06) 60%,    /* Violet */
+                transparent 80%
             );
             top: 50%;
             left: 50%;
-            transform: translate(-20%, -50%); /* Positions right of card center */
+            transform: translate(-60%, -50%);
             pointer-events: none;
-            z-index: 0;
+            z-index: 1; /* Above background, below chat */
+            filter: blur(60px);
+        }
+        
+        /* Subtle fill glow - Top-right side (softer, smaller) */
+        body::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(
+                circle at 70% 30%, 
+                rgba(0, 230, 118, 0.05) 0%,      /* Energy Green - softer */
+                rgba(0, 217, 255, 0.03) 40%,     /* Electric Cyan - softer */
+                rgba(118, 75, 162, 0.02) 70%,    /* Violet - softer */
+                transparent 85%
+            );
+            top: 20%;
+            right: 10%;
+            pointer-events: none;
+            z-index: 1; /* Above background, below chat */
+            filter: blur(50px);
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
@@ -97,7 +100,7 @@
             max-width: 650px; /* Professional landing page width for copy + checkbox */
             margin: 20px;
             position: relative;
-            z-index: 1;
+            z-index: 10; /* Above glows - matching calculator bot */
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
