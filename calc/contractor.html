@@ -128,11 +128,17 @@
             color: #E8E8E8; /* Soft Gray */
         }
         
-        .chat-header p:first-child {
-            font-size: 14px;
-            font-weight: 500; /* Inter Medium */
-            color: #FFA500; /* Solar Orange */
-            margin-bottom: 5px;
+        .header-logo {
+            height: 32px;
+            width: auto;
+            margin: 0 auto 8px auto;
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .header-logo {
+                height: 28px;
+            }
         }
         
         /* ===================================
@@ -493,7 +499,7 @@
              HEADER - iSolar Branding
              =================================== -->
         <div class="chat-header">
-            <p>iSolar Hot Water Academy's</p>
+            <img src="LogoNameGold-one_line-final.svg" alt="iSolar Hot Water Academy" class="header-logo">
             <h1>☀️ PV Solar Hot Water Designer</h1>
             <p>International Support - Metric & Imperial</p>
         </div>
