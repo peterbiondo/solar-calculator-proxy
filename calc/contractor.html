@@ -871,9 +871,11 @@ function redirectToWaitlist() {
             }
             
             setTimeout(() => {
-                addMessage("<strong>Welcome Solar Contractor! <span class='wave-emoji'>👋</span><br>I'm your solar hot water assistant.</strong>");
-                setTimeout(() => {
-                    addMessage('<strong>Which units do you prefer?<br>Click a button or enter</strong><br>• <strong>"Imperial"</strong> for US units (gallons, °F)<br>• <strong>"Metric"</strong> for international units (liters, °C)');
+            addMessage("<strong>Welcome Solar Contractor! <span class='wave-emoji'>👋</span></strong>");
+            setTimeout(() => {
+                addMessage("I'm your solar hot water assistant.<br><strong>Claim your bonus at the end!</strong>");
+                    setTimeout(() => {
+            addMessage('<strong>Which units do you prefer?<br>Click a button or enter</strong><br>• <strong>"Imperial"</strong> for US units (gallons, °F)<br>• <strong>"Metric"</strong> for international units (liters, °C)');
                     
                     // Add unit system buttons
                     const unitButtons = document.getElementById('gallonButtons');
