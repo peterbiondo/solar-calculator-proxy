@@ -130,8 +130,8 @@
         
         /* Logo container - headline treatment */
 .header-logo {
-    max-width: 100%;
-    height: 44px; /* Visual height target: 40-48px */
+    max-width: 320px; /* Constrain by width, not height */
+    width: 100%;
     margin: 0 auto 8px auto;
     display: flex;
     justify-content: center;
@@ -139,16 +139,15 @@
 }
 
 .header-logo svg {
-    max-width: 100%;
-    height: 100%;
-    width: auto;
+    width: 100%;
+    height: auto; /* Let height scale naturally */
     display: block;
 }
 
 /* Mobile responsive */
 @media (max-width: 480px) {
     .header-logo {
-        height: 36px; /* Scale down proportionally on mobile */
+        max-width: 240px; /* Scale down proportionally on mobile */
     }
 }
         
