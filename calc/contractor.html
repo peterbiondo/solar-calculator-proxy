@@ -360,6 +360,33 @@
         .gallon-btn:active {
             transform: scale(0.98);
         }
+
+        /* Smaller spec sheet buttons */
+        .spec-btn {
+            padding: 8px 16px;
+            background: #FFA500;
+            color: #0F0F0F;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 8px;
+            margin-top: 8px;
+        }
+        
+        .spec-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
+        }
+        
+        .spec-btn:active {
+            transform: scale(0.98);
+        }
         
         .input-group {
             display: flex;
@@ -1573,10 +1600,6 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
     const latDisplay = Math.abs(Math.round(actualLat));
     const direction = actualLat < 0 ? 'north' : 'south';
     
-    const modelUrl = inverterModel === '1200H' ? 
-        'https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf' :
-        'https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf';
-    
     if (unitSystem === 'metric') {
         const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
         const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
@@ -1602,7 +1625,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             
             <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
             
-            <strong><a href="${modelUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">Use the Off-Grid CIM ${inverterModel} Inverter</a>:</strong><br>
+            <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
             • Inverters: ${system.inverters}<br>
             • Panels: ${system.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
@@ -1614,7 +1637,9 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
+            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
                 <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
@@ -1667,7 +1692,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             
             <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
             
-            <strong><a href="${modelUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">Use the Off-Grid CIM ${inverterModel} Inverter</a>:</strong><br>
+            <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
             • Inverters: ${system.inverters}<br>
             • Panels: ${system.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
@@ -1679,7 +1704,9 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
+            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
                 <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
@@ -1732,7 +1759,7 @@ function displayBothSystems(data) {
         const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
         const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
         
-        let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
+        let recommended, alternative, recommendedName, alternativeName, reason;
         const inv1250 = parseInt(sys1250.inverters);
         const inv1500 = parseInt(sys1500.inverters);
         const panel1250 = parseInt(sys1250.panels);
@@ -1743,8 +1770,6 @@ function displayBothSystems(data) {
             alternative = sys1500;
             recommendedName = "Use the Off-Grid CIM 1200H Inverter";
             alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
             if (panel1250 < panel1500) {
                 reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
             } else {
@@ -1755,8 +1780,6 @@ function displayBothSystems(data) {
             alternative = sys1250;
             recommendedName = "Use the Off-Grid CIM 1500H Inverter";
             alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
             if (panel1500 < panel1250) {
                 reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
             } else {
@@ -1767,24 +1790,18 @@ function displayBothSystems(data) {
             alternative = sys1500;
             recommendedName = "Use the Off-Grid CIM 1200H Inverter";
             alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
             reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
         } else if (panel1500 < panel1250) {
             recommended = sys1500;
             alternative = sys1250;
             recommendedName = "Use the Off-Grid CIM 1500H Inverter";
             alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
             reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
         } else {
             recommended = sys1250;
             alternative = sys1500;
             recommendedName = "Use the Off-Grid CIM 1200H Inverter";
             alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
             reason = "This system is the most cost-effective choice with a less expensive inverter.";
         }
         
@@ -1814,7 +1831,7 @@ function displayBothSystems(data) {
             
             <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
             
-            <strong><a href="${recommendedUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${recommendedName}</a>:</strong><br>
+            <strong>${recommendedName}:</strong><br>
             • Inverters: ${recommended.inverters}<br>
             • Panels: ${recommended.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
@@ -1827,7 +1844,7 @@ function displayBothSystems(data) {
             
             <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
             
-            <strong><a href="${alternativeUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${alternativeName}</a>:</strong><br>
+            <strong>${alternativeName}:</strong><br>
             • Inverters: ${alternative.inverters}<br>
             • Panels: ${alternative.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
@@ -1838,7 +1855,9 @@ function displayBothSystems(data) {
             
             ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
+            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
                 <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
@@ -1879,7 +1898,7 @@ function displayBothSystems(data) {
         const displayHotTemp = Math.round(userData.hotWaterTemp);
         const displayHighLimit = Math.round(userData.highLimit);
         
-        let recommended, alternative, recommendedName, alternativeName, recommendedUrl, alternativeUrl, reason;
+        let recommended, alternative, recommendedName, alternativeName, reason;
         const inv1250 = parseInt(sys1250.inverters);
         const inv1500 = parseInt(sys1500.inverters);
         const panel1250 = parseInt(sys1250.panels);
@@ -1890,8 +1909,6 @@ function displayBothSystems(data) {
             alternative = sys1500;
             recommendedName = "Use the Off-Grid CIM 1200H Inverter";
             alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
             if (panel1250 < panel1500) {
                 reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
             } else {
@@ -1902,8 +1919,6 @@ function displayBothSystems(data) {
             alternative = sys1250;
             recommendedName = "Use the Off-Grid CIM 1500H Inverter";
             alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
             if (panel1500 < panel1250) {
                 reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
             } else {
@@ -1914,24 +1929,18 @@ function displayBothSystems(data) {
             alternative = sys1500;
             recommendedName = "Use the Off-Grid CIM 1200H Inverter";
             alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
             reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
         } else if (panel1500 < panel1250) {
             recommended = sys1500;
             alternative = sys1250;
             recommendedName = "Use the Off-Grid CIM 1500H Inverter";
             alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
             reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
         } else {
             recommended = sys1250;
             alternative = sys1500;
             recommendedName = "Use the Off-Grid CIM 1200H Inverter";
             alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            recommendedUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf";
-            alternativeUrl = "https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf";
             reason = "This system is the most cost-effective choice with a less expensive inverter.";
         }
         
@@ -1948,7 +1957,7 @@ function displayBothSystems(data) {
             
             <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
             
-            <strong><a href="${recommendedUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${recommendedName}</a>:</strong><br>
+            <strong>${recommendedName}:</strong><br>
             • Inverters: ${recommended.inverters}<br>
             • Panels: ${recommended.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
@@ -1961,7 +1970,7 @@ function displayBothSystems(data) {
             
             <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
             
-            <strong><a href="${alternativeUrl}" target="_blank" style="color: #FFA500; text-decoration: underline;">${alternativeName}</a>:</strong><br>
+            <strong>${alternativeName}:</strong><br>
             • Inverters: ${alternative.inverters}<br>
             • Panels: ${alternative.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
@@ -1972,7 +1981,9 @@ function displayBothSystems(data) {
             
             ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br><br>
+            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
+            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
                 <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
