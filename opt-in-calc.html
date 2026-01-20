@@ -439,6 +439,21 @@
                 overflow-y: auto;
                 padding: 20px 15px; /* Tighter padding */
             }
+        }    
+    
+        /* iOS Safari PORTRAIT fix — URL bar overlap */
+        @supports (-webkit-touch-callout: none) {
+            @media (orientation: portrait) {
+                body {
+                    align-items: flex-start;
+                    padding-top: 20px;
+                    min-height: 100dvh;
+                }
+
+                .container {
+                    margin-top: 16px;
+                }
+            }
         }
 </style>
 </head>
