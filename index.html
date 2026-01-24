@@ -88,35 +88,34 @@
         }
         
         .hero-title {
-            font-size: 48px; 
+            font-size: 52px; /* Reduced from 60px */
             font-weight: 700;
-            line-height: 1.2;
+            line-height: 1.1;
             margin-bottom: 30px;
             color: #FFFFFF;
         }
         
         /* Blue highlight effect like Wes's "chasing you?" */
         .highlight-blue {
-            background: rgba(70, 150, 255, 0.7); /* Bright saturated blue like Wes */
-            padding: 0px 8px; /* Reduced vertical padding from 2px to 0px */
-            border-radius: 4px;
-            color: #FFFFFF;
+            background: linear-gradient(to top, rgba(70, 150, 255, 0.7) 55%, transparent 55%); /* Raised to 55% */
+            padding: 0px 4px;
+            border-radius: 2px;
+            display: inline;
+            /* Removed color: #FFFFFF so parent text color (green) shows through */
         }
         
         .hero-body {
-            font-size: 19px; /* Reduced from 18px */
+            font-size: 17px; /* Reduced from 18px */
             line-height: 1.5; /* Tighter from 1.6 */
             color: rgba(255, 255, 255, 0.85);
             margin-bottom: 25px; /* Reduced from 35px */
         }
-
-
         
         .hero-tagline {
             font-size: 19px; /* Reduced from 20px */
             font-weight: 600;
             color: #00E676; /* Energy Green */
-            margin-bottom: 8px; /* Tight spacing between taglines */
+            margin-bottom: 25px; /* Increased from 8px for more space under thermal collectors */
             letter-spacing: 0.5px;
         }
         
@@ -147,7 +146,7 @@
         .cta-heading {
             font-size: 28px;
             font-weight: 600;
-            color: #FFFFFF;
+            color: #FFA500; /* Solar Orange - lighter and more readable */
             margin-bottom: 20px; /* Reduced from 30px */
             text-align: center;
         }
@@ -333,7 +332,7 @@
             }
             
             .hero-title {
-                font-size: 36px; /* Increased from 28px to match new desktop scale */
+                font-size: 32px; /* Reduced from 36px to match new desktop scale */
             }
             
             .hero-body {
@@ -359,9 +358,9 @@
     <section class="hero">
         <!-- Left Column - Content -->
         <div class="hero-content">
-            <h1 class="hero-title">Solar water heating <span class="highlight-blue">isn't one thing anymore.</span></h1>
+            <h1 class="hero-title">Solar Hot Water<br><span class="highlight-blue">isn't one thing anymore.</span></h1>
             
-            <p class="hero-tagline"><span class="highlight-blue">PV ELECTRIC or SOLAR THERMAL COLLECTORS</span></p>
+            <p class="hero-tagline">PV ELECTRIC or SOLAR THERMAL COLLECTORS</p>
             
             <p class="hero-body">
                 It's about <strong>choosing the simplest system</strong> with the best real-world economic performance — <strong>faster, without guesswork.</strong>
