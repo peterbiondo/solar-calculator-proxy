@@ -63,11 +63,21 @@
             z-index: 1;
             max-width: none;
             margin: 0;
-            padding: 80px 0 100px 60px; /* Only left padding */
+            padding: 80px 0 40px 60px; /* Reduced bottom padding from 100px to 40px */
             display: grid;
-            grid-template-columns: 42% 58%; /* Proportional like Wes - more text room */
-            gap: 60px;
+            grid-template-columns: 55% 45%; /* More text space, less image */
+            grid-template-rows: auto auto; /* Two rows: content row, then CTA row */
+            gap: 40px; /* Reduced from 60px to bring CTA closer */
             align-items: start;
+        }
+        
+        /* CTA section spans full width */
+        .cta-section {
+            grid-column: 1 / -1; /* Span across both columns */
+            margin-top: 0; /* Remove extra top margin */
+            text-align: center;
+            padding-right: 60px; /* Balance the left padding */
+            padding-bottom: 60px; /* Add bottom padding instead */
         }
         
         /* ===================================
@@ -96,7 +106,15 @@
             font-size: 20px;
             font-weight: 600;
             color: #00E676; /* Energy Green */
-            margin-bottom: 40px;
+            margin-bottom: 8px; /* Tight spacing between taglines */
+            letter-spacing: 0.5px;
+        }
+        
+        .hero-tagline-alt {
+            font-size: 20px; /* Same size as hero-tagline */
+            font-weight: 600;
+            color: #00E676; /* Energy Green */
+            margin-bottom: 35px; /* Space after both taglines */
             letter-spacing: 0.5px;
         }
         
@@ -104,7 +122,7 @@
             font-size: 16px;
             line-height: 1.7;
             color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 50px;
+            margin-bottom: 30px; /* Reduced from 50px */
         }
         
         .hero-intro strong {
@@ -113,10 +131,10 @@
         }
         
         .cta-heading {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 600;
             color: #FFFFFF;
-            margin-bottom: 25px;
+            margin-bottom: 20px; /* Reduced from 30px */
             text-align: center;
         }
         
@@ -127,7 +145,10 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin-top: 25px;
+            margin-top: 10px; /* Reduced from 25px */
+            max-width: 700px; /* Wider for full-page centering */
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .avatar-card {
@@ -175,7 +196,7 @@
             display: flex;
             align-items: flex-start;
             justify-content: flex-end;
-            min-height: 100vh;
+            min-height: 55vh; /* Reduced from 70vh to fit CTA on screen */
             margin: -80px 0 0 0; /* Only negative top margin to reach top */
             padding: 0;
         }
@@ -192,7 +213,7 @@
             justify-content: center;
             font-size: 14px;
             color: rgba(255, 255, 255, 0.4);
-            min-height: 100vh;
+            min-height: 55vh; /* Reduced from 70vh */
         }
         
         /* ===================================
@@ -221,6 +242,29 @@
                 min-height: 40vh;
                 border-right: none;
                 border-left: none;
+            }
+            
+            .cta-section {
+                padding-right: 0; /* Remove right padding on mobile */
+                margin-top: 0;
+                padding-bottom: 40px;
+            }
+            
+            .cta-heading {
+                font-size: 22px;
+                margin-bottom: 15px;
+            }
+            
+            .avatar-grid {
+                max-width: 100%; /* Full width on mobile */
+            }
+            
+            .hero-tagline {
+                font-size: 18px;
+            }
+            
+            .hero-tagline-alt {
+                font-size: 18px;
             }
             
             .hero-title {
@@ -293,15 +337,27 @@
             <h1 class="hero-title">Solar water heating isn't one thing anymore.</h1>
             
             <p class="hero-body">
-                It's about understanding PV electric and thermal technologies so your decisions lead to the simplest system with the best real-world economic performance — faster, without guesswork.
+                It's about choosing the simplest system with the best real-world economic performance — faster, without guesswork.
             </p>
             
-            <p class="hero-tagline">No fluff. No hype.</p>
+            <p class="hero-tagline">PV electric or solar thermal collectors</p>
+            
+            <p class="hero-tagline-alt">No fluff. No hype.</p>
             
             <p class="hero-intro">
                 Hey, I'm <strong>Peter Biondo</strong>. With four decades in solar thermal, I build training through coaching, live sessions, and AI-powered learning tools to make solar water heating easier to learn and succeed with — so homeowners, solar pros, and career changers can make meaningful progress sooner.
             </p>
-            
+        </div>
+        
+        <!-- Right Column - Image -->
+        <div class="hero-image">
+            <div class="image-placeholder">
+                [Your Image or Visual Element Here]
+            </div>
+        </div>
+        
+        <!-- CTA Section - Spans Full Width -->
+        <div class="cta-section">
             <h2 class="cta-heading">Choose your path forward</h2>
             
             <!-- Avatar Cards -->
@@ -326,13 +382,6 @@
                     <div class="avatar-title">Solar Career Starter</div>
                     <div class="avatar-description">Enter the solar industry</div>
                 </a>
-            </div>
-        </div>
-        
-        <!-- Right Column - Image -->
-        <div class="hero-image">
-            <div class="image-placeholder">
-                [Your Image or Visual Element Here]
             </div>
         </div>
     </section>
