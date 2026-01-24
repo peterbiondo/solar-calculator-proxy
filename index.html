@@ -42,7 +42,7 @@
             left: 0;
             right: 0;
             z-index: 100;
-            padding: 20px 60px;
+            padding: 20px 60px 20px 80px; /* Increased left padding to 80px */
             background: #0F0F0F;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -63,7 +63,7 @@
             z-index: 1;
             max-width: none;
             margin: 0;
-            padding: 80px 0 40px 40px; /* Reduced left padding from 60px to 40px */
+            padding: 80px 0 40px 80px; /* Increased left padding from 40px to 80px */
             display: grid;
             grid-template-columns: 55% 45%; /* More text space, less image */
             grid-template-rows: auto auto; /* Two rows: content row, then CTA row */
@@ -76,7 +76,7 @@
             grid-column: 1 / -1; /* Span across both columns */
             margin-top: 0; /* Remove extra top margin */
             text-align: center;
-            padding-right: 40px; /* Balance the left padding (changed from 60px) */
+            padding-right: 80px; /* Balance the left padding (changed to 80px) */
             padding-bottom: 60px; /* Add bottom padding instead */
         }
         
@@ -88,17 +88,17 @@
         }
         
         .hero-title {
-            font-size: 60px; /* Increased from 48px to match Wes's bold style */
+            font-size: 48px; 
             font-weight: 700;
-            line-height: 1.1;
+            line-height: 1.2;
             margin-bottom: 30px;
             color: #FFFFFF;
         }
         
         /* Blue highlight effect like Wes's "chasing you?" */
         .highlight-blue {
-            background: rgba(100, 150, 255, 0.3);
-            padding: 2px 8px;
+            background: rgba(70, 150, 255, 0.7); /* Bright saturated blue like Wes */
+            padding: 0px 8px; /* Reduced vertical padding from 2px to 0px */
             border-radius: 4px;
             color: #FFFFFF;
         }
@@ -127,10 +127,14 @@
         }
         
         .hero-intro {
-            font-size: 15px; /* Reduced from 16px */
+            font-size: 17px; /* Increased from 15px */
             line-height: 1.6; /* Tighter from 1.7 */
             color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 30px; /* Reduced from 50px */
+            margin-bottom: 30px; /* Space before "Choose your path forward" */
+            text-align: center; /* Centered for CTA section */
+            max-width: 900px; /* Constrain width for readability */
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .hero-intro strong {
@@ -336,8 +340,9 @@
             }
             
             .hero-intro {
-                font-size: 14px;
+                font-size: 15px; /* Increased from 14px to match desktop scale */
                 margin-bottom: 25px;
+                text-align: center;
             }
         }
     </style>
@@ -354,17 +359,13 @@
         <div class="hero-content">
             <h1 class="hero-title">Solar water heating <span class="highlight-blue">isn't one thing anymore.</span></h1>
             
-            <p class="hero-body">
-                It's about choosing the simplest system with the best real-world economic performance — faster, without guesswork.
-            </p>
-            
             <p class="hero-tagline"><span class="highlight-blue">PV ELECTRIC or SOLAR THERMAL COLLECTORS</span></p>
             
-            <p class="hero-tagline-alt">No fluff. No hype.</p>
-            
-            <p class="hero-intro">
-                Hey, I'm <strong>Peter Biondo</strong>. With four decades in solar thermal, I build training through coaching, live sessions, and AI-powered learning tools to make solar water heating easier to learn and succeed with — so homeowners, solar pros, and career changers can make meaningful progress sooner.
+            <p class="hero-body">
+                It's about <strong>choosing the simplest system</strong> with the best real-world economic performance — <strong>faster, without guesswork.</strong>
             </p>
+            
+            <p class="hero-tagline-alt">No fluff. No hype.</p>
         </div>
         
         <!-- Right Column - Image -->
@@ -376,6 +377,10 @@
         
         <!-- CTA Section - Spans Full Width -->
         <div class="cta-section">
+            <p class="hero-intro">
+                Hey, I'm Peter Biondo. With four decades in solar thermal, I build <strong>training through coaching, live sessions, and AI-powered learning tools</strong> to make solar water heating easier to learn and succeed with — so homeowners, solar pros, and career changers can make meaningful progress sooner.
+            </p>
+            
             <h2 class="cta-heading">Choose your path forward</h2>
             
             <!-- Avatar Cards -->
