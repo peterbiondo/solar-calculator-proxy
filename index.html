@@ -21,22 +21,20 @@ body {
     background: #0F0F0F;
     color: #FFFFFF;
     overflow-x: hidden;
-
-    /* Space for fixed header */
-    padding-top: 72px;
+    padding-top: 72px; /* space for fixed header */
 }
 
 /* ================= HEADER ================= */
 
 header {
     position: fixed;
-    top: 0;                   /* ✅ flush to top */
+    top: 0;
     left: 0;
     right: 0;
     z-index: 100;
 
-    height: 72px;             /* ✅ keep height you liked */
-    padding: 0 60px 0 210px;  /* ✅ pushed right a bit more */
+    height: 72px;
+    padding: 0 60px 0 210px;
 
     display: flex;
     align-items: center;
@@ -123,8 +121,7 @@ header {
     display: flex;
     justify-content: flex-end;
     align-items: flex-start;
-
-    padding-top: 12px;   /* ✅ half the previous padding */
+    padding-top: 12px;
 }
 
 .hero-image img {
@@ -138,7 +135,9 @@ header {
 .cta-section {
     grid-column: 1 / -1;
     text-align: center;
-    padding: 30px 180px 60px;
+
+    /* 🔽 ONLY CHANGE MADE HERE */
+    padding: 8px 180px 60px;
 }
 
 .hero-intro {
@@ -219,7 +218,7 @@ header {
     }
 
     .cta-section {
-        padding: 20px 20px 40px;
+        padding: 8px 20px 40px; /* same reduction on mobile */
     }
 
     .avatar-grid {
