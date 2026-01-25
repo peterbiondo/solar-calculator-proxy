@@ -21,7 +21,7 @@ body {
     background: #0F0F0F;
     color: #FFFFFF;
     overflow-x: hidden;
-    padding-top: 72px; /* space for fixed header */
+    padding-top: 72px;
 }
 
 /* ================= HEADER ================= */
@@ -105,14 +105,7 @@ header {
     font-size: 19px;
     font-weight: 600;
     color: #00E676;
-    margin-bottom: 24px;   /* keep normal spacing here */
-}
-
-.hero-tagline-alt {
-    font-size: 19px;
-    font-weight: 600;
-    color: #00E676;
-    margin-bottom: 6px;    /* ⬅ THIS pulls “Hey, I’m Peter…” up */
+    margin-bottom: 24px;
 }
 
 .hero-body {
@@ -120,6 +113,13 @@ header {
     line-height: 1.5;
     color: rgba(255,255,255,0.85);
     margin-bottom: 24px;
+}
+
+.hero-tagline-alt {
+    font-size: 19px;
+    font-weight: 600;
+    color: #00E676;
+    margin-bottom: 6px; /* tightened handoff */
 }
 
 /* RIGHT IMAGE */
@@ -144,13 +144,9 @@ header {
     padding: 8px 180px 60px;
 }
 
-/* 🔽 CHANGE #2 — explicitly remove top margin */
 .hero-intro {
     max-width: 760px;
-    margin-top: 0;          /* ✅ THIS IS THE NEW PART */
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 30px;
+    margin: 0 auto 30px;
     font-size: 17px;
     color: rgba(255,255,255,0.85);
 }
@@ -161,6 +157,8 @@ header {
     color: #FFA500;
     margin-bottom: 20px;
 }
+
+/* ================= AVATARS ================= */
 
 .avatar-grid {
     display: grid;
@@ -178,12 +176,31 @@ header {
     text-align: center;
     text-decoration: none;
     font-family: 'Inter', sans-serif;
-    transition: 0.3s ease;
+    transition: border-color 0.3s ease;
 }
 
+/* Hover stays immediate */
 .avatar-card:hover {
-    transform: translateY(-4px);
     border-color: #E65100;
+}
+
+/* Gentle glow pulse */
+.avatar-card.is-active {
+    border-color: #E65100;
+    box-shadow: 0 0 0 rgba(230, 81, 0, 0);
+    animation: glow-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+    0% {
+        box-shadow: 0 0 0 rgba(230, 81, 0, 0);
+    }
+    50% {
+        box-shadow: 0 0 18px rgba(230, 81, 0, 0.35);
+    }
+    100% {
+        box-shadow: 0 0 0 rgba(230, 81, 0, 0);
+    }
 }
 
 .avatar-icon {
@@ -257,7 +274,7 @@ header {
 
         <p class="hero-body">
             It's about <strong>choosing the simplest system</strong> with the best real-world economics —
-            <strong>faster, and without the guesswork.</strong>
+            <strong>faster, without guesswork.</strong>
         </p>
 
         <p class="hero-tagline-alt">No fluff. No hype.</p>
@@ -270,7 +287,7 @@ header {
     <div class="cta-section">
         <p class="hero-intro">
             <strong>Hey, I'm Peter Biondo!</strong> 👋  
-            With four decades in solar thermal, I am experienced to train you through coaching, live sessions, courses
+            With four decades in solar thermal, I train through coaching, live sessions,
             and AI-powered learning tools.
         </p>
 
@@ -298,6 +315,56 @@ header {
     </div>
 
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = Array.from(document.querySelectorAll('.avatar-card'));
+
+    // Disable on touch devices
+    if (window.matchMedia('(hover: none)').matches) return;
+
+    let index = cards.length - 1; // start right
+    let isPaused = false;
+    let timeoutId;
+
+    function clearActive() {
+        cards.forEach(card => card.classList.remove('is-active'));
+    }
+
+    function stepGlow() {
+        if (isPaused) return;
+
+        clearActive();
+        cards[index].classList.add('is-active');
+
+        index--;
+
+        if (index < 0) {
+            index = cards.length - 1;
+            timeoutId = setTimeout(stepGlow, 3000); // pause after full pass
+        } else {
+            timeoutId = setTimeout(stepGlow, 1800);
+        }
+    }
+
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            isPaused = true;
+            clearActive();
+            card.classList.add('is-active');
+            clearTimeout(timeoutId);
+        });
+
+        card.addEventListener('mouseleave', () => {
+            isPaused = false;
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(stepGlow, 800);
+        });
+    });
+
+    timeoutId = setTimeout(stepGlow, 1200);
+});
+</script>
 
 </body>
 </html>
