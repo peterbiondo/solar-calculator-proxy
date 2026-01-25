@@ -22,21 +22,21 @@ body {
     color: #FFFFFF;
     overflow-x: hidden;
 
-    /* MATCH header offset + height */
-    padding-top: 120px;
+    /* Space for fixed header */
+    padding-top: 72px;
 }
 
 /* ================= HEADER ================= */
 
 header {
     position: fixed;
-    top: 24px;                /* ✅ buffer ABOVE header */
+    top: 0;                   /* ✅ flush to top */
     left: 0;
     right: 0;
     z-index: 100;
 
-    height: 72px;             /* ✅ fixed height */
-    padding: 0 60px 0 180px;  /* ✅ narrower vertically */
+    height: 72px;             /* ✅ keep height you liked */
+    padding: 0 60px 0 210px;  /* ✅ pushed right a bit more */
 
     display: flex;
     align-items: center;
@@ -81,7 +81,7 @@ header {
     display: grid;
     grid-template-columns: 55% 45%;
     gap: 40px;
-    padding: 60px 0 40px 180px;  /* left buffer preserved */
+    padding: 60px 0 40px 180px;
     align-items: start;
 }
 
@@ -124,12 +124,11 @@ header {
     justify-content: flex-end;
     align-items: flex-start;
 
-    padding-top: 24px;   /* ✅ REAL padding above image */
+    padding-top: 12px;   /* ✅ half the previous padding */
 }
 
 .hero-image img {
     width: 100%;
-    height: 100%;
     max-height: 55vh;
     object-fit: cover;
 }
@@ -201,11 +200,10 @@ header {
 @media (max-width: 768px) {
 
     body {
-        padding-top: 90px;
+        padding-top: 64px;
     }
 
     header {
-        top: 12px;
         height: 64px;
         padding: 0 20px;
     }
@@ -216,7 +214,7 @@ header {
     }
 
     .hero-image {
-        padding-top: 16px;
+        padding-top: 10px;
         margin-bottom: 30px;
     }
 
