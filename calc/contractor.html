@@ -480,27 +480,43 @@
         .chat-messages::-webkit-scrollbar-thumb:hover {
             background: #E65100;
         }
-        /* ===================================
-           MOBILE: FORCE SINGLE-COLUMN CHAT
-           =================================== */
-        @media (max-width: 600px) {
+/* ===================================
+   MOBILE: FORCE SINGLE-COLUMN CHAT
+   =================================== */
+@media (max-width: 600px) {
 
-            /* Stop left/right split */
-          .message.bot,
-          .message.user {
-            justify-content: flex-start;
-          }
+  .message.bot,
+  .message.user {
+    justify-content: flex-start;
+  }
 
-          /* Let bubbles fill the column */
-          .message-content {
-            max-width: 95%;
-          }
+  .message-content {
+    max-width: 95%;
+  }
 
-          /* Optional: keep user bubbles visually distinct */
-          .message.user .message-content {
-            margin-left: auto;
-          }
-        }
+  .message.user .message-content {
+    margin-left: auto;
+  }
+}
+
+/* ===================================
+   MOBILE: TIGHTER HEADER TO MATCH CHAT
+   =================================== */
+@media (max-width: 600px) {
+
+  .chat-header {
+    padding: 12px 14px;
+  }
+
+  .chat-header h1 {
+    font-size: 20px;
+  }
+
+  .chat-header p {
+    font-size: 13px;
+  }
+}
+    
     </style>
     
     <!-- iOS Safari scroll position fix -->
