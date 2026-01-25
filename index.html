@@ -4,446 +4,273 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iSolar Hot Water Academy - Solar Water Heating Training</title>
-    
-    <!-- Poppins Font from Google Fonts -->
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Inter Font from Google Fonts (for headline & avatar cards) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
-        /* ===================================
-           RESET & BASE STYLES
-           =================================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0F0F0F; /* iSolar Black */
+            font-family: 'Poppins', sans-serif;
+            background: #0F0F0F;
             color: #FFFFFF;
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
         }
-        
-        /* ===================================
-           SOLID BLACK BACKGROUND - No glows
-           =================================== */
-        
-        /* ===================================
-           HEADER - Fixed at top
-           =================================== */
+
+        /* ================= HEADER ================= */
         header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            padding: 20px 60px 20px 140px; /* Increased left padding to 140px */
+            padding: 28px 60px 28px 180px; /* Taller + aligned */
             background: #0F0F0F;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
         .logo-text {
             font-size: 14px;
             font-weight: 600;
-            color: #E65100; /* Solar Orange */
+            color: #E65100;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
-        
-        /* ===================================
-           HERO SECTION - TWO COLUMN LAYOUT
-           =================================== */
+
+        .header-cta {
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .header-cta.placeholder {
+            border: 1px dashed rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.6);
+            background: transparent;
+        }
+
+        /* ================= HERO ================= */
         .hero {
-            position: relative;
-            z-index: 1;
-            max-width: none;
-            margin: 0;
-            padding: 80px 0 40px 140px; /* Increased left padding from 80px to 140px */
             display: grid;
-            grid-template-columns: 55% 45%; /* More text space, less image */
-            grid-template-rows: auto auto; /* Two rows: content row, then CTA row */
-            gap: 40px; /* Reduced from 60px to bring CTA closer */
+            grid-template-columns: 55% 45%;
+            gap: 40px;
+            padding: 100px 0 40px 180px; /* More left buffer */
             align-items: start;
         }
-        
-        /* CTA section spans full width */
-        .cta-section {
-            grid-column: 1 / -1; /* Span across both columns */
-            margin-top: 0; /* Remove extra top margin */
-            text-align: center;
-            padding-right: 140px; /* Balance the left padding (changed to 140px) */
-            padding-bottom: 60px; /* Add bottom padding instead */
-        }
-        
-        /* ===================================
-           LEFT COLUMN - CONTENT
-           =================================== */
+
         .hero-content {
-            max-width: 650px; /* Keep text readable, don't stretch too wide */
+            max-width: 650px;
         }
-        
+
         .hero-title {
-            font-size: 54px; /* Increased from 52px */
+            font-size: 54px;
             font-weight: 700;
             line-height: 1.1;
             margin-bottom: 30px;
-            color: #FFFFFF;
-            font-family: 'Inter', sans-serif; /* Keep Inter for headline */
+            font-family: 'Inter', sans-serif;
         }
-        
-        /* Blue highlight effect like Wes's "chasing you?" */
+
         .highlight-blue {
-            background: linear-gradient(to top, rgba(70, 150, 255, 0.7) 55%, transparent 55%); /* Raised to 55% */
-            padding: 0px 4px;
+            background: linear-gradient(to top, rgba(70,150,255,0.7) 55%, transparent 55%);
+            padding: 0 4px;
             border-radius: 2px;
-            display: inline;
-            /* Removed color: #FFFFFF so parent text color (green) shows through */
         }
-        
-        .hero-body {
-            font-size: 17px; /* Reduced from 18px */
-            line-height: 1.5; /* Tighter from 1.6 */
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 25px; /* Reduced from 35px */
-        }
-        
-        .hero-tagline {
-            font-size: 19px; /* Reduced from 20px */
-            font-weight: 600;
-            color: #00E676; /* Energy Green */
-            margin-bottom: 25px; /* Increased from 8px for more space under thermal collectors */
-            letter-spacing: 0.5px;
-        }
-        
+
+        .hero-tagline,
         .hero-tagline-alt {
-            font-size: 19px; /* Reduced from 20px - Same size as hero-tagline */
+            font-size: 19px;
             font-weight: 600;
-            color: #00E676; /* Energy Green */
-            margin-bottom: 30px; /* Reduced from 35px - Space after both taglines */
-            letter-spacing: 0.5px;
+            color: #00E676;
+            margin-bottom: 25px;
         }
-        
+
+        .hero-body {
+            font-size: 17px;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 25px;
+        }
+
+        /* ================= IMAGE ================= */
+        .hero-image {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            min-height: 55vh;
+            margin: -50px 0 0 0; /* Softer pull-up */
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ================= CTA ================= */
+        .cta-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding-right: 180px;
+            padding-bottom: 60px;
+        }
+
         .hero-intro {
-            font-size: 17px; /* Increased from 15px */
-            line-height: 1.6; /* Tighter from 1.7 */
-            color: rgba(255, 255, 255, 0.8); /* Back to white text */
-            margin-bottom: 30px; /* Space before "Choose your path forward" */
-            text-align: center; /* Centered for CTA section */
-            max-width: 750px; /* Increased from 700px to extend beyond avatar boxes */
-            margin-left: auto;
-            margin-right: auto;
+            font-size: 17px;
+            max-width: 750px;
+            margin: 0 auto 30px;
+            color: rgba(255,255,255,0.85);
         }
-        
-        .hero-intro strong {
-            color: #FFA500; /* Solar Orange for bold text */
-            font-weight: 700;
-        }
-        
-        /* Wave animation for hand emoji */
-        .wave {
-            display: inline-block;
-            font-size: 1.5em; /* Back to 1.5em - original size */
-            animation: wave-animation 8s infinite; /* Changed to 8s */
-            transform-origin: 70% 70%;
-            filter: brightness(1.3); /* Keep brighter */
-        }
-        
-        @keyframes wave-animation {
-            0% { transform: rotate(0deg); }
-            5%, 12.5% { transform: rotate(14deg); }
-            8.5%, 16.7% { transform: rotate(-8deg); }
-            20.8% { transform: rotate(0deg); }
-            20.8%, 100% { transform: rotate(0deg); } /* Stay still until next cycle */
-        }
-        
-        .hero-intro strong {
-            color: #FFFFFF;
-            font-weight: 600;
-        }
-        
+
         .cta-heading {
             font-size: 28px;
             font-weight: 600;
-            color: #FFA500; /* Solar Orange - lighter and more readable */
-            margin-bottom: 20px; /* Reduced from 30px */
-            text-align: center;
+            color: #FFA500;
+            margin-bottom: 20px;
         }
-        
-        /* ===================================
-           AVATAR CARDS - EXACT OPT-IN SPECS
-           =================================== */
+
         .avatar-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin-top: 10px; /* Reduced from 25px */
-            max-width: 700px; /* Wider for full-page centering */
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 700px;
+            margin: 0 auto;
         }
-        
+
         .avatar-card {
             background: #FFFFFF;
             border: 3px solid #E8E8E8;
             border-radius: 12px;
             padding: 14px 8px;
             text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
             text-decoration: none;
-            display: block;
-            font-family: 'Inter', sans-serif; /* Keep Inter for avatar cards */
+            font-family: 'Inter', sans-serif;
+            transition: 0.3s ease;
         }
-        
+
         .avatar-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 6px 20px rgba(230, 81, 0, 0.2);
-            border-color: #E65100; /* Solar Orange */
+            border-color: #E65100;
         }
-        
+
         .avatar-icon {
-            font-size: 33px; /* Increased from 32px */
+            font-size: 33px;
             margin-bottom: 8px;
         }
-        
+
         .avatar-title {
-            font-size: 15px; /* Increased from 14px */
+            font-size: 15px;
             font-weight: 600;
             color: #0F0F0F;
-            margin-bottom: 4px;
         }
-        
+
         .avatar-description {
-            font-size: 12px; /* Increased from 11px */
+            font-size: 12px;
             color: #424242;
-            line-height: 1.3;
         }
-        
-        /* ===================================
-           RIGHT COLUMN - IMAGE (Extends to top and right viewport edges)
-           =================================== */
-        .hero-image {
-            position: relative;
-            display: flex;
-            align-items: flex-start;
-            justify-content: flex-end;
-            min-height: 55vh; /* Reduced from 70vh to fit CTA on screen */
-            margin: -80px 0 0 0; /* Only negative top margin to reach top */
-            padding: 0;
-        }
-        
-        .image-placeholder {
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-right: none; /* Remove right border at viewport edge */
-            border-top: none; /* Remove top border at viewport edge */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.4);
-            min-height: 55vh; /* Reduced from 70vh */
-        }
-        
-        /* ===================================
-           RESPONSIVE DESIGN
-           =================================== */
-        
-        /* Mobile phones and tablets */
+
+        /* ================= MOBILE ================= */
         @media (max-width: 768px) {
             header {
                 padding: 15px 20px;
             }
-            
+
             .hero {
-                grid-template-columns: 1fr; /* Single column on mobile */
-                gap: 0;
-                padding: 70px 20px 60px 20px;
+                grid-template-columns: 1fr;
+                padding: 70px 20px 60px;
             }
-            
+
             .hero-image {
-                order: -1;
-                min-height: 40vh;
-                margin: -70px -20px 40px -20px; /* Extend to viewport edges on mobile */
+                margin: 0 -20px 40px;
             }
-            
-            .image-placeholder {
-                min-height: 40vh;
-                border-right: none;
-                border-left: none;
-            }
-            
+
             .cta-section {
-                padding-right: 0; /* Remove right padding on mobile */
-                margin-top: 0;
-                padding-bottom: 40px;
+                padding-right: 0;
             }
-            
-            .cta-heading {
-                font-size: 22px;
-                margin-bottom: 15px;
-            }
-            
-            .avatar-grid {
-                max-width: 100%; /* Full width on mobile */
-            }
-            
-            .hero-tagline {
-                font-size: 18px;
-            }
-            
-            .hero-tagline-alt {
-                font-size: 18px;
-            }
-            
-            .hero-title {
-                font-size: 32px;
-                margin-bottom: 25px;
-            }
-            
-            .hero-body {
-                font-size: 16px;
-                margin-bottom: 25px;
-            }
-            
-            .hero-tagline {
-                font-size: 18px;
-                margin-bottom: 30px;
-            }
-            
-            .hero-intro {
-                font-size: 15px;
-                margin-bottom: 40px;
-            }
-            
-            .cta-heading {
-                font-size: 20px;
-                margin-bottom: 20px;
-            }
-        }
-        
-        /* Small phones - stack cards vertically */
-        @media (max-width: 600px) {
+
             .avatar-grid {
                 grid-template-columns: 1fr;
-                gap: 8px;
-            }
-            
-            .avatar-card {
-                padding: 10px 8px;
-            }
-            
-            .avatar-icon {
-                font-size: 25px; /* Increased from 24px */
-                margin-bottom: 5px;
-            }
-            
-            .avatar-title {
-                font-size: 14px; /* Increased from 13px */
-                margin-bottom: 2px;
-            }
-            
-            .avatar-description {
-                font-size: 12px; /* Increased from 11px */
-            }
-            
-            .hero-title {
-                font-size: 33px; /* Increased from 32px to match new desktop scale */
-            }
-            
-            .hero-body {
-                font-size: 16px;
-                margin-bottom: 20px;
-            }
-            
-            .hero-intro {
-                font-size: 15px; /* Increased from 14px to match desktop scale */
-                margin-bottom: 25px;
-                text-align: center;
             }
         }
     </style>
 </head>
+
 <body>
-    <!-- Header -->
-    <header>
+
+<header>
+    <div class="header-inner">
         <div class="logo-text">iSolar Hot Water Academy</div>
-    </header>
-    
-    <!-- Hero Section -->
-    <section class="hero">
-        <!-- Left Column - Content -->
-        <div class="hero-content">
-            <h1 class="hero-title">Solar Hot Water<br><span class="highlight-blue">isn't one thing anymore.</span></h1>
-            
-            <p class="hero-tagline">PV ELECTRIC or SOLAR THERMAL COLLECTORS</p>
-            
-            <p class="hero-body">
-                It's about <strong>choosing the simplest system</strong> with the best real-world economics — <strong>faster, without guesswork.</strong>
-            </p>
-            
-            <p class="hero-tagline-alt">No fluff. No hype.</p>
+        <div class="header-cta placeholder">Button</div>
+    </div>
+</header>
+
+<section class="hero">
+
+    <div class="hero-content">
+        <h1 class="hero-title">
+            Solar Hot Water<br>
+            <span class="highlight-blue">isn't one thing anymore.</span>
+        </h1>
+
+        <p class="hero-tagline">PV ELECTRIC or SOLAR THERMAL COLLECTORS</p>
+
+        <p class="hero-body">
+            It's about <strong>choosing the simplest system</strong> with the best real-world economics — <strong>faster, without guesswork.</strong>
+        </p>
+
+        <p class="hero-tagline-alt">No fluff. No hype.</p>
+    </div>
+
+    <div class="hero-image">
+        <img src="hero-image.jpg" alt="Solar installation">
+    </div>
+
+    <div class="cta-section">
+        <p class="hero-intro">
+            <strong>Hey, I'm Peter Biondo!</strong> 👋  
+            With four decades in solar thermal, I train through coaching, live sessions, and AI-powered learning tools.
+        </p>
+
+        <h2 class="cta-heading">Choose your path forward</h2>
+
+        <div class="avatar-grid">
+            <a href="/messaging/contractor.html" class="avatar-card">
+                <div class="avatar-icon">⚡</div>
+                <div class="avatar-title">PV Contractor</div>
+                <div class="avatar-description">Grow your solar business</div>
+            </a>
+
+            <a href="/messaging/diy.html" class="avatar-card">
+                <div class="avatar-icon">🏠</div>
+                <div class="avatar-title">DIY Homeowner</div>
+                <div class="avatar-description">Self-install your own system</div>
+            </a>
+
+            <a href="/messaging/career.html" class="avatar-card">
+                <div class="avatar-icon">🔄</div>
+                <div class="avatar-title">Solar Career Starter</div>
+                <div class="avatar-description">Enter the solar industry</div>
+            </a>
         </div>
-        
-        <!-- Right Column - Image -->
-        <div class="hero-image">
-            <img src="hero-image.jpg" alt="Peter Biondo installing solar panels" style="width: 100%; height: 100%; object-fit: cover; object-position: center;">
-        </div>
-        
-        <!-- CTA Section - Spans Full Width -->
-        <div class="cta-section">
-            <p class="hero-intro">
-                <strong>Hey, I'm Peter Biondo!</strong> <span class="wave">👋</span> With four decades in solar thermal, I train through coaching, live sessions, and AI-powered learning tools. <strong>Make meaningful progress sooner!</strong>
-            </p>
-            
-            <h2 class="cta-heading">Choose your path forward</h2>
-            
-            <!-- Avatar Cards -->
-            <div class="avatar-grid">
-                <!-- Solar Contractor Card -->
-                <a href="/messaging/contractor.html" class="avatar-card">
-                    <div class="avatar-icon">⚡</div>
-                    <div class="avatar-title">PV Contractor</div>
-                    <div class="avatar-description">Grow your solar business</div>
-                </a>
-                
-                <!-- DIY Homeowner Card -->
-                <a href="/messaging/diy.html" class="avatar-card">
-                    <div class="avatar-icon">🏠</div>
-                    <div class="avatar-title">DIY Homeowner</div>
-                    <div class="avatar-description">Self-install your own system</div>
-                </a>
-                
-                <!-- Solar Career Starter Card -->
-                <a href="/messaging/career.html" class="avatar-card">
-                    <div class="avatar-icon">🔄</div>
-                    <div class="avatar-title">Solar Career Starter</div>
-                    <div class="avatar-description">Enter the solar industry</div>
-                </a>
-            </div>
-        </div>
-    </section>
-    
-    <script>
-        // Optional: Add localStorage for avatar selection tracking
-        document.querySelectorAll('.avatar-card').forEach(card => {
-            card.addEventListener('click', function(e) {
-                const href = this.getAttribute('href');
-                const avatar = href.split('/').pop().replace('.html', '');
-                localStorage.setItem('selectedAvatar', avatar);
-            });
-        });
-    </script>
+    </div>
+
+</section>
+
 </body>
 </html>
