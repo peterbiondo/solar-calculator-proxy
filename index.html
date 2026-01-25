@@ -194,7 +194,7 @@ header {
 
 /* AUTO GLOW */
 .avatar-card.is-active {
-    border-color: #FFD54F;
+    border-color: #E65100;
     animation: glow-pulse 2.2s ease-in-out infinite;
     box-shadow:
         0 0 16px rgba(255,213,79,0.45),
@@ -204,17 +204,17 @@ header {
 @keyframes glow-pulse {
     0% {
         box-shadow:
-            0 0 0 rgba(255,213,79,0),
+            0 0 0 rgba(230, 81, 0, 0),
             0 4px 10px rgba(0,0,0,0.18);
     }
     50% {
         box-shadow:
-            0 0 18px rgba(255,213,79,0.55),
+            0 0 18px rgba(230, 81, 0, 0.55),
             0 8px 18px rgba(0,0,0,0.28);
     }
     100% {
         box-shadow:
-            0 0 0 rgba(255,213,79,0),
+            0 0 0 rgba(230, 81, 0, 0),
             0 4px 10px rgba(0,0,0,0.18);
     }
 }
@@ -338,9 +338,11 @@ header {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const cards = Array.from(document.querySelectorAll('.avatar-card'));
+
+    // Disable on touch devices
     if (window.matchMedia('(hover: none)').matches) return;
 
-    let index = cards.length - 1; // RIGHT → LEFT
+    let index = 0; // START on LEFT (PV Contractor)
     let paused = false;
     let timer;
 
@@ -354,13 +356,14 @@ document.addEventListener('DOMContentLoaded', () => {
         clearActive();
         cards[index].classList.add('is-active');
 
-        index--;
+        index++;
 
-        if (index < 0) {
-            index = cards.length - 1;
-            timer = setTimeout(stepGlow, 4000); // long pause after full pass
+        // Reached the end → pause, then restart at PV
+        if (index >= cards.length) {
+            index = 0;
+            timer = setTimeout(stepGlow, 4000); // pause after full pass
         } else {
-            timer = setTimeout(stepGlow, 2600); // slower between cards
+            timer = setTimeout(stepGlow, 2600); // slow drift between cards
         }
     }
 
@@ -378,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    timer = setTimeout(stepGlow, 2000);
+    timer = setTimeout(stepGlow, 2000); // gentle start delay
 });
 </script>
 
