@@ -12,7 +12,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-/* ================= RESET ================= */
 * {
     margin: 0;
     padding: 0;
@@ -20,10 +19,9 @@
 }
 
 body {
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: #0F0F0F;
     color: #FFFFFF;
-    min-height: 100vh;
     overflow-x: hidden;
 }
 
@@ -35,7 +33,7 @@ header {
     right: 0;
     z-index: 100;
     height: 72px;
-    padding: 0 60px 0 160px; /* reduced but not excessive */
+    padding: 0 60px 0 160px;
     display: flex;
     align-items: center;
     background: #0F0F0F;
@@ -45,8 +43,8 @@ header {
 .header-inner {
     width: 100%;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
 }
 
 .logo-text {
@@ -68,16 +66,13 @@ header {
 
 /* ================= HERO ================= */
 .hero {
-    position: relative;
-    margin: 0;
-    padding: 100px 0 40px 160px; /* header offset + moderate left indent */
+    padding: 100px 0 40px 160px;
     display: grid;
     grid-template-columns: 55% 45%;
     gap: 40px;
     align-items: start;
 }
 
-/* LEFT CONTENT */
 .hero-content {
     max-width: 650px;
 }
@@ -114,23 +109,22 @@ header {
     font-size: 19px;
     font-weight: 600;
     color: #00E676;
-    margin-bottom: 6px; /* tightened on purpose */
+    margin-bottom: 6px;
 }
 
-/* RIGHT IMAGE */
+/* ================= IMAGE ================= */
 .hero-image {
     display: flex;
     justify-content: flex-end;
     align-items: flex-start;
-    padding-left: 24px; /* space from text */
+    padding-left: 24px;
 }
 
 .hero-image img {
     width: 100%;
-    height: 100%;
     max-height: 55vh;
     object-fit: cover;
-    padding-right: 24px; /* visible right-side buffer */
+    padding-right: 24px;
 }
 
 /* ================= CTA ================= */
@@ -141,14 +135,13 @@ header {
 }
 
 .hero-intro {
-    font-size: 17px;
-    line-height: 1.6;
-    color: rgba(255,255,255,0.85);
     max-width: 760px;
     margin: 0 auto 30px;
+    font-size: 17px;
+    color: rgba(255,255,255,0.85);
 }
 
-/* 👋 ORIGINAL HAND WAVE — UNCHANGED */
+/* 👋 ORIGINAL WAVE — RESTORED */
 .wave {
     display: inline-block;
     font-size: 1.5em;
@@ -165,7 +158,6 @@ header {
     20.8%, 100% { transform: rotate(0deg); }
 }
 
-/* CTA HEADING — ORIGINAL ORANGE */
 .cta-heading {
     font-size: 28px;
     font-weight: 600;
@@ -194,17 +186,16 @@ header {
     font-family: 'Inter', sans-serif;
 }
 
-/* ORIGINAL HOVER */
 .avatar-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 20px rgba(230, 81, 0, 0.2);
     border-color: #E65100;
 }
 
-/* AUTO GLOW — layered on top */
+/* AUTO GLOW */
 .avatar-card.is-active {
     border-color: #FFD54F;
-    animation: glow-pulse 1.6s ease-in-out infinite;
+    animation: glow-pulse 2.2s ease-in-out infinite;
     box-shadow:
         0 0 16px rgba(255,213,79,0.45),
         0 6px 14px rgba(0,0,0,0.25);
@@ -311,7 +302,9 @@ header {
 
     <div class="cta-section">
         <p class="hero-intro">
-            <strong>Hey, I'm Peter Biondo! 👋 With four decades in solar thermal,</strong>
+            <strong>Hey, I'm Peter Biondo!</strong>
+            <span class="wave">👋</span>
+            <strong> With four decades in solar thermal,</strong>
             I am thoroughly experienced to train you through coaching, live sessions,
             courses, and AI-powered learning tools to assist you
             <strong>progress faster!</strong>
@@ -347,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = Array.from(document.querySelectorAll('.avatar-card'));
     if (window.matchMedia('(hover: none)').matches) return;
 
-    let index = cards.length - 1;
+    let index = cards.length - 1; // RIGHT → LEFT
     let paused = false;
     let timer;
 
@@ -355,12 +348,20 @@ document.addEventListener('DOMContentLoaded', () => {
         cards.forEach(c => c.classList.remove('is-active'));
     }
 
-    function step() {
+    function stepGlow() {
         if (paused) return;
+
         clearActive();
         cards[index].classList.add('is-active');
-        index = index - 1 < 0 ? cards.length - 1 : index - 1;
-        timer = setTimeout(step, index === cards.length - 1 ? 3000 : 1800);
+
+        index--;
+
+        if (index < 0) {
+            index = cards.length - 1;
+            timer = setTimeout(stepGlow, 4000); // long pause after full pass
+        } else {
+            timer = setTimeout(stepGlow, 2600); // slower between cards
+        }
     }
 
     cards.forEach(card => {
@@ -370,13 +371,14 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('is-active');
             clearTimeout(timer);
         });
+
         card.addEventListener('mouseleave', () => {
             paused = false;
-            timer = setTimeout(step, 800);
+            timer = setTimeout(stepGlow, 1200);
         });
     });
 
-    timer = setTimeout(step, 1200);
+    timer = setTimeout(stepGlow, 2000);
 });
 </script>
 
