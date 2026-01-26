@@ -103,7 +103,7 @@ header {
     
     .header-cta {
         font-size: 12px;
-        padding: 4px 8px 4px 10px;
+        padding: 6px 8px 6px 10px;
     }
 }
 
@@ -286,7 +286,9 @@ header {
 <header>
     <div class="header-inner">
         <div class="logo">
-            <img src="Logo.svg" alt="iSolar Hot Water Academy">
+            <a href="https://pv-hotwater.com">
+                <img src="Logo.svg" alt="iSolar Hot Water Academy">
+            </a>
         </div>
         <a href="https://pv-hotwater.com/opt-in-calc.html" class="header-cta">
             <span class="btn-text-desktop">Try the FREE PV Hot Water Designer</span>
@@ -350,6 +352,17 @@ header {
     </div>
 
 </section>
+
+<script>
+// Hide avatar cards if user has already opted in
+if (localStorage.getItem('opted_in') === 'true') {
+    const avatarGrid = document.querySelector('.avatar-grid');
+    const ctaHeading = document.querySelector('.cta-heading');
+    
+    if (avatarGrid) avatarGrid.style.display = 'none';
+    if (ctaHeading) ctaHeading.style.display = 'none';
+}
+</script>
 
 </body>
 </html>
