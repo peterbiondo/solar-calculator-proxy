@@ -79,6 +79,34 @@ header {
     box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
 }
 
+/* Button text switching - mobile only (not tablet) */
+.btn-text-mobile {
+    display: none;
+}
+
+.btn-text-desktop {
+    display: inline;
+}
+
+@media (max-width: 600px) {
+    .btn-text-mobile {
+        display: inline;
+    }
+    
+    .btn-text-desktop {
+        display: none;
+    }
+    
+    .logo img {
+        height: 32px;
+    }
+    
+    .header-cta {
+        font-size: 12px;
+        padding: 4px 8px 4px 10px;
+    }
+}
+
 /* ================= HERO ================= */
 .hero {
     padding: 100px 0 40px 160px;
@@ -260,7 +288,10 @@ header {
         <div class="logo">
             <img src="Logo.svg" alt="iSolar Hot Water Academy">
         </div>
-        <a href="https://pv-hotwater.com/opt-in-calc.html" class="header-cta">Try the FREE PV Hot Water Designer</a>
+        <a href="https://pv-hotwater.com/opt-in-calc.html" class="header-cta">
+            <span class="btn-text-desktop">Try the FREE PV Hot Water Designer</span>
+            <span class="btn-text-mobile">Try FREE Calculator</span>
+        </a>
     </div>
 </header>
 
