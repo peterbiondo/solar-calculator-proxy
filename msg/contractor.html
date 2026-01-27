@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iSolar Hot Water Academy</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #0F0F0F;
+    color: #FFFFFF;
+    overflow-x: hidden;
+}
+
+/* ================= HEADER ================= */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    padding: 0 30px 0 160px;
+    display: flex;
+    align-items: center;
+    background: #0F0F0F;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 100;
+}
+
+.header-inner {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* LOGO (IMAGE) */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 36px;
+    width: auto;
+    display: block;
+}
+
+/* Right-side CTA button - Calculator style */
+.header-cta {
+    padding: 5px 10px 5px 12px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #FFA500;
+    color: #0F0F0F;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.header-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
+}
+
+/* Button text switching - mobile only (not tablet) */
+.btn-text-mobile {
+    display: none;
+}
+
+.btn-text-desktop {
+    display: inline;
+}
+
+@media (max-width: 600px) {
+    .btn-text-mobile {
+        display: inline;
+    }
+    
+    .btn-text-desktop {
+        display: none;
+    }
+    
+    .logo img {
+        height: 32px;
+    }
+    
+    .header-cta {
+        font-size: 12px;
+        padding: 6px 8px 6px 10px;
+    }
+}
+
+/* ================= HERO ================= */
+.hero {
+    padding: 100px 0 40px 160px;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    gap: 20px;
+    align-items: start;
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.hero-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 30px;
+}
+
+.highlight-blue {
+    background: linear-gradient(to top, rgba(70,150,255,0.7) 55%, transparent 55%);
+    padding: 0 4px;
+    border-radius: 2px;
+}
+
+.hero-tagline {
+    font-size: 19px;
+    font-weight: 600;
+    color: #00E676;
+    margin-bottom: 25px;
+}
+
+.hero-body {
+    font-size: 17px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 25px;
+}
+
+.hero-tagline-alt {
+    font-size: 19px;
+    font-weight: 600;
+    color: #00E676;
+    margin-bottom: 0px;
+}
+
+/* ================= IMAGE ================= */
+.hero-image {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-right: 35px;
+    padding-left: 35px;
+}
+
+.hero-image img {
+    width: 100%;
+    max-height: 55vh;
+    object-fit: cover;
+}
+
+/* ================= CTA ================= */
+.cta-section {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 0 160px 60px;
+}
+
+.hero-intro {
+    max-width: 760px;
+    margin: 0 auto 30px;
+    font-size: 17px;
+    color: rgba(255,255,255,0.85);
+}
+
+/* 👋 WAVE */
+.wave {
+    display: inline-block;
+    font-size: 1.5em;
+    animation: wave-animation 8s infinite;
+    transform-origin: 70% 70%;
+    filter: brightness(1.2);
+}
+
+@keyframes wave-animation {
+    0% { transform: rotate(0deg); }
+    5%, 12.5% { transform: rotate(14deg); }
+    8.5%, 16.7% { transform: rotate(-8deg); }
+    20.8% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.cta-heading {
+    font-size: 28px;
+    font-weight: 600;
+    color: #FFA500;
+    margin-bottom: 20px;
+}
+
+/* ================= AVATARS ================= */
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.avatar-card {
+    background: #FFFFFF;
+    border: 3px solid #E8E8E8;
+    border-radius: 12px;
+    padding: 14px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.avatar-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(230, 81, 0, 0.2);
+    border-color: #E65100;
+}
+
+.avatar-icon {
+    font-size: 33px;
+    margin-bottom: 8px;
+}
+
+.avatar-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F0F0F;
+    margin-bottom: 4px;
+}
+
+.avatar-description {
+    font-size: 13px;
+    color: #424242;
+    line-height: 1.3;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+    header {
+        padding: 0 20px;
+        height: 64px;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 80px 20px 60px;
+    }
+
+    .hero-image {
+        padding-right: 0;
+        margin-bottom: 0px;
+    }
+
+    .cta-section {
+        padding: 6px 20px 40px;
+    }
+
+    .avatar-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="logo">
+            <a href="https://pv-hotwater.com">
+                <img src="Logo.svg" alt="iSolar Hot Water Academy">
+            </a>
+        </div>
+        <a href="https://pv-hotwater.com/opt-in-calc.html" class="header-cta">
+            <span class="btn-text-desktop">Try the FREE PV Hot Water Designer</span>
+            <span class="btn-text-mobile">FREE PV Sizing Bot</span>
+        </a>
+    </div>
+</header>
+
+<section class="hero">
+
+    <div class="hero-content">
+        <h1 class="hero-title">
+            Solar Hot Water<br>
+            <span class="highlight-blue">isn't one thing anymore.</span>
+        </h1>
+
+        <p class="hero-tagline">PV ELECTRIC HOT WATER or SOLAR THERMAL COLLECTORS</p>
+
+        <p class="hero-body">
+            It's about choosing the simplest system with the best real-world economics —
+            <strong>faster, and without guesswork.</strong>
+        </p>
+
+        <p class="hero-tagline-alt">No fluff. No hype.</p>
+    </div>
+
+    <div class="hero-image">
+        <img src="hero-image.jpg" alt="Peter Biondo installing solar panels">
+    </div>
+
+    <div class="cta-section">
+        <p class="hero-intro">
+            <strong>Hey, I'm Peter Biondo!</strong>
+            <span class="wave">👋</span>
+            With four decades in solar thermal, I combine coaching, live sessions,
+            courses, and AI-powered learning tools to help you
+            <strong>move forward faster!</strong>
+        </p>
+
+        <h2 class="cta-heading">Choose your path forward</h2>
+
+        <div class="avatar-grid">
+            <a href="/messaging/contractor.html" class="avatar-card">
+                <div class="avatar-icon">⚡</div>
+                <div class="avatar-title">PV Contractor</div>
+                <div class="avatar-description">Grow your solar business</div>
+            </a>
+
+            <a href="/messaging/diy.html" class="avatar-card">
+                <div class="avatar-icon">🏠</div>
+                <div class="avatar-title">DIY Homeowner</div>
+                <div class="avatar-description">Self-install your own system</div>
+            </a>
+
+            <a href="/messaging/career.html" class="avatar-card">
+                <div class="avatar-icon">🔄</div>
+                <div class="avatar-title">Solar Career Starter</div>
+                <div class="avatar-description">Enter the solar industry</div>
+            </a>
+        </div>
+    </div>
+
+</section>
+
+<script>
+// Hide avatar cards if user has already opted in
+if (localStorage.getItem('opted_in') === 'true') {
+    const avatarGrid = document.querySelector('.avatar-grid');
+    const ctaHeading = document.querySelector('.cta-heading');
+    
+    if (avatarGrid) avatarGrid.style.display = 'none';
+    if (ctaHeading) ctaHeading.style.display = 'none';
+}
+</script>
+
+</body>
+</html>
