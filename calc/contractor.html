@@ -643,7 +643,7 @@ function redirectToWaitlist() {
     const userEmail = urlParams.get('email') || 'unknown@example.com';
     
     // Redirect to waitlist page with email and avatar
-    window.location.href = `../Contractor-waitlist.html?email=${encodeURIComponent(userEmail)}&avatar=contractor`;
+    window.location.href = `/waitlist/contractor.html?email=${encodeURIComponent(userEmail)}&avatar=contractor`;
 }
         
         let conversationStep = 0;
