@@ -635,16 +635,16 @@
         const WEBHOOK_URL = 'https://solar-calculator-proxy.vercel.app/api/webhook-proxy';
         
         /* ===================================
-   WAITLIST REDIRECT FUNCTION
-   =================================== */
-function redirectToWaitlist() {
-    // Get email from URL parameters (passed from opt-in page)
-    const urlParams = new URLSearchParams(window.location.search);
-    const userEmail = urlParams.get('email') || 'unknown@example.com';
-    
-    // Redirect to waitlist page with email and avatar
-    window.location.href = `/waitlist/contractor.html?email=${encodeURIComponent(userEmail)}&avatar=contractor`;
-}
+           WAITLIST REDIRECT FUNCTION
+           =================================== */
+        function redirectToWaitlist() {
+            // Get email from URL parameters (passed from opt-in page)
+            const urlParams = new URLSearchParams(window.location.search);
+            const userEmail = urlParams.get('email') || 'unknown@example.com';
+            
+            // Redirect to waitlist page with email and avatar
+            window.location.href = `/waitlist/contractor.html?email=${encodeURIComponent(userEmail)}&avatar=contractor`;
+        }
         
         let conversationStep = 0;
         let userData = {
@@ -900,6 +900,21 @@ function redirectToWaitlist() {
             
             // If exceeds largest tank, return 500L
             return 500;
+        }
+
+        // ✅ NEW: Calculate optional smaller IMPERIAL tank size (gallons) using high-limit storage
+        function calculateOptionalImperialTank(dailyGallons, setpointF, highLimitF, incomingF) {
+            const tankSizes = [20, 30, 40, 50, 60, 80, 100, 120];
+
+            const dailyEnergy = dailyGallons * (setpointF - incomingF);
+            const minimumEnergy = dailyEnergy / 1.05;
+            const minimumTankGallons = minimumEnergy / (highLimitF - incomingF);
+
+            for (let i = 0; i < tankSizes.length; i++) {
+                if (tankSizes[i] >= minimumTankGallons) return tankSizes[i];
+            }
+
+            return tankSizes[tankSizes.length - 1];
         }
         
         // Convert gallons back to exact metric button value
@@ -1570,513 +1585,572 @@ function redirectToWaitlist() {
         }
         
         /* ===================================
-   WEBHOOK & RESULTS
-   =================================== */
+           WEBHOOK & RESULTS
+           =================================== */
 
-async function sendToWebhook() {
-    try {
-        const response = await fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData)
-        });
-        
-        const data = await response.json();
-        
-        hideTyping();
-        
-        if (data.success && data.system_1250w && data.system_1500w) {
-            displayResults(data);
-        } else {
-            addMessage("I apologize, but I encountered an issue calculating your system. Please try again or contact support.");
+        async function sendToWebhook() {
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(userData)
+                });
+                
+                const data = await response.json();
+                
+                hideTyping();
+                
+                if (data.success && data.system_1250w && data.system_1500w) {
+                    displayResults(data);
+                } else {
+                    addMessage("I apologize, but I encountered an issue calculating your system. Please try again or contact support.");
+                }
+            } catch (error) {
+                hideTyping();
+                addMessage("Connection error. Please check your internet and try again.");
+                console.error('Error:', error);
+            }
         }
-    } catch (error) {
-        hideTyping();
-        addMessage("Connection error. Please check your internet and try again.");
-        console.error('Error:', error);
-    }
-}
 
-function displayResults(data) {
-    chatInputArea.style.display = 'none';
-    
-    const sys1250 = data.system_1250w;
-    const sys1500 = data.system_1500w;
-    
-    const sys1250InverterNull = !sys1250.inverters || sys1250.inverters === null || sys1250.inverters === 'null';
-    
-    if (sys1250InverterNull) {
-        displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
-        return;
-    }
-    
-    const sys1250Exceeds = typeof sys1250.panels === 'string' && sys1250.panels.toLowerCase().includes('exceeds');
-    const sys1500Exceeds = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
-    
-    if (sys1250Exceeds && sys1500Exceeds) {
-        const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-        const displayGallons = unitSystem === 'metric' ? 
-            gallonsToExactLiters(parseFloat(userData.gallons)) : 
-            Math.round(userData.gallons);
-        const displayHotTemp = unitSystem === 'metric' ? 
-            Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
-            Math.round(userData.hotWaterTemp);
-        const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
-        const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
-        
-        addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
-            The system cannot provide sufficient energy for your hot water specifications:<br><br>
-            • Daily Usage: ${displayGallons} ${unit}<br>
-            • Target Temperature: ${displayHotTemp}${tempUnit}<br>
-            • Peak Sun Hours: ${actualPeakSun} hrs/day<br>
-            • Panel Wattage: ${userData.panelWatts}W<br><br>
-            <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong><br><br>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`);
-        return;
-    }
-    
-    if (sys1500Exceeds && !sys1250Exceeds) {
-        displaySingleSystem(data, sys1250, '1200H', data.system_1250w);
-        return;
-    }
-    
-    if (sys1250Exceeds && !sys1500Exceeds) {
-        displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
-        return;
-    }
-    
-    displayBothSystems(data);
-}
-
-function displaySingleSystem(data, system, inverterModel, systemData) {
-    const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-    const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
-    const actualLat = data.latitude_actual || 35;
-    
-    const latDisplay = Math.abs(Math.round(actualLat));
-    const direction = actualLat < 0 ? 'north' : 'south';
-    
-    if (unitSystem === 'metric') {
-        const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
-        const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
-        const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
-        const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
-        const tankDisplay = calculateOptimalMetricTank(
-            parseFloat(userData.gallons),
-            parseFloat(userData.hotWaterTemp),
-            parseFloat(userData.highLimit),
-            actualColdTemp
-        );
-        
-        let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
-            📍 <strong>Location:</strong> ${userData.location}<br>
-            💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
-            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C*<br>
-            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
-            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-            📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
+        function displayResults(data) {
+            chatInputArea.style.display = 'none';
             
-            <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+            const sys1250 = data.system_1250w;
+            const sys1500 = data.system_1500w;
             
-            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+            const sys1250InverterNull = !sys1250.inverters || sys1250.inverters === null || sys1250.inverters === 'null';
             
-            <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
-            • Inverters: ${system.inverters}<br>
-            • Panels: ${system.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${tankDisplay} liters<br>
-            • Element Size: ${system.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>` : ''}<br>
-            
-            This system can meet your hot water requirements.<br><br>
-            ${getOptimalConditionsMessage(direction)}
-            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
-            
-            <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
-                    <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
-                    <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
-                        <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
-                             alt="PV Water Heating Video" 
-                             style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
-                             onmouseover="this.style.transform='scale(1.02)'" 
-                             onmouseout="this.style.transform='scale(1)'">
-                    </a>
-                </div>
-            </div>`;
-            
-        addMessage(messageContent);
-         
-        setTimeout(() => {
-            const messages = chatMessages.querySelectorAll('.message');
-            const lastMessage = messages[messages.length - 1];
-            if (lastMessage) {
-                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (sys1250InverterNull) {
+                displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
+                return;
             }
-        }, 100);
-    } else {
-        const displayGallons = Math.round(userData.gallons);
-        const displayColdTemp = Math.round(actualColdTemp);
-        const displayHotTemp = Math.round(userData.hotWaterTemp);
-        const displayHighLimit = Math.round(userData.highLimit);
-        
-        let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
-            📍 <strong>Location:</strong> ${userData.location}<br>
-            💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
-            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F*<br>
-            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
-            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-            📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
             
-            <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+            const sys1250Exceeds = typeof sys1250.panels === 'string' && sys1250.panels.toLowerCase().includes('exceeds');
+            const sys1500Exceeds = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
             
-            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-            
-            <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
-            • Inverters: ${system.inverters}<br>
-            • Panels: ${system.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${system.tank_size} gallons<br>
-            • Element Size: ${system.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>` : ''}<br>
-            
-            This system can meet your hot water requirements.<br><br>
-            ${getOptimalConditionsMessage(direction)}
-            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
-            
-            <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+            if (sys1250Exceeds && sys1500Exceeds) {
+                const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+                const displayGallons = unitSystem === 'metric' ? 
+                    gallonsToExactLiters(parseFloat(userData.gallons)) : 
+                    Math.round(userData.gallons);
+                const displayHotTemp = unitSystem === 'metric' ? 
+                    Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
+                    Math.round(userData.hotWaterTemp);
+                const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
+                const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
                 
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
-                    <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
-                    <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
-                        <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
-                             alt="PV Water Heating Video" 
-                             style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
-                             onmouseover="this.style.transform='scale(1.02)'" 
-                             onmouseout="this.style.transform='scale(1)'">
-                    </a>
-                </div>
-            </div>`;
-
-        addMessage(messageContent);
-   
-        setTimeout(() => {
-            const messages = chatMessages.querySelectorAll('.message');
-            const lastMessage = messages[messages.length - 1];
-            if (lastMessage) {
-                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
+                    The system cannot provide sufficient energy for your hot water specifications:<br><br>
+                    • Daily Usage: ${displayGallons} ${unit}<br>
+                    • Target Temperature: ${displayHotTemp}${tempUnit}<br>
+                    • Peak Sun Hours: ${actualPeakSun} hrs/day<br>
+                    • Panel Wattage: ${userData.panelWatts}W<br><br>
+                    <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong><br><br>
+                    <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`);
+                return;
             }
-        }, 100);
-    }
-}
-
-function displayBothSystems(data) {
-    const sys1250 = data.system_1250w;
-    const sys1500 = data.system_1500w;
-    const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-    const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
-    const actualLat = data.latitude_actual || 35;
-    
-    const latDisplay = Math.abs(Math.round(actualLat));
-    const direction = actualLat < 0 ? 'north' : 'south';
-    
-    if (unitSystem === 'metric') {
-        const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
-        const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
-        const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
-        const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
-        
-        let recommended, alternative, recommendedName, alternativeName, reason;
-        const inv1250 = parseInt(sys1250.inverters);
-        const inv1500 = parseInt(sys1500.inverters);
-        const panel1250 = parseInt(sys1250.panels);
-        const panel1500 = parseInt(sys1500.panels);
-        
-        if (inv1250 < inv1500) {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            if (panel1250 < panel1500) {
-                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-            } else {
-                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+            
+            if (sys1500Exceeds && !sys1250Exceeds) {
+                displaySingleSystem(data, sys1250, '1200H', data.system_1250w);
+                return;
             }
-        } else if (inv1500 < inv1250) {
-            recommended = sys1500;
-            alternative = sys1250;
-            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            if (panel1500 < panel1250) {
-                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-            } else {
-                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+            
+            if (sys1250Exceeds && !sys1500Exceeds) {
+                displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
+                return;
             }
-        } else if (panel1250 < panel1500) {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-        } else if (panel1500 < panel1250) {
-            recommended = sys1500;
-            alternative = sys1250;
-            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-        } else {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            reason = "This system is the most cost-effective choice with a less expensive inverter.";
+            
+            displayBothSystems(data);
         }
-        
-        const recTankDisplay = calculateOptimalMetricTank(
-            parseFloat(userData.gallons),
-            parseFloat(userData.hotWaterTemp),
-            parseFloat(userData.highLimit),
-            actualColdTemp
-        );
-        const altTankDisplay = calculateOptimalMetricTank(
-            parseFloat(userData.gallons),
-            parseFloat(userData.hotWaterTemp),
-            parseFloat(userData.highLimit),
-            actualColdTemp
-        );
-        
-        let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
-            📍 <strong>Location:</strong> ${userData.location}<br>
-            💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
-            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C*<br>
-            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
-            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-            📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
+
+        function displaySingleSystem(data, system, inverterModel, systemData) {
+            const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+            const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
+            const actualLat = data.latitude_actual || 35;
             
-            <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+            const latDisplay = Math.abs(Math.round(actualLat));
+            const direction = actualLat < 0 ? 'north' : 'south';
             
-            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-            
-            <strong>${recommendedName}:</strong><br>
-            • Inverters: ${recommended.inverters}<br>
-            • Panels: ${recommended.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${recTankDisplay} liters<br>
-            • Element Size: ${recommended.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>` : ''}<br>
-            
-            <em>${reason}</em><br><br>
-            
-            <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
-            
-            <strong>${alternativeName}:</strong><br>
-            • Inverters: ${alternative.inverters}<br>
-            • Panels: ${alternative.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${altTankDisplay} liters<br>
-            • Element Size: ${alternative.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>` : ''}<br>
-            
-            ${getOptimalConditionsMessage(direction)}
-            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
-            
-            <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+            if (unitSystem === 'metric') {
+                const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons)); // liters (exact button value)
+                const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
+                const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
+                const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
+
+                // ✅ NEW tank display logic:
+                const baseTankLiters = displayGallons; // first show full hot-water volume
+                const hasMixingValveOption = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp);
+                const optionalTankLiters = hasMixingValveOption
+                    ? calculateOptimalMetricTank(
+                        parseFloat(userData.gallons),
+                        parseFloat(userData.hotWaterTemp),
+                        parseFloat(userData.highLimit),
+                        actualColdTemp
+                      )
+                    : null;
                 
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
-                    <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
-                    <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
-                        <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
-                             alt="PV Water Heating Video" 
-                             style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
-                             onmouseover="this.style.transform='scale(1.02)'" 
-                             onmouseout="this.style.transform='scale(1)'">
-                    </a>
-                </div>
-            </div>`;
-            
-        addMessage(messageContent);
-         
-        setTimeout(() => {
-            const messages = chatMessages.querySelectorAll('.message');
-            const lastMessage = messages[messages.length - 1];
-            if (lastMessage) {
-                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }, 100);
-        
-    } else {
-        const displayGallons = Math.round(userData.gallons);
-        const displayColdTemp = Math.round(actualColdTemp);
-        const displayHotTemp = Math.round(userData.hotWaterTemp);
-        const displayHighLimit = Math.round(userData.highLimit);
-        
-        let recommended, alternative, recommendedName, alternativeName, reason;
-        const inv1250 = parseInt(sys1250.inverters);
-        const inv1500 = parseInt(sys1500.inverters);
-        const panel1250 = parseInt(sys1250.panels);
-        const panel1500 = parseInt(sys1500.panels);
-        
-        if (inv1250 < inv1500) {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            if (panel1250 < panel1500) {
-                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
+                    📍 <strong>Location:</strong> ${userData.location}<br>
+                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
+                    ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C*<br>
+                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
+                    ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+                    📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
+                    
+                    <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+                    
+                    <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+                    
+                    <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
+                    • Inverters: ${system.inverters}<br>
+                    • Panels: ${system.panels}<br>
+                    • Panel Wattage: ${userData.panelWatts}W<br>
+                    • Tank Size: ${baseTankLiters} liters<br>
+                    • Element Size: ${system.element_size}W<br>
+                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
+                    • kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
+                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankLiters} liters<br>` : ''}
+                    ${hasMixingValveOption && parseFloat(system.kwh_max) > parseFloat(system.kwh_day)
+                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>`
+                        : ''
+                    }<br>
+                    
+                    This system can meet your hot water requirements.<br><br>
+                    ${getOptimalConditionsMessage(direction)}
+                    <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
+                    <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+                    <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
+                    <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
+                    
+                    <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
+                        <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                        <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                        
+                        <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
+                        <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+                        
+                        <strong style="color: #000000;">Win more projects</strong><br>
+                        <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                            <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
+                            <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
+                                <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
+                                     alt="PV Water Heating Video" 
+                                     style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
+                                     onmouseover="this.style.transform='scale(1.02)'" 
+                                     onmouseout="this.style.transform='scale(1)'">
+                            </a>
+                        </div>
+                    </div>`;
+                    
+                addMessage(messageContent);
+                 
+                setTimeout(() => {
+                    const messages = chatMessages.querySelectorAll('.message');
+                    const lastMessage = messages[messages.length - 1];
+                    if (lastMessage) {
+                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
             } else {
-                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                const displayGallons = Math.round(userData.gallons); // gallons
+                const displayColdTemp = Math.round(actualColdTemp);
+                const displayHotTemp = Math.round(userData.hotWaterTemp);
+                const displayHighLimit = Math.round(userData.highLimit);
+
+                // ✅ NEW tank display logic:
+                const baseTankGallons = displayGallons; // first show full hot-water volume
+                const hasMixingValveOption = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp);
+                const optionalTankGallons = hasMixingValveOption
+                    ? calculateOptionalImperialTank(
+                        baseTankGallons,
+                        parseFloat(userData.hotWaterTemp),
+                        parseFloat(userData.highLimit),
+                        actualColdTemp
+                      )
+                    : null;
+                
+                let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
+                    📍 <strong>Location:</strong> ${userData.location}<br>
+                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
+                    ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F*<br>
+                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
+                    ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+                    📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
+                    
+                    <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+                    
+                    <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+                    
+                    <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
+                    • Inverters: ${system.inverters}<br>
+                    • Panels: ${system.panels}<br>
+                    • Panel Wattage: ${userData.panelWatts}W<br>
+                    • Tank Size: ${baseTankGallons} gallons<br>
+                    • Element Size: ${system.element_size}W<br>
+                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
+                    • kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
+                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankGallons} gallons<br>` : ''}
+                    ${hasMixingValveOption && parseFloat(system.kwh_max) > parseFloat(system.kwh_day)
+                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>`
+                        : ''
+                    }<br>
+                    
+                    This system can meet your hot water requirements.<br><br>
+                    ${getOptimalConditionsMessage(direction)}
+                    <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
+                    <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+                    <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
+                    <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
+                    
+                    <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
+                        <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                        <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                        
+                        <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
+                        <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+                        
+                        <strong style="color: #000000;">Win more projects</strong><br>
+                        <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                            <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
+                            <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
+                                <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
+                                     alt="PV Water Heating Video" 
+                                     style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
+                                     onmouseover="this.style.transform='scale(1.02)'" 
+                                     onmouseout="this.style.transform='scale(1)'">
+                            </a>
+                        </div>
+                    </div>`;
+
+                addMessage(messageContent);
+           
+                setTimeout(() => {
+                    const messages = chatMessages.querySelectorAll('.message');
+                    const lastMessage = messages[messages.length - 1];
+                    if (lastMessage) {
+                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
             }
-        } else if (inv1500 < inv1250) {
-            recommended = sys1500;
-            alternative = sys1250;
-            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            if (panel1500 < panel1250) {
-                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-            } else {
-                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-            }
-        } else if (panel1250 < panel1500) {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-        } else if (panel1500 < panel1250) {
-            recommended = sys1500;
-            alternative = sys1250;
-            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-        } else {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            reason = "This system is the most cost-effective choice with a less expensive inverter.";
         }
-        
-        let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
-            📍 <strong>Location:</strong> ${userData.location}<br>
-            💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
-            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F*<br>
-            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
-            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-            📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
+
+        function displayBothSystems(data) {
+            const sys1250 = data.system_1250w;
+            const sys1500 = data.system_1500w;
+            const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+            const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
+            const actualLat = data.latitude_actual || 35;
             
-            <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+            const latDisplay = Math.abs(Math.round(actualLat));
+            const direction = actualLat < 0 ? 'north' : 'south';
             
-            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-            
-            <strong>${recommendedName}:</strong><br>
-            • Inverters: ${recommended.inverters}<br>
-            • Panels: ${recommended.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${recommended.tank_size} gallons<br>
-            • Element Size: ${recommended.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>` : ''}<br>
-            
-            <em>${reason}</em><br><br>
-            
-            <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
-            
-            <strong>${alternativeName}:</strong><br>
-            • Inverters: ${alternative.inverters}<br>
-            • Panels: ${alternative.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${alternative.tank_size} gallons<br>
-            • Element Size: ${alternative.element_size}W<br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>` : ''}<br>
-            
-            ${getOptimalConditionsMessage(direction)}
-            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
-            
-            <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+            if (unitSystem === 'metric') {
+                const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons)); // liters
+                const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
+                const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
+                const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
                 
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+                let recommended, alternative, recommendedName, alternativeName, reason;
+                const inv1250 = parseInt(sys1250.inverters);
+                const inv1500 = parseInt(sys1500.inverters);
+                const panel1250 = parseInt(sys1250.panels);
+                const panel1500 = parseInt(sys1500.panels);
                 
-                <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                if (inv1250 < inv1500) {
+                    recommended = sys1250;
+                    alternative = sys1500;
+                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                    if (panel1250 < panel1500) {
+                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                    } else {
+                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                    }
+                } else if (inv1500 < inv1250) {
+                    recommended = sys1500;
+                    alternative = sys1250;
+                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                    if (panel1500 < panel1250) {
+                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                    } else {
+                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                    }
+                } else if (panel1250 < panel1500) {
+                    recommended = sys1250;
+                    alternative = sys1500;
+                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                } else if (panel1500 < panel1250) {
+                    recommended = sys1500;
+                    alternative = sys1250;
+                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                } else {
+                    recommended = sys1250;
+                    alternative = sys1500;
+                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                    reason = "This system is the most cost-effective choice with a less expensive inverter.";
+                }
+
+                // ✅ NEW tank display logic:
+                const baseTankLiters = displayGallons;
+                const hasMixingValveOption = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp);
+                const optionalTankLiters = hasMixingValveOption
+                    ? calculateOptimalMetricTank(
+                        parseFloat(userData.gallons),
+                        parseFloat(userData.hotWaterTemp),
+                        parseFloat(userData.highLimit),
+                        actualColdTemp
+                      )
+                    : null;
                 
-                <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
-                    <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
-                    <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
-                        <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
-                             alt="PV Water Heating Video" 
-                             style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
-                             onmouseover="this.style.transform='scale(1.02)'" 
-                             onmouseout="this.style.transform='scale(1)'">
-                    </a>
-                </div>
-            </div>`;
-        
-        addMessage(messageContent);
-         
-        setTimeout(() => {
-            const messages = chatMessages.querySelectorAll('.message');
-            const lastMessage = messages[messages.length - 1];
-            if (lastMessage) {
-                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
+                    📍 <strong>Location:</strong> ${userData.location}<br>
+                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
+                    ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C*<br>
+                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
+                    ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+                    📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
+                    
+                    <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+                    
+                    <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+                    
+                    <strong>${recommendedName}:</strong><br>
+                    • Inverters: ${recommended.inverters}<br>
+                    • Panels: ${recommended.panels}<br>
+                    • Panel Wattage: ${userData.panelWatts}W<br>
+                    • Tank Size: ${baseTankLiters} liters<br>
+                    • Element Size: ${recommended.element_size}W<br>
+                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
+                    • kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
+                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankLiters} liters<br>` : ''}
+                    ${hasMixingValveOption && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day)
+                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>`
+                        : ''
+                    }<br>
+                    
+                    <em>${reason}</em><br><br>
+                    
+                    <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
+                    
+                    <strong>${alternativeName}:</strong><br>
+                    • Inverters: ${alternative.inverters}<br>
+                    • Panels: ${alternative.panels}<br>
+                    • Panel Wattage: ${userData.panelWatts}W<br>
+                    • Tank Size: ${baseTankLiters} liters<br>
+                    • Element Size: ${alternative.element_size}W<br>
+                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
+                    • kWh/day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
+                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankLiters} liters<br>` : ''}
+                    ${hasMixingValveOption && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day)
+                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>`
+                        : ''
+                    }<br>
+                    
+                    ${getOptimalConditionsMessage(direction)}
+                    <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
+                    <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+                    <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
+                    <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
+                    
+                    <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
+                        <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                        <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                        
+                        <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
+                        <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+                        
+                        <strong style="color: #000000;">Win more projects</strong><br>
+                        <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                            <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
+                            <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
+                                <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
+                                     alt="PV Water Heating Video" 
+                                     style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
+                                     onmouseover="this.style.transform='scale(1.02)'" 
+                                     onmouseout="this.style.transform='scale(1)'">
+                            </a>
+                        </div>
+                    </div>`;
+                    
+                addMessage(messageContent);
+                 
+                setTimeout(() => {
+                    const messages = chatMessages.querySelectorAll('.message');
+                    const lastMessage = messages[messages.length - 1];
+                    if (lastMessage) {
+                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
+                
+            } else {
+                const displayGallons = Math.round(userData.gallons); // gallons
+                const displayColdTemp = Math.round(actualColdTemp);
+                const displayHotTemp = Math.round(userData.hotWaterTemp);
+                const displayHighLimit = Math.round(userData.highLimit);
+                
+                let recommended, alternative, recommendedName, alternativeName, reason;
+                const inv1250 = parseInt(sys1250.inverters);
+                const inv1500 = parseInt(sys1500.inverters);
+                const panel1250 = parseInt(sys1250.panels);
+                const panel1500 = parseInt(sys1500.panels);
+                
+                if (inv1250 < inv1500) {
+                    recommended = sys1250;
+                    alternative = sys1500;
+                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                    if (panel1250 < panel1500) {
+                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                    } else {
+                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                    }
+                } else if (inv1500 < inv1250) {
+                    recommended = sys1500;
+                    alternative = sys1250;
+                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                    if (panel1500 < panel1250) {
+                        reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                    } else {
+                        reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+                    }
+                } else if (panel1250 < panel1500) {
+                    recommended = sys1250;
+                    alternative = sys1500;
+                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                } else if (panel1500 < panel1250) {
+                    recommended = sys1500;
+                    alternative = sys1250;
+                    recommendedName = "Use the Off-Grid CIM 1500H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                    reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+                } else {
+                    recommended = sys1250;
+                    alternative = sys1500;
+                    recommendedName = "Use the Off-Grid CIM 1200H Inverter";
+                    alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                    reason = "This system is the most cost-effective choice with a less expensive inverter.";
+                }
+
+                // ✅ NEW tank display logic:
+                const baseTankGallons = displayGallons;
+                const hasMixingValveOption = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp);
+                const optionalTankGallons = hasMixingValveOption
+                    ? calculateOptionalImperialTank(
+                        baseTankGallons,
+                        parseFloat(userData.hotWaterTemp),
+                        parseFloat(userData.highLimit),
+                        actualColdTemp
+                      )
+                    : null;
+                
+                let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
+                    📍 <strong>Location:</strong> ${userData.location}<br>
+                    💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
+                    ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
+                    🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F*<br>
+                    🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
+                    ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+                    📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
+                    
+                    <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+                    
+                    <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+                    
+                    <strong>${recommendedName}:</strong><br>
+                    • Inverters: ${recommended.inverters}<br>
+                    • Panels: ${recommended.panels}<br>
+                    • Panel Wattage: ${userData.panelWatts}W<br>
+                    • Tank Size: ${baseTankGallons} gallons<br>
+                    • Element Size: ${recommended.element_size}W<br>
+                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
+                    • kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
+                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankGallons} gallons<br>` : ''}
+                    ${hasMixingValveOption && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day)
+                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>`
+                        : ''
+                    }<br>
+                    
+                    <em>${reason}</em><br><br>
+                    
+                    <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
+                    
+                    <strong>${alternativeName}:</strong><br>
+                    • Inverters: ${alternative.inverters}<br>
+                    • Panels: ${alternative.panels}<br>
+                    • Panel Wattage: ${userData.panelWatts}W<br>
+                    • Tank Size: ${baseTankGallons} gallons<br>
+                    • Element Size: ${alternative.element_size}W<br>
+                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
+                    • kWh/day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
+                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankGallons} gallons<br>` : ''}
+                    ${hasMixingValveOption && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day)
+                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>`
+                        : ''
+                    }<br>
+                    
+                    ${getOptimalConditionsMessage(direction)}
+                    <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
+                    <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+                    <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
+                    <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
+                    
+                    <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
+                        <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
+                        <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                        
+                        <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
+                        <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+                        
+                        <strong style="color: #000000;">Win more projects</strong><br>
+                        <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <strong style="color: #E65100; font-size: 17px;">Learn More About PV Water Heating</strong><br>
+                            <em style="color: #000000; font-size: 13px;">What PV Water Heaters Are - and Why They Matter</em><br>
+                            <a href="https://youtu.be/c3tr_hcXeuc" target="_blank">
+                                <img src="https://img.youtube.com/vi/c3tr_hcXeuc/maxresdefault.jpg" 
+                                     alt="PV Water Heating Video" 
+                                     style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
+                                     onmouseover="this.style.transform='scale(1.02)'" 
+                                     onmouseout="this.style.transform='scale(1)'">
+                            </a>
+                        </div>
+                    </div>`;
+                
+                addMessage(messageContent);
+                 
+                setTimeout(() => {
+                    const messages = chatMessages.querySelectorAll('.message');
+                    const lastMessage = messages[messages.length - 1];
+                    if (lastMessage) {
+                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
             }
-        }, 100);
-    }
-}
+        }
     </script>
 </body>
 </html>
