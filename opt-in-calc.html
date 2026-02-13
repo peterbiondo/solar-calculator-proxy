@@ -1,297 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Get Your Free PV Hot Water Designer - iSolar Hot Water Academy</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Get Your Free PV Solar Hot Water Designer - iSolar Hot Water Academy</title>
+    
+    <!-- Inter Font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+<style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  <!-- Inter Font from Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        button,
+        input[type="submit"],
+        input[type="button"] {
+            min-height: 48px;
+            min-width: 48px;
+        }
+        
+        @media (max-width: 767px) {
+            input, select, textarea { font-size: 16px !important; }
+        }
+        
+        a, button, input, select, .avatar-card { -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            padding-top: max(env(safe-area-inset-top), 60px);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            overscroll-behavior: none;
 
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0F0F0F;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(
+                circle at 30% 50%, 
+                rgba(0, 230, 118, 0.15) 0%, 
+                rgba(124, 77, 255, 0.15) 50%, 
+                transparent 100%
+            );
+            top: 50%;
+            left: 0;
+            transform: translate(-40%, -50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(
+                circle at 70% 50%, 
+                rgba(230, 81, 0, 0.12) 0%, 
+                rgba(211, 47, 47, 0.12) 50%, 
+                transparent 100%
+            );
+            top: 50%;
+            right: 0;
+            transform: translate(40%, -50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.97);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 40px 30px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo { text-align: center; margin-bottom: 10px; }
+        .logo-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #BF360C;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        h1 {
+            color: #0F0F0F;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            color: #424242;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+        
+        .instruction {
+            color: #0F0F0F;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        /* ===== AVATARS (2-column now) ===== */
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .avatar-card {
+            background: #FFFFFF;
+            border: 3px solid #E8E8E8;
+            border-radius: 12px;
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .avatar-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(230, 81, 0, 0.2);
+            border-color: #E65100;
+        }
+        
+        .avatar-card.selected {
+            border-color: #E65100;
+            background: rgba(230, 81, 0, 0.05);
+            box-shadow: 0 4px 16px rgba(230, 81, 0, 0.3);
+        }
+        
+        .avatar-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: #00E676;
+            color: #0F0F0F;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .avatar-icon { font-size: 32px; margin-bottom: 8px; }
+        .avatar-title { font-size: 14px; font-weight: 600; color: #0F0F0F; margin-bottom: 4px; }
+        .avatar-card.selected .avatar-title { color: #BF360C; }
+        .avatar-description { font-size: 11px; color: #424242; line-height: 1.3; }
+        
+        .form-group { margin-bottom: 25px; }
+        label { display: block; color: #0F0F0F; font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+        
+        input[type="email"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #E8E8E8;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: #FFFFFF;
+            color: #0F0F0F;
+        }
+        
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #E65100;
+            box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.1);
+        }
+        
+        input[type="email"]::placeholder { color: #999; }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px 24px;
+            margin: 4px;
+            background: #E65100;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .submit-btn:hover {
+            background: #FF6F00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 81, 0, 0.4);
+        }
+        
+        .submit-btn:active { transform: translateY(0); }
+        .submit-btn:disabled { background: #CCCCCC; cursor: not-allowed; transform: none; }
+        
+        .error-message {
+            background: #FFEBEE;
+            color: #C62828;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            border-left: 4px solid #C62828;
+        }
+        
+        .error-message.show { display: block; }
+        
+        .privacy-note {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
 
-    /* Touch-friendly sizing */
-    button, input[type="submit"], input[type="button"] { min-height: 48px; min-width: 48px; }
-
-    @media (max-width: 767px) {
-      input, select, textarea { font-size: 16px !important; }
-    }
-
-    a, button, input, select { -webkit-tap-highlight-color: transparent; }
-
-    body {
-      padding-top: max(env(safe-area-inset-top), 60px);
-      padding-bottom: env(safe-area-inset-bottom);
-      padding-left: env(safe-area-inset-left);
-      padding-right: env(safe-area-inset-right);
-      overscroll-behavior: none;
-
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #0F0F0F;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      width: 900px;
-      height: 900px;
-      background: radial-gradient(circle at 30% 50%, rgba(0, 230, 118, 0.15) 0%, rgba(124, 77, 255, 0.15) 50%, transparent 100%);
-      top: 50%;
-      left: 0;
-      transform: translate(-40%, -50%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(circle at 70% 50%, rgba(230, 81, 0, 0.12) 0%, rgba(211, 47, 47, 0.12) 50%, transparent 100%);
-      top: 50%;
-      right: 0;
-      transform: translate(40%, -50%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .container {
-      background: rgba(255, 255, 255, 0.97);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 16px;
-      padding: 40px 30px;
-      max-width: 700px;
-      width: 100%;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      position: relative;
-      z-index: 1;
-    }
-
-    .logo { text-align: center; margin-bottom: 10px; }
-    .logo-text {
-      font-size: 14px;
-      font-weight: 600;
-      color: #BF360C;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      color: #0F0F0F;
-      font-size: 24px;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 10px;
-      line-height: 1.2;
-    }
-
-    .subtitle {
-      color: #424242;
-      font-size: 16px;
-      text-align: center;
-      margin-bottom: 18px;
-      line-height: 1.5;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin: 0 auto 18px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: rgba(230, 81, 0, 0.08);
-      border: 1px solid rgba(230, 81, 0, 0.25);
-      color: #BF360C;
-      font-weight: 700;
-      font-size: 13px;
-      width: fit-content;
-    }
-
-    .form-group { margin-bottom: 18px; }
-
-    label {
-      display: block;
-      color: #0F0F0F;
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    input[type="email"] {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #E8E8E8;
-      border-radius: 8px;
-      font-size: 16px;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.3s ease;
-      background: #FFFFFF;
-      color: #0F0F0F;
-    }
-
-    input[type="email"]:focus {
-      outline: none;
-      border-color: #E65100;
-      box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.1);
-    }
-
-    input[type="email"]::placeholder { color: #999; }
-
-    .submit-btn {
-      width: 100%;
-      padding: 16px 24px;
-      margin: 4px;
-      background: #E65100;
-      color: #FFFFFF;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: 'Inter', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .submit-btn:hover {
-      background: #FF6F00;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(230, 81, 0, 0.4);
-    }
-
-    .submit-btn:active { transform: translateY(0); }
-
-    .privacy-note {
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      margin-top: 18px;
-      line-height: 1.5;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      body { padding: 10px; }
-      .container { max-width: none; padding: 25px 15px; }
-      h1 { font-size: 24px; }
-      .subtitle { font-size: 15px; }
-    }
-
-    @media (max-width: 600px) {
-      body { padding: 12px; }
-      .container { max-width: none; padding: 30px 12px 35px 12px; }
-      h1 { font-size: 22px; }
-      .submit-btn { font-size: 16px; }
-    }
-
-    @media (orientation: landscape) and (max-width: 767px) {
-      body { padding: 10px 8px; }
-      .container { max-height: 95vh; overflow-y: auto; padding: 20px 15px; }
-    }
-
-    @supports (-webkit-touch-callout: none) {
-      @media (orientation: portrait) {
-        body { align-items: flex-start; padding-top: 12px; min-height: 100dvh; }
-        .container { margin-top: 16px; }
-      }
-    }
-  </style>
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { max-width: none; padding: 25px 15px; }
+            h1 { font-size: 24px; }
+            .subtitle { font-size: 15px; }
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .container { max-width: none; padding: 30px 12px 35px 12px; }
+            .avatar-grid { grid-template-columns: 1fr; gap: 8px; }
+            .avatar-card { padding: 10px 8px; }
+            .avatar-icon { font-size: 24px; margin-bottom: 5px; }
+            .avatar-title { font-size: 13px; margin-bottom: 2px; }
+            .avatar-description { font-size: 11px; }
+            h1 { font-size: 22px; }
+            .submit-btn { font-size: 16px; }
+        }
+        
+        @media (orientation: landscape) and (max-width: 767px) {
+            body { padding: 10px 8px; }
+            .container { max-height: 95vh; overflow-y: auto; padding: 20px 15px; }
+        }
+        
+        @supports (-webkit-touch-callout: none) {
+            @media (orientation: portrait) {
+                body { align-items: flex-start; padding-top: 12px; min-height: 100dvh; }
+                .container { margin-top: 16px; }
+            }
+        }
+</style>
 </head>
-
 <body>
-  <div class="container">
-    <div class="logo">
-      <div class="logo-text">iSolar Hot Water Academy</div>
+    <div class="container">
+        <div class="logo">
+            <div class="logo-text">iSolar Hot Water Academy</div>
+        </div>
+        
+        <h1>Get Free Access to the PV Hot Water Designer</h1>
+        <p class="subtitle">
+            Size and design your Solar PV water heater in minutes -<br>the next simple step.<br><br><strong>We Tailor Your Experience</strong>
+        </p>
+        
+        <div id="errorMessage" class="error-message"></div>
+        
+        <form id="optinForm">
+            <p class="instruction">Click one:</p>
+            
+            <div class="avatar-grid">
+                <div class="avatar-card" data-avatar="contractor" onclick="selectAvatar('contractor')">
+                    <div class="avatar-icon">⚡</div>
+                    <div class="avatar-title">PV Contractor</div>
+                    <div class="avatar-description">Grow your solar business</div>
+                </div>
+                
+                <div class="avatar-card" data-avatar="diy" onclick="selectAvatar('diy')">
+                    <div class="avatar-icon">🏠</div>
+                    <div class="avatar-title">DIY Homeowner</div>
+                    <div class="avatar-description">Self-install your own system</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Your Email Address</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submitBtn">Get Direct Access</button>
+        </form>
+        
+        <p class="privacy-note">
+            We respect your inbox. We'll never spam you or share your email with anyone.
+        </p>
     </div>
 
-    <h1>Get Free Access to the PV Hot Water Designer</h1>
-    <p class="subtitle">
-      Size and design your Solar PV water heater in minutes — the next simple step.
-    </p>
+    <script>
+        let selectedAvatar = null;
 
-    <div class="badge">⚡ PV Contractor Track</div>
+        // You locked this in:
+        const CONTRACTOR_BOT_URL = "https://pv-hotwater.com/calc/contractor.html";
 
-    <!-- =========================================
-         KAJABI FORM (CONTRACTOR) — PASTE HERE
-         -----------------------------------------
-         In Kajabi:
-         Marketing → Forms → (Your Contractor Form) → Embed
-         Copy the FULL embed HTML and paste it here.
+        function selectAvatar(avatar) {
+            selectedAvatar = avatar;
 
-         IMPORTANT:
-         - Keep Kajabi’s hidden inputs exactly as-is
-         - We only restyle the email + button to match
-       ========================================= -->
+            // Persist avatar now (so back button / future pages can use it)
+            localStorage.setItem("avatar", avatar);
 
-    <!-- START: Example structure only (replace with your Kajabi embed) -->
-    <form id="kajabiContractorForm" action="PASTE_KAJABI_FORM_ACTION_URL_HERE" method="POST" accept-charset="UTF-8">
-      <!-- Paste Kajabi hidden fields here (authenticity token, form id, etc.) -->
-
-      <!-- If your Kajabi embed includes its own email input, delete the one below and use theirs.
-           The ONLY must-have is name="form_submission[email]" (Kajabi commonly uses this). -->
-      <div class="form-group">
-        <label for="email">Your Email Address</label>
-        <input
-          type="email"
-          id="email"
-          name="form_submission[email]"
-          placeholder="you@example.com"
-          required
-        />
-      </div>
-
-      <!-- Optional: if you created a Kajabi Custom Field called "avatar", keep this.
-           Otherwise delete it, and rely on Kajabi automation tags instead. -->
-      <input type="hidden" name="form_submission[custom_fields][avatar]" value="contractor" />
-
-      <button type="submit" class="submit-btn" id="submitBtn">Get Direct Access</button>
-    </form>
-    <!-- END: Example structure only -->
-
-    <p class="privacy-note">
-      We respect your inbox. We'll never spam you or share your email with anyone.
-    </p>
-  </div>
-
-  <script>
-    // Contractor-only funnel flags (used to hide avatars elsewhere)
-    function markOptIn() {
-      try {
-        localStorage.setItem('opted_in', 'true');
-        localStorage.setItem('avatar', 'contractor');
-      } catch (e) { /* ignore */ }
-    }
-
-    // Mark on submit (Kajabi will handle tags + redirect on success)
-    const form = document.getElementById('kajabiContractorForm');
-    if (form) {
-      form.addEventListener('submit', function () {
-        markOptIn();
-        const btn = document.getElementById('submitBtn');
-        if (btn) {
-          btn.disabled = true;
-          btn.textContent = 'Processing...';
+            document.querySelectorAll('.avatar-card').forEach(card => card.classList.remove('selected'));
+            document.querySelector(`[data-avatar="${avatar}"]`).classList.add('selected');
+            hideError();
         }
-      });
-    }
 
-    window.addEventListener('load', function () {
-      window.scrollTo(0, 0);
-    });
-  </script>
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function hideError() {
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+
+        document.getElementById('optinForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            if (!selectedAvatar) {
+                showError('Please select who you are before continuing.');
+                return;
+            }
+
+            const email = document.getElementById('email').value;
+            if (!email || !email.includes('@')) {
+                showError('Please enter a valid email address.');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+
+            // Mark opted-in (your homepage uses this)
+            localStorage.setItem("opted_in", "true");
+
+            // For now: no Kajabi — just route correctly.
+            if (selectedAvatar === "contractor") {
+                window.location.href = `${CONTRACTOR_BOT_URL}?email=${encodeURIComponent(email)}&avatar=contractor`;
+                return;
+            }
+
+            // DIY will be built after contractor funnel is flawless.
+            // For now, we can either block DIY or route to a placeholder.
+            showError("DIY homeowner flow is coming next. Please choose PV Contractor for now.");
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Get Direct Access';
+        });
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.classList.contains('avatar-card')) {
+                const avatar = e.target.getAttribute('data-avatar');
+                selectAvatar(avatar);
+            }
+        });
+
+        document.querySelectorAll('.avatar-card').forEach(card => {
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('role', 'button');
+        });
+
+        window.addEventListener('load', function () {
+            window.scrollTo(0, 0);
+        });
+    </script>
 </body>
 </html>
