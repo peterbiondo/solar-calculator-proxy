@@ -329,7 +329,8 @@
 
         // You locked this in:
         const CONTRACTOR_BOT_URL = "https://pv-hotwater.com/calc/contractor.html";
-
+        const DIY_BOT_URL = "https://pv-hotwater.com/calc/diy.html"; // <-- change if your homeowner calculator file name differs
+        
         function selectAvatar(avatar) {
             selectedAvatar = avatar;
 
@@ -353,38 +354,49 @@
         }
 
         document.getElementById('optinForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+    e.preventDefault();
 
-            if (!selectedAvatar) {
-                showError('Please select who you are before continuing.');
-                return;
-            }
+    if (!selectedAvatar) {
+        showError('Please select who you are before continuing.');
+        return;
+    }
 
-            const email = document.getElementById('email').value;
-            if (!email || !email.includes('@')) {
-                showError('Please enter a valid email address.');
-                return;
-            }
+    const email = document.getElementById('email').value;
+    if (!email || !email.includes('@')) {
+        showError('Please enter a valid email address.');
+        return;
+    }
 
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Processing...';
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
 
-            // Mark opted-in (your homepage uses this)
-            localStorage.setItem("opted_in", "true");
+    // Persist state for downstream pages
+    localStorage.setItem("avatar", selectedAvatar);
+    localStorage.setItem("opted_in", "true");
 
-            // For now: no Kajabi — just route correctly.
-            if (selectedAvatar === "contractor") {
-                window.location.href = `${CONTRACTOR_BOT_URL}?email=${encodeURIComponent(email)}&avatar=contractor`;
-                return;
-            }
+    // Route by avatar
+    if (selectedAvatar === "contractor") {
+        window.location.href =
+            "https://pv-hotwater.com/calc/contractor.html" +
+            "?email=" + encodeURIComponent(email) +
+            "&avatar=contractor";
+        return;
+    }
 
-            // DIY will be built after contractor funnel is flawless.
-            // For now, we can either block DIY or route to a placeholder.
-            showError("DIY homeowner flow is coming next. Please choose PV Contractor for now.");
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Get Direct Access';
-        });
+    if (selectedAvatar === "diy") {
+        window.location.href =
+            "https://pv-hotwater.com/calc/diy.html" +
+            "?email=" + encodeURIComponent(email) +
+            "&avatar=diy";
+        return;
+    }
+
+    // Safety fallback
+    showError("Please select PV Contractor or DIY Homeowner.");
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Get Direct Access';
+});
 
         // Keyboard accessibility
         document.addEventListener('keydown', function(e) {
