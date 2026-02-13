@@ -100,7 +100,27 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
-        
+        .logo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 34px;
+    width: auto;
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+/* Slightly smaller logo on small phones */
+@media (max-width: 600px) {
+    .logo-img {
+        height: 30px;
+        margin-bottom: 8px;
+    }
+}
         h1 {
             color: #0F0F0F;
             font-size: 24px;
