@@ -211,9 +211,9 @@ header {
 /* ================= AVATARS ================= */
 .avatar-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* CHANGED: 2 columns now */
     gap: 12px;
-    max-width: 700px;
+    max-width: 520px; /* CHANGED: slightly narrower for 2 cards */
     margin: 0 auto;
 }
 
@@ -276,6 +276,7 @@ header {
 
     .avatar-grid {
         grid-template-columns: 1fr;
+        max-width: 520px;
     }
 }
 </style>
@@ -341,12 +342,6 @@ header {
                 <div class="avatar-icon">🏠</div>
                 <div class="avatar-title">DIY Homeowner</div>
                 <div class="avatar-description">Self-install your own system</div>
-            </a>
-
-            <a href="/messaging/career.html" class="avatar-card">
-                <div class="avatar-icon">🔄</div>
-                <div class="avatar-title">Solar Career Starter</div>
-                <div class="avatar-description">Enter the solar industry</div>
             </a>
         </div>
     </div>
