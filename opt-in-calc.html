@@ -347,6 +347,16 @@
         const CONTRACTOR_BOT_URL = "https://pv-hotwater.com/calc/contractor.html";
         const DIY_BOT_URL = "https://pv-hotwater.com/calc/diy.html"; // <-- change if your homeowner calculator file name differs
         
+        // OPTIONAL: if someone already opted in, skip this page entirely
+        if (localStorage.getItem("opted_in") === "true") {
+            const savedAvatar = localStorage.getItem("avatar");
+
+            if (savedAvatar === "contractor") {
+                window.location.replace(CONTRACTOR_BOT_URL);
+            } else if (savedAvatar === "diy") {
+            window.location.replace(DIY_BOT_URL);
+            }
+        }
         function selectAvatar(avatar) {
             selectedAvatar = avatar;
 
