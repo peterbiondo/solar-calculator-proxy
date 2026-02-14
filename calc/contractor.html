@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1689,17 +1689,8 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Tank Size: ${tankDisplay} liters<br>
             • Element Size: ${system.element_size}W<br>
-            • kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) &&
-              parseFloat(system.kwh_max) > parseFloat(system.kwh_day)
-                ? `• kWh/day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>`
-                : ''
-            }
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp)
-            ? `• <strong>Optional Tank Size*</strong>: ${tankDisplay} ${unitSystem === 'metric' ? 'liters' : 'gallons'}<br>
-               &nbsp;&nbsp;• <strong>Mixing Valve Required</strong><br>`
-            : ''
-            }
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>` : ''}<br>
             
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
@@ -1765,17 +1756,8 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Tank Size: ${system.tank_size} gallons<br>
             • Element Size: ${system.element_size}W<br>
-            • kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) &&
-              parseFloat(system.kwh_max) > parseFloat(system.kwh_day)
-                ? `• kWh/day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>`
-                : ''
-            }
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp)
-            ? `• <strong>Optional Tank Size*</strong>: ${tankDisplay} ${unitSystem === 'metric' ? 'liters' : 'gallons'}<br>
-               &nbsp;&nbsp;• <strong>Mixing Valve Required</strong><br>`
-            : ''
-            }
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>` : ''}<br>
             
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
