@@ -934,6 +934,31 @@ function redirectToWaitlist() {
             return 500;
         }
         
+        // Calculate optimal imperial tank using energy formula
+        function calculateOptimalImperialTank(dailyGallons, setpointF, highLimitF, incomingF) {
+            // Available imperial tank sizes in gallons
+            const imperialTankGallons = [30, 40, 50, 65, 80, 105, 120];
+            
+            // Step 1: Calculate daily energy needed
+            const dailyEnergy = dailyGallons * (setpointF - incomingF);
+            
+            // Step 2: Apply 5% margin (tank operates at 95% capacity)
+            const minimumEnergy = dailyEnergy / 1.05;
+            
+            // Step 3: Calculate minimum tank size in gallons
+            const minimumTankGallons = minimumEnergy / (highLimitF - incomingF);
+            
+            // Step 4: Find smallest imperial tank that meets requirement
+            for (let i = 0; i < imperialTankGallons.length; i++) {
+                if (imperialTankGallons[i] >= minimumTankGallons) {
+                    return imperialTankGallons[i]; // Return in gallons
+                }
+            }
+            
+            // If exceeds largest tank, return 120
+            return 120;
+        }
+        
         // Convert gallons back to exact metric button value
         function gallonsToExactLiters(gallons) {
             const reverseTable = {
@@ -1769,6 +1794,14 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
         const displayHotTemp = Math.round(userData.hotWaterTemp);
         const displayHighLimit = Math.round(userData.highLimit);
         
+        // Calculate optional tank size for Imperial
+        const optionalTankDisplay = calculateOptimalImperialTank(
+            parseFloat(userData.gallons),
+            parseFloat(userData.hotWaterTemp),
+            parseFloat(userData.highLimit),
+            actualColdTemp
+        );
+        
         let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
             💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
@@ -1789,7 +1822,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             • Element Size: ${system.element_size}W<br>
             • Tank Size: ${displayGallons} gallons<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${system.tank_size} gallons (mixing valve required)<br>` : ''}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${optionalTankDisplay} gallons (mixing valve required)<br>` : ''}<br>
             
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
@@ -2034,6 +2067,20 @@ function displayBothSystems(data) {
             reason = "This system is the most cost-effective choice with a less expensive inverter.";
         }
         
+        // Calculate optional tank sizes for Imperial - both systems
+        const recOptionalTank = calculateOptimalImperialTank(
+            parseFloat(userData.gallons),
+            parseFloat(userData.hotWaterTemp),
+            parseFloat(userData.highLimit),
+            actualColdTemp
+        );
+        const altOptionalTank = calculateOptimalImperialTank(
+            parseFloat(userData.gallons),
+            parseFloat(userData.hotWaterTemp),
+            parseFloat(userData.highLimit),
+            actualColdTemp
+        );
+        
         let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
             💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
@@ -2054,7 +2101,7 @@ function displayBothSystems(data) {
             • Element Size: ${recommended.element_size}W<br>
             • Tank Size: ${displayGallons} gallons<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recommended.tank_size} gallons (mixing valve required)<br>` : ''}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recOptionalTank} gallons (mixing valve required)<br>` : ''}<br>
             
             <em>${reason}</em><br><br>
             
@@ -2067,7 +2114,7 @@ function displayBothSystems(data) {
             • Element Size: ${alternative.element_size}W<br>
             • Tank Size: ${displayGallons} gallons<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>*Optional Tank Size: ${alternative.tank_size} gallons (mixing valve required)<br>` : ''}<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>*Optional Tank Size: ${altOptionalTank} gallons (mixing valve required)<br>` : ''}<br>
             
             ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
