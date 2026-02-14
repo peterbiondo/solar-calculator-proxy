@@ -1682,18 +1682,15 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
             
             <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-
+            
             <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
             • Inverters: ${system.inverters}<br>
             • Panels: ${system.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${baseTankGallons} gallons<br>
+            • Tank Size: ${tankDisplay} liters<br>
             • Element Size: ${system.element_size}W<br>
-            • kWh / Day: <span style="color:#00E676;font-weight:600;">${system.kwh_day}</span><br>
-            • kWh / Day Max: <span style="color:#00E676;font-weight:600;">${system.kwh_max}</span><br>
-            * Optional Tank Size: ${optionalTankGallons} gallons<br>
-            &nbsp;&nbsp;Mixing Valve Required<br><br>
-
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>` : ''}<br>
             
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
@@ -1752,18 +1749,15 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
             
             <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-
+            
             <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
             • Inverters: ${system.inverters}<br>
             • Panels: ${system.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${baseTankGallons} gallons<br>
+            • Tank Size: ${system.tank_size} gallons<br>
             • Element Size: ${system.element_size}W<br>
-            • kWh / Day: <span style="color:#00E676;font-weight:600;">${system.kwh_day}</span><br>
-            • kWh / Day Max: <span style="color:#00E676;font-weight:600;">${system.kwh_max}</span><br>
-            * Optional Tank Size: ${optionalTankGallons} gallons<br>
-            &nbsp;&nbsp;Mixing Valve Required<br><br>
-
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(system.kwh_max) > parseFloat(system.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>` : ''}<br>
             
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
@@ -1894,18 +1888,15 @@ function displayBothSystems(data) {
             <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
             
             <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-
-            <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
-            • Inverters: ${system.inverters}<br>
-            • Panels: ${system.panels}<br>
+            
+            <strong>${recommendedName}:</strong><br>
+            • Inverters: ${recommended.inverters}<br>
+            • Panels: ${recommended.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${baseTankGallons} gallons<br>
-            • Element Size: ${system.element_size}W<br>
-            • kWh / Day: <span style="color:#00E676;font-weight:600;">${system.kwh_day}</span><br>
-            • kWh / Day Max: <span style="color:#00E676;font-weight:600;">${system.kwh_max}</span><br>
-            * Optional Tank Size: ${optionalTankGallons} gallons<br>
-            &nbsp;&nbsp;Mixing Valve Required<br><br>
-
+            • Tank Size: ${recTankDisplay} liters<br>
+            • Element Size: ${recommended.element_size}W<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>` : ''}<br>
             
             <em>${reason}</em><br><br>
             
@@ -2023,18 +2014,15 @@ function displayBothSystems(data) {
             <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
             
             <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-
-            <strong>Use the Off-Grid CIM ${inverterModel} Inverter:</strong><br>
-            • Inverters: ${system.inverters}<br>
-            • Panels: ${system.panels}<br>
+            
+            <strong>${recommendedName}:</strong><br>
+            • Inverters: ${recommended.inverters}<br>
+            • Panels: ${recommended.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
-            • Tank Size: ${baseTankGallons} gallons<br>
-            • Element Size: ${system.element_size}W<br>
-            • kWh / Day: <span style="color:#00E676;font-weight:600;">${system.kwh_day}</span><br>
-            • kWh / Day Max: <span style="color:#00E676;font-weight:600;">${system.kwh_max}</span><br>
-            * Optional Tank Size: ${optionalTankGallons} gallons<br>
-            &nbsp;&nbsp;Mixing Valve Required<br><br>
-
+            • Tank Size: ${recommended.tank_size} gallons<br>
+            • Element Size: ${recommended.element_size}W<br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? '• Mixing Valve: Required<br>' : ''}• kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
+            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day) ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>` : ''}<br>
             
             <em>${reason}</em><br><br>
             
