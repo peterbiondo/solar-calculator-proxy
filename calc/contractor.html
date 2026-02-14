@@ -1688,7 +1688,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             • Panels: ${system.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Element Size: ${system.element_size}W<br>
-            • Tank Size: ${displayGallons} liters (same as hot water draw)<br>
+            • Tank Size: ${displayGallons} liters<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${tankDisplay} liters (mixing valve required)<br>` : ''}<br>
             
@@ -1755,7 +1755,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             • Panels: ${system.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Element Size: ${system.element_size}W<br>
-            • Tank Size: ${displayGallons} gallons (same as hot water draw)<br>
+            • Tank Size: ${displayGallons} gallons<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${system.tank_size} gallons (mixing valve required)<br>` : ''}<br>
             
@@ -1894,7 +1894,7 @@ function displayBothSystems(data) {
             • Panels: ${recommended.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Element Size: ${recommended.element_size}W<br>
-            • Tank Size: ${displayGallons} liters (same as hot water draw)<br>
+            • Tank Size: ${displayGallons} liters<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recTankDisplay} liters (mixing valve required)<br>` : ''}<br>
             
@@ -2020,7 +2020,7 @@ function displayBothSystems(data) {
             • Panels: ${recommended.panels}<br>
             • Panel Wattage: ${userData.panelWatts}W<br>
             • Element Size: ${recommended.element_size}W<br>
-            • Tank Size: ${displayGallons} gallons (same as hot water draw)<br>
+            • Tank Size: ${displayGallons} gallons<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
             ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recommended.tank_size} gallons (mixing valve required)<br>` : ''}<br>
             
