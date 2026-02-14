@@ -1710,13 +1710,13 @@
                     • Panel Wattage: ${userData.panelWatts}W<br>
                     • Tank Size: ${baseTankLiters} liters<br>
                     • Element Size: ${system.element_size}W<br>
-                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankLiters} liters<br>` : ''}
                     ${hasMixingValveOption && parseFloat(system.kwh_max) > parseFloat(system.kwh_day)
-                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>`
+                        ? `• kWh/day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>`
                         : ''
-                    }<br>
+                    }
+                    ${hasMixingValveOption ? `* Optional Tank Size: ${optionalTankLiters} liters<br>` : ''}
+                    ${hasMixingValveOption ? '• Mixing Valve Required<br>' : ''}<br>
                     
                     This system can meet your hot water requirements.<br><br>
                     ${getOptimalConditionsMessage(direction)}
@@ -1794,13 +1794,13 @@
                     • Panel Wattage: ${userData.panelWatts}W<br>
                     • Tank Size: ${baseTankGallons} gallons<br>
                     • Element Size: ${system.element_size}W<br>
-                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankGallons} gallons<br>` : ''}
                     ${hasMixingValveOption && parseFloat(system.kwh_max) > parseFloat(system.kwh_day)
-                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>`
+                        ? `• kWh/day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>`
                         : ''
-                    }<br>
+                    }
+                    ${hasMixingValveOption ? `* Optional Tank Size: ${optionalTankGallons} gallons<br>` : ''}
+                    ${hasMixingValveOption ? '• Mixing Valve Required<br>' : ''}<br>
                     
                     This system can meet your hot water requirements.<br><br>
                     ${getOptimalConditionsMessage(direction)}
@@ -1936,14 +1936,14 @@
                     • Panels: ${recommended.panels}<br>
                     • Panel Wattage: ${userData.panelWatts}W<br>
                     • Tank Size: ${baseTankLiters} liters<br>
-                    • Element Size: ${recommended.element_size}W<br>
-                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
+                     • Element Size: ${recommended.element_size}W<br>
                     • kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
-                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankLiters} liters<br>` : ''}
                     ${hasMixingValveOption && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day)
-                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>`
+                        ? `• kWh/day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>`
                         : ''
-                    }<br>
+                    }
+                    ${hasMixingValveOption ? `* Optional Tank Size: ${optionalTankLiters} liters<br>` : ''}
+                    ${hasMixingValveOption ? '• Mixing Valve Required<br>' : ''}<br>
                     
                     <em>${reason}</em><br><br>
                     
@@ -1955,13 +1955,13 @@
                     • Panel Wattage: ${userData.panelWatts}W<br>
                     • Tank Size: ${baseTankLiters} liters<br>
                     • Element Size: ${alternative.element_size}W<br>
-                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
-                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankLiters} liters<br>` : ''}
                     ${hasMixingValveOption && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day)
-                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>`
+                        ? `• kWh/day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>`
                         : ''
-                    }<br>
+                    }
+                    ${hasMixingValveOption ? `* Optional Tank Size: ${optionalTankLiters} liters<br>` : ''}
+                    ${hasMixingValveOption ? '• Mixing Valve Required<br>' : ''}<br>
                     
                     ${getOptimalConditionsMessage(direction)}
                     <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
@@ -2085,13 +2085,13 @@
                     • Panel Wattage: ${userData.panelWatts}W<br>
                     • Tank Size: ${baseTankGallons} gallons<br>
                     • Element Size: ${recommended.element_size}W<br>
-                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
-                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankGallons} gallons<br>` : ''}
                     ${hasMixingValveOption && parseFloat(recommended.kwh_max) > parseFloat(recommended.kwh_day)
-                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>`
+                        ? `• kWh/day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>`
                         : ''
-                    }<br>
+                    }
+                    ${hasMixingValveOption ? `* Optional Tank Size: ${optionalTankGallons} gallons<br>` : ''}
+                    ${hasMixingValveOption ? '• Mixing Valve Required<br>' : ''}<br>
                     
                     <em>${reason}</em><br><br>
                     
@@ -2103,13 +2103,13 @@
                     • Panel Wattage: ${userData.panelWatts}W<br>
                     • Tank Size: ${baseTankGallons} gallons<br>
                     • Element Size: ${alternative.element_size}W<br>
-                    ${hasMixingValveOption ? '• Mixing Valve: Required<br>' : ''}
                     • kWh/day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
-                    ${hasMixingValveOption ? `• Optional tank size (requires mixing valve): ${optionalTankGallons} gallons<br>` : ''}
                     ${hasMixingValveOption && parseFloat(alternative.kwh_max) > parseFloat(alternative.kwh_day)
-                        ? `• kWh Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>`
+                        ? `• kWh/day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>`
                         : ''
-                    }<br>
+                    }
+                    ${hasMixingValveOption ? `* Optional Tank Size: ${optionalTankGallons} gallons<br>` : ''}
+                    ${hasMixingValveOption ? '• Mixing Valve Required<br>' : ''}<br>
                     
                     ${getOptimalConditionsMessage(direction)}
                     <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
