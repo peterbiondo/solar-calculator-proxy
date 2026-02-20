@@ -200,10 +200,12 @@
         @media (max-width: 768px) {
             body {
                 padding: 20px 16px; /* Reduced top padding */
+                align-items: flex-start; /* Align to top on mobile portrait */
             }
 
             .container {
                 padding: 20px 24px; /* Reduced top padding from 40px */
+                margin-top: 0; /* No top margin on mobile */
             }
 
             .logo {
@@ -228,10 +230,12 @@
         @media (max-width: 480px) {
             body {
                 padding: 16px 12px; /* Reduced top padding */
+                align-items: flex-start; /* Align to top on mobile portrait */
             }
             
             .container {
                 padding: 16px 20px; /* Reduced top padding from 30px */
+                margin-top: 0; /* No top margin on mobile */
             }
 
             .logo {
