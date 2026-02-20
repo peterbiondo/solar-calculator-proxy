@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>You're on the Priority List! | iSolar Hot Water Academy</title>
+    <title>Join the Waitlist | iSolar Hot Water Academy</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,59 +38,58 @@
             background: var(--isolar-black);
             color: var(--isolar-black);
             line-height: 1.6;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 30px 20px; /* Less padding for fuller screen */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             position: relative;
             overflow-x: hidden;
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
-        /* DUAL-GLOW BACKGROUND EFFECTS (Repositioned to frame video) */
+        /* DUAL-GLOW BACKGROUND EFFECTS (FROM CALCULATOR BOT) */
         /* ═══════════════════════════════════════════════════════════════ */
         
-        /* Main glow - Left side of video (Energy Green to Violet) */
+        /* Main glow - Left side (Energy Green to Violet) */
         body::before {
             content: '';
-            position: fixed;
+            position: absolute;
             width: 900px;
             height: 900px;
             background: radial-gradient(
-                circle at 50% 50%, 
-                rgba(0, 230, 118, 0.25) 0%,      /* Much more visible */
-                rgba(0, 217, 255, 0.18) 30%,
-                rgba(118, 75, 162, 0.12) 60%,
+                circle at 30% 50%, 
+                rgba(0, 230, 118, 0.12) 0%,
+                rgba(0, 217, 255, 0.08) 30%,
+                rgba(118, 75, 162, 0.06) 60%,
                 transparent 80%
             );
             top: 50%;
-            left: 25%;  /* Moved closer to center from 10% */
-            transform: translate(-50%, -50%);
+            left: 50%;
+            transform: translate(-60%, -50%);
             pointer-events: none;
-            z-index: 0;  /* Below everything */
-            filter: blur(100px);
+            z-index: 1;
+            filter: blur(60px);
         }
         
-        /* Secondary glow - Right side of video (Cyan to Violet) */
+        /* Subtle fill glow - Top-right side (softer, smaller) */
         body::after {
             content: '';
-            position: fixed;
-            width: 900px;
-            height: 900px;
+            position: absolute;
+            width: 600px;
+            height: 600px;
             background: radial-gradient(
-                circle at 50% 50%, 
-                rgba(0, 217, 255, 0.20) 0%,      /* Cyan lead - more visible */
-                rgba(118, 75, 162, 0.15) 40%,
-                rgba(0, 230, 118, 0.10) 70%,
+                circle at 70% 30%, 
+                rgba(0, 230, 118, 0.05) 0%,
+                rgba(0, 217, 255, 0.03) 40%,
+                rgba(118, 75, 162, 0.02) 70%,
                 transparent 85%
             );
-            top: 50%;
-            right: 25%;  /* Moved closer to center from 10% */
-            transform: translate(50%, -50%);
+            top: 20%;
+            right: 10%;
             pointer-events: none;
-            z-index: 0;  /* Below everything */
-            filter: blur(100px);
+            z-index: 1;
+            filter: blur(50px);
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
@@ -98,212 +97,499 @@
         /* ═══════════════════════════════════════════════════════════════ */
         .container {
             width: 100%;
-            max-width: 900px; /* Reduced from 1200px for better proportions */
+            max-width: 650px;
+            margin: 20px;
             position: relative;
-            z-index: 10;
-            padding: 60px 40px; /* Padding directly on container instead of card */
+            z-index: 1;
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
-        /* LOGO */
+        /* WHITE CARD - Matching Calculator Bot Styling */
         /* ═══════════════════════════════════════════════════════════════ */
+        .card {
+            background: #1A1A1A;
+            border: 1px solid #2A2A2A;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* HEADER */
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* LOGO (image) */
         .logo {
             text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 15; /* Above background glows */
+            margin-bottom: 24px;
         }
 
-        .logo-text {
-            font-size: 36px; /* Larger for desktop */
-            font-weight: 700;
-            color: #FFA500; /* Solar Orange */
-            letter-spacing: 1px;
-            margin-bottom: 0px; /* Even tighter - right next to each other */
-        }
-
-        .logo-subtitle {
-            font-size: 28px; /* Smaller than main title */
-            font-weight: 400;
-            color: #FFA500; /* Solar Orange */
-            font-style: italic; /* Cursive/italic style */
-            font-family: 'Georgia', 'Times New Roman', serif; /* More cursive-like font */
-        }
-
-        /* ═══════════════════════════════════════════════════════════════ */
-        /* HEADER TEXT */
-        /* ═══════════════════════════════════════════════════════════════ */
-        .priority-text {
-            font-size: 42px; /* Larger for desktop */
-            font-weight: 700;
-            color: #FFFFFF;
-            text-align: center;
-            margin-bottom: 16px;
-            line-height: 1.2;
-            position: relative;
-            z-index: 15; /* Above background glows */
-        }
-
-        .instruction-text {
-            font-size: 24px; /* Larger for desktop */
-            font-weight: 500;
-            color: #E0E0E0;
-            text-align: center;
-            margin-bottom: 50px;
-            line-height: 1.4;
-            position: relative;
-            z-index: 15; /* Above background glows */
-        }
-
-        /* ═══════════════════════════════════════════════════════════════ */
-        /* VIDEO CONTAINER */
-        /* ═══════════════════════════════════════════════════════════════ */
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            background: #000000;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1); /* Added subtle border */
-            z-index: 20; /* Above background glows */
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Placeholder for when no video is embedded yet */
-        .video-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
+        .logo-link {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: #1A1A1A;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 34px; /* adjust size here */
+            width: auto;
+            display: block;
+        }
+
+        /* Slightly smaller logo on small phones */
+        @media (max-width: 600px) {
+            .logo-img {
+                height: 32px;
+            }
+        }
+
+        .headline {
+            font-size: 32px;
+            font-weight: 700;
             color: #FFFFFF;
-            font-size: 18px;
+            margin-bottom: 12px;
             text-align: center;
-            padding: 20px;
+            line-height: 1.2;
+        }
+
+        .subheadline {
+            font-size: 16px;
+            font-weight: 400;
+            color: #E0E0E0;
+            margin-bottom: 32px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 16px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* CHECKBOX SECTION */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .checkbox-container {
+            margin-bottom: 8px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            padding: 16px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .checkbox-wrapper:hover {
+            background: rgba(230, 81, 0, 0.05);
+        }
+
+        /* Custom checkbox styling */
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            border: 2px solid #FFFFFF;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            margin-top: 2px;
+            background: transparent;
+        }
+
+        input[type="checkbox"]:hover {
+            border-color: var(--solar-orange);
+        }
+
+        input[type="checkbox"]:checked {
+            background: var(--solar-orange);
+            border-color: var(--solar-orange);
+        }
+
+        input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        input[type="checkbox"]:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .checkbox-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #FFFFFF;
+            cursor: pointer;
+            line-height: 1.5;
+            user-select: none;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* ACCORDION */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .accordion {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+        }
+
+        .accordion.open {
+            max-height: 500px;
+            opacity: 1;
+            transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
+        }
+
+        .accordion-content {
+            padding: 0 20px 20px 20px;
+            background: rgba(230, 81, 0, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid var(--solar-orange);
+        }
+
+
+        .accordion-message {
+            font-size: 16px;
+            color: #FFFFFF;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .email-highlight {
+            font-weight: 600;
+            color: var(--solar-orange);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* SUCCESS STATE */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .success-message {
+            display: none;
+            padding: 16px 16px;
+            background: rgba(0, 230, 118, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--energy-green);
+            margin-top: 0px;
+            margin-bottom: 28px;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--energy-green);
+            margin: 0;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* FOOTER */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .footer {
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .privacy-note {
+            font-size: 12px;
+            color: #AAAAAA;
+            line-height: 1.5;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* LOADING STATE */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--soft-gray);
+            border-top-color: var(--solar-orange);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* ═══════════════════════════════════════════════════════════════ */
         /* MOBILE OPTIMIZATION */
         /* ═══════════════════════════════════════════════════════════════ */
-        
-        /* Tablets */
-        @media (max-width: 1024px) {
+        @media (max-width: 600px) {
             .container {
-                padding: 50px 40px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 20px 16px; /* Reduced top padding */
-                align-items: flex-start; /* Align to top on mobile portrait */
+                margin: 16px;
             }
 
-            .container {
-                padding: 20px 24px; /* Reduced top padding from 40px */
-                margin-top: 20px; /* Small breathing room at top */
+            .card {
+                padding: 32px 24px;
             }
 
-            .logo {
-                margin-bottom: 24px; /* Reduced from 40px */
+            .headline {
+                font-size: 28px;
             }
 
-            .logo-text {
-                font-size: 28px; /* Back to larger size for short title */
+            .subheadline {
+                font-size: 15px;
             }
 
-            .logo-subtitle {
-                font-size: 22px; /* Proportionally smaller on tablet */
+            /* Touch target optimization */
+            .checkbox-wrapper {
+                min-height: 48px;
+                padding: 12px;
             }
 
-            .priority-text {
-                font-size: 26px;
+            input[type="checkbox"] {
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
             }
 
-            .instruction-text {
+            input[type="checkbox"]:checked::after {
                 font-size: 18px;
-                margin-bottom: 30px;
             }
         }
 
-        /* Small phones */
-        @media (max-width: 480px) {
-            body {
-                padding: 16px 12px; /* Reduced top padding */
-                align-items: flex-start; /* Align to top on mobile portrait */
-            }
-            
-            .container {
-                padding: 16px 20px; /* Reduced top padding from 30px */
-                margin-top: 16px; /* Small breathing room at top */
+        @media (max-width: 400px) {
+            .card {
+                padding: 24px 20px;
             }
 
-            .logo {
-                margin-bottom: 20px; /* Reduced spacing */
-            }
-
-            .logo-text {
-                font-size: 24px; /* Back to larger size for short title */
-            }
-
-            .logo-subtitle {
-                font-size: 20px; /* Proportionally smaller on phone */
-            }
-
-            .priority-text {
+            .headline {
                 font-size: 24px;
-            }
-
-            .instruction-text {
-                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Logo/Title -->
+        <div class="card">
+            <!-- Header -->
         <div class="logo">
-            <div class="logo-text">PV to Hot Water</div>
-            <div class="logo-subtitle">System Design — Simplified</div>
+            <a href="https://pv-hotwater.com" class="logo-link">
+                <img src="/Logo.svg" alt="iSolar Hot Water Academy" class="logo-img">
+
+            </a>
         </div>
 
-        <!-- Header Text -->
-        <h1 class="priority-text">You're on the priority list!</h1>
-        <p class="instruction-text">Watch this video for what this means for you.</p>
+            <h2 class="section-title" style="margin-bottom: 10px; color: #FFA500;">
+                How PV Water Heating Keeps Deals Moving
+            </h2>
 
-        <!-- Video Container -->
-        <div class="video-container">
-            <!-- Placeholder - Replace with actual video embed -->
-            <div class="video-placeholder">
-                <p>Video embed will go here<br>(YouTube, Vimeo, or custom player)</p>
+            <p class="subheadline" style="margin-bottom: 32px; font-weight: 700;">
+                This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close.
+            </p>
+            
+            <p class="subheadline" style="margin-bottom: 8px; font-weight: 600; text-align: left;">
+                You'll see:
+            </p>
+            
+            <ul style="list-style: none; padding-left: 0; margin-bottom: 40px; text-align: left;">
+                <li style="margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
+                    <span style="position: absolute; left: 0;">•</span>
+                    how the systems are built and sized
+                </li>
+                <li style="margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
+                    <span style="position: absolute; left: 0;">•</span>
+                    what role they play in making systems more affordable
+                </li>
+                <li style="margin-bottom: 0; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
+                    <span style="position: absolute; left: 0;">•</span>
+                    when they make strong financial sense for homeowners
+                </li>
+            </ul>
+            
+            <h1 class="headline" id="headline"
+                style="margin-bottom: 22px; color: #FFA500; text-align: center; font-size: 26px;">
+                ☀️ Join the Waitlist
+            </h1>
+
+
+            <!-- Checkbox Section -->
+            <div class="checkbox-container">
+                <label class="checkbox-wrapper" for="waitlistCheckbox">
+                    <input type="checkbox" id="waitlistCheckbox">
+                    <span class="checkbox-label" id="checkboxLabel">
+                        Notify me when the webinar opens
+                    </span>
+                </label>
             </div>
-            
-            <!-- EXAMPLE: YouTube embed (uncomment and add your video ID) -->
-            <!-- <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" 
-                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                     allowfullscreen>
-            </iframe> -->
-            
-            <!-- EXAMPLE: Vimeo embed (uncomment and add your video ID) -->
-            <!-- <iframe src="https://player.vimeo.com/video/YOUR_VIDEO_ID" 
-                     allow="autoplay; fullscreen; picture-in-picture" 
-                     allowfullscreen>
-            </iframe> -->
+
+            <!-- Accordion (Hidden by Default) -->
+            <div class="accordion" id="accordion">
+                <div class="accordion-content">
+
+            <div class="success-message" id="successMessage">
+            <p class="success-text">✓ You're on the waitlist!</p>
+            </div>
+
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <p class="success-text">✓ You're on the waitlist!</p>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p class="privacy-note">
+                    We respect your privacy. Unsubscribe anytime.
+                </p>
+            </div>
         </div>
     </div>
+
+    <script>
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* CONTENT CONFIGURATION - Easy to change all text here */
+        /* ═══════════════════════════════════════════════════════════════ */
+        const CONTENT = {
+            headline: "Join the Waitlist",
+            subheadline: "This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close.",
+            checkboxLabel: "Notify me when the webinar opens",
+            successMessage: "✓ You're on the waitlist!",
+            privacyNote: "We respect your privacy. Unsubscribe anytime."
+        };
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* KAJABI CONFIGURATION - Replace with your actual form URL */
+        /* ═══════════════════════════════════════════════════════════════ */
+        const KAJABI_FORM_URL = 'YOUR_KAJABI_FORM_URL_HERE';
+        // Example: 'https://yoursite.kajabi.com/forms/abc123/submit'
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* GET EMAIL FROM URL PARAMETERS */
+        /* ═══════════════════════════════════════════════════════════════ */
+        function getEmailFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            
+            if (!email) {
+                console.warn('⚠️ No email found in URL parameters');
+                return null;
+            }
+            
+            console.log('✅ Email loaded from URL:', email);
+            return email;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* SUBMIT TO KAJABI FORM */
+        /* ═══════════════════════════════════════════════════════════════ */
+        async function submitToKajabi(email) {
+            console.log('📤 Submitting to Kajabi...', { email, tags: ['waitlist'] });
+
+            // Check if Kajabi URL is configured
+            if (KAJABI_FORM_URL === 'YOUR_KAJABI_FORM_URL_HERE') {
+                console.log('⏸️ Kajabi URL not configured yet - showing demo mode');
+                console.log('✅ [DEMO MODE] Would submit:', { email, tags: ['waitlist'] });
+                return { success: true, demo: true };
+            }
+
+            try {
+                const response = await fetch(KAJABI_FORM_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        tags: ['waitlist']
+                    })
+                });
+
+                if (response.ok) {
+                    console.log('✅ Successfully submitted to Kajabi');
+                    return { success: true };
+                } else {
+                    console.error('❌ Kajabi submission failed:', response.status);
+                    return { success: false, error: response.status };
+                }
+            } catch (error) {
+                console.error('❌ Error submitting to Kajabi:', error);
+                return { success: false, error: error.message };
+            }
+        }
+
+                /* ═══════════════════════════════════════════════════════════════ */
+        /* INITIALIZE PAGE */
+        /* ═══════════════════════════════════════════════════════════════ */
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🚀 Waitlist page loaded');
+
+            /* Get email from URL */
+            const userEmail = getEmailFromURL();
+
+            /* DOM elements */
+            const waitlistCheckbox = document.getElementById('waitlistCheckbox');
+            const accordion = document.getElementById('accordion');
+            const successMessage = document.getElementById('successMessage');
+
+            /* ─────────────────────────────────────────────────────────── */
+            /* WAITLIST CHECKBOX HANDLER */
+            /* ─────────────────────────────────────────────────────────── */
+            waitlistCheckbox.addEventListener('change', async function () {
+                if (!this.checked) {
+                    accordion.classList.remove('open');
+                    successMessage.classList.remove('show');
+                    return;
+                }
+
+                console.log('✅ Waitlist checkbox checked');
+
+                /* Open accordion immediately */
+                accordion.classList.add('open');
+
+                /* No email — still show confirmation visually */
+                if (!userEmail) {
+                    console.warn('⚠️ No email found — skipping submission');
+                    successMessage.classList.add('show');
+                    return;
+                }
+
+                /* Submit to Kajabi */
+                const result = await submitToKajabi(userEmail);
+
+                if (result.success) {
+                    setTimeout(() => {
+                        successMessage.classList.add('show');
+                        waitlistCheckbox.disabled = true;
+                        console.log('✅ Waitlist confirmed');
+                    }, 300);
+                } else {
+                    console.error('❌ Waitlist submission failed');
+                }
+            });
+
+            /* ─────────────────────────────────────────────────────────── */
+            /* READY STATE LOG */
+            /* ─────────────────────────────────────────────────────────── */
+            console.log('✅ Page ready');
+            console.log('📧 User email:', userEmail || 'Not provided');
+            console.log('🔗 Kajabi URL:', KAJABI_FORM_URL);
+        });
+    </script>
 </body>
 </html>
