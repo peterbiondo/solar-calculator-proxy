@@ -444,24 +444,6 @@
             <p class="success-text">✓ You're on the waitlist!</p>
             </div>
 
-            <p class="accordion-message" style="margin-bottom: 8px;">
-                Want to move sooner? Request group or one-on-one training.
-            </p>
-
-            <p class="accordion-message" style="margin-bottom: 16px;">
-                We'll contact you directly.
-            </p>
-
-                    
-                    <!-- Second Checkbox for One-on-One Training -->
-                    <div class="checkbox-container" style="margin-bottom: 0;">
-                        <label class="checkbox-wrapper" for="oneOnOneCheckbox" style="padding: 12px; background: rgba(230, 81, 0, 0.05); border-radius: 8px;">
-                            <input type="checkbox" id="oneOnOneCheckbox">
-                            <span class="checkbox-label" style="font-size: 15px;">
-                                Learn more about group or one-on-one training
-                            </span>
-                        </label>
-                    </div>
                 </div>
             </div>
 
@@ -485,9 +467,8 @@
         /* ═══════════════════════════════════════════════════════════════ */
         const CONTENT = {
             headline: "Join the Waitlist",
-            subheadline: "This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close — while keeping your crews working.",
+            subheadline: "This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close.",
             checkboxLabel: "Notify me when the webinar opens",
-            accordionMessage: "We'll notify you when the webinar is open. Want to move sooner? Request group or one-on-one training. We'll contact you directly.",
             successMessage: "✓ You're on the waitlist!",
             privacyNote: "We respect your privacy. Unsubscribe anytime."
         };
@@ -563,7 +544,6 @@
 
             /* DOM elements */
             const waitlistCheckbox = document.getElementById('waitlistCheckbox');
-            const trainingCheckbox = document.getElementById('oneOnOneCheckbox');
             const accordion = document.getElementById('accordion');
             const successMessage = document.getElementById('successMessage');
 
@@ -600,55 +580,6 @@
                     }, 300);
                 } else {
                     console.error('❌ Waitlist submission failed');
-                }
-            });
-
-            /* ─────────────────────────────────────────────────────────── */
-            /* GROUP / ONE-ON-ONE TRAINING CHECKBOX HANDLER */
-            /* ─────────────────────────────────────────────────────────── */
-            trainingCheckbox.addEventListener('change', async function () {
-                if (!this.checked) {
-                    return;
-                }
-
-                console.log('✅ Training request checked');
-
-                if (!userEmail) {
-                    console.warn('⚠️ No email found — cannot submit training request');
-                    return;
-                }
-
-                /* Demo mode */
-                if (KAJABI_FORM_URL === 'YOUR_KAJABI_FORM_URL_HERE') {
-                    console.log('⏸️ Demo mode — training request not submitted');
-                    console.log('📨 Would submit:', {
-                        email: userEmail,
-                        tags: ['one-on-one-training']
-                    });
-                    trainingCheckbox.disabled = true;
-                    return;
-                }
-
-                try {
-                    const response = await fetch(KAJABI_FORM_URL, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            email: userEmail,
-                            tags: ['one-on-one-training']
-                        })
-                    });
-
-                    if (response.ok) {
-                        console.log('✅ Training request submitted');
-                        trainingCheckbox.disabled = true;
-                    } else {
-                        console.error('❌ Training request failed:', response.status);
-                    }
-                } catch (error) {
-                    console.error('❌ Error submitting training request:', error);
                 }
             });
 
