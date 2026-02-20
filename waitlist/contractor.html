@@ -131,7 +131,7 @@
         }
 
         .logo-img {
-            height: 34px; /* adjust size here */
+            height: 34px;
             width: auto;
             display: block;
         }
@@ -562,10 +562,13 @@
                 /* Open accordion immediately */
                 accordion.classList.add('open');
 
-                /* No email — still show confirmation visually */
+                /* No email — still show confirmation visually, then redirect immediately */
                 if (!userEmail) {
                     console.warn('⚠️ No email found — skipping submission');
                     successMessage.classList.add('show');
+                    
+                    /* Redirect to priority video page immediately */
+                    window.location.href = '/priority/contractor.html';
                     return;
                 }
 
@@ -573,11 +576,12 @@
                 const result = await submitToKajabi(userEmail);
 
                 if (result.success) {
-                    setTimeout(() => {
-                        successMessage.classList.add('show');
-                        waitlistCheckbox.disabled = true;
-                        console.log('✅ Waitlist confirmed');
-                    }, 300);
+                    successMessage.classList.add('show');
+                    waitlistCheckbox.disabled = true;
+                    console.log('✅ Waitlist confirmed');
+                    
+                    /* Redirect to priority video page immediately */
+                    window.location.href = '/priority/contractor.html';
                 } else {
                     console.error('❌ Waitlist submission failed');
                 }
