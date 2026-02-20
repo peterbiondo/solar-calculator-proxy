@@ -1,1 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>You're on the Priority List! | iSolar Hot Water Academy</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* CSS VARIABLES - iSolar Brand Colors */
+        /* ═══════════════════════════════════════════════════════════════ */
+        :root {
+            --isolar-black: #0F0F0F;
+            --solar-orange: #E65100;
+            --deep-orange: #BF360C;
+            --energy-green: #00E676;
+            --soft-gray: #E8E8E8;
+            --dark-gray: #424242;
+            --pure-white: #FFFFFF;
+        }
 
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* GLOBAL RESET & BASE STYLES */
+        /* ═══════════════════════════════════════════════════════════════ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--isolar-black);
+            color: var(--isolar-black);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px; /* Less padding for fuller screen */
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* DUAL-GLOW BACKGROUND EFFECTS (Repositioned to frame video) */
+        /* ═══════════════════════════════════════════════════════════════ */
+        
+        /* Main glow - Left side of video (Energy Green to Violet) */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(
+                circle at 50% 50%, 
+                rgba(0, 230, 118, 0.25) 0%,      /* Much more visible */
+                rgba(0, 217, 255, 0.18) 30%,
+                rgba(118, 75, 162, 0.12) 60%,
+                transparent 80%
+            );
+            top: 50%;
+            left: 10%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;  /* Below everything */
+            filter: blur(100px);
+        }
+        
+        /* Secondary glow - Right side of video (Cyan to Violet) */
+        body::after {
+            content: '';
+            position: fixed;
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(
+                circle at 50% 50%, 
+                rgba(0, 217, 255, 0.20) 0%,      /* Cyan lead - more visible */
+                rgba(118, 75, 162, 0.15) 40%,
+                rgba(0, 230, 118, 0.10) 70%,
+                transparent 85%
+            );
+            top: 50%;
+            right: 10%;
+            transform: translate(50%, -50%);
+            pointer-events: none;
+            z-index: 0;  /* Below everything */
+            filter: blur(100px);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* MAIN CONTAINER */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .container {
+            width: 100%;
+            max-width: 1200px; /* Adjusted for no card padding */
+            position: relative;
+            z-index: 10;
+            padding: 60px 40px; /* Padding directly on container instead of card */
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* LOGO */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 15; /* Above background glows */
+        }
+
+        .logo-text {
+            font-size: 36px; /* Larger for desktop */
+            font-weight: 700;
+            color: #FFA500; /* Solar Orange */
+            letter-spacing: 1px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* HEADER TEXT */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .priority-text {
+            font-size: 42px; /* Larger for desktop */
+            font-weight: 700;
+            color: #FFFFFF;
+            text-align: center;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            position: relative;
+            z-index: 15; /* Above background glows */
+        }
+
+        .instruction-text {
+            font-size: 24px; /* Larger for desktop */
+            font-weight: 500;
+            color: #E0E0E0;
+            text-align: center;
+            margin-bottom: 50px;
+            line-height: 1.4;
+            position: relative;
+            z-index: 15; /* Above background glows */
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* VIDEO CONTAINER */
+        /* ═══════════════════════════════════════════════════════════════ */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            background: #000000;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1); /* Added subtle border */
+            z-index: 20; /* Above background glows */
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Placeholder for when no video is embedded yet */
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1A1A1A;
+            color: #FFFFFF;
+            font-size: 18px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════ */
+        /* MOBILE OPTIMIZATION */
+        /* ═══════════════════════════════════════════════════════════════ */
+        
+        /* Tablets */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 50px 40px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 16px;
+            }
+
+            .container {
+                padding: 40px 24px;
+            }
+
+            .logo-text {
+                font-size: 28px; /* Back to larger size for short title */
+            }
+
+            .priority-text {
+                font-size: 26px;
+            }
+
+            .instruction-text {
+                font-size: 18px;
+                margin-bottom: 30px;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 480px) {
+            body {
+                padding: 16px 12px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+
+            .logo-text {
+                font-size: 24px; /* Back to larger size for short title */
+            }
+
+            .priority-text {
+                font-size: 24px;
+            }
+
+            .instruction-text {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo/Title -->
+        <div class="logo">
+            <div class="logo-text">PV to Hot Water</div>
+        </div>
+
+        <!-- Header Text -->
+        <h1 class="priority-text">You're on the priority list!</h1>
+        <p class="instruction-text">Watch this video for what this means for you.</p>
+
+        <!-- Video Container -->
+        <div class="video-container">
+            <!-- Placeholder - Replace with actual video embed -->
+            <div class="video-placeholder">
+                <p>Video embed will go here<br>(YouTube, Vimeo, or custom player)</p>
+            </div>
+            
+            <!-- EXAMPLE: YouTube embed (uncomment and add your video ID) -->
+            <!-- <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" 
+                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                     allowfullscreen>
+            </iframe> -->
+            
+            <!-- EXAMPLE: Vimeo embed (uncomment and add your video ID) -->
+            <!-- <iframe src="https://player.vimeo.com/video/YOUR_VIDEO_ID" 
+                     allow="autoplay; fullscreen; picture-in-picture" 
+                     allowfullscreen>
+            </iframe> -->
+        </div>
+    </div>
+</body>
+</html>
