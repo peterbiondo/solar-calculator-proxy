@@ -675,7 +675,7 @@ function redirectToWaitlist() {
     const userEmail = urlParams.get('email') || 'unknown@example.com';
     
     // Redirect to waitlist page with email and avatar
-    window.location.href = `/waitlist/contractor.html?email=${encodeURIComponent(userEmail)}&avatar=contractor`;
+    window.location.href = `/waitlist/diy.html?email=${encodeURIComponent(userEmail)}&avatar=diy`;
 }
         
         let conversationStep = 0;
@@ -989,13 +989,12 @@ function redirectToWaitlist() {
                 addMessage(`<strong><span style="color: #00E676;">🎉</span> You've reached the maximum of 10 calculations!</strong><br>You've explored many scenarios! Ready to take the next step?<br><br>
                 
                 <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                    <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                    <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                    
-                    <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                    <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                    
-                    <strong style="color: #000000;">Win more projects</strong><br>
+                    <strong style="color: #FF8C00; font-size: 17px;">HANDY HOMEOWNERS</strong><br>
+                    <em style="color: #000000; font-size: 13px;">Install and save big</em><br><br>
+                    <strong style="color: #000000; font-size: 16px;">Skip $6,000 in contractor overhead — labor, commissions, admin, and profit margins — and put that money back in your pocket.</strong><br><br>
+                    <em style="color: #000000;">A PV hot water system is one of the most straightforward solar projects a homeowner can take on — no grid tie-in, no utility paperwork, no interconnection hassles.</em><br><br>
+                    <em style="color: #000000;">Join the priority list and get first access to a free webinar showing exactly how handy homeowners are cutting their hot water bill for good — without paying a contractor.</em><br><br>
+                    <strong style="color: #000000;">Make It Happen</strong><br>
                     <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                     
                     <div style="text-align: center; margin-top: 30px;">
@@ -1014,7 +1013,7 @@ function redirectToWaitlist() {
             }
             
             setTimeout(() => {
-                addMessage("<strong>Welcome, Solar Contractor! <span class='wave-emoji'>👋</span></strong><br><span style='color: #FFFFFF;'>I'm your PV water-heating assistant.<br>🎯 There's a bonus waiting at the end.</span>");
+                addMessage("<strong>Welcome, Homeowners! <span class='wave-emoji'>👋</span></strong><br><span style='color: #FFFFFF;'>I'm your PV water-heating assistant.<br>🎯 There's a bonus waiting at the end.</span>");
                 setTimeout(() => {
                     addMessage('<strong>Which units do you prefer?<br>Click a button or enter</strong><br>• <strong>"Imperial"</strong> for US units (gallons, °F)<br>• <strong>"Metric"</strong> for international units (liters, °C)');
                     
@@ -1761,13 +1760,12 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
+                <strong style="color: #FF8C00; font-size: 17px;">HANDY HOMEOWNERS</strong><br>
+                <em style="color: #000000; font-size: 13px;">Install and save big</em><br><br>
+                <strong style="color: #000000; font-size: 16px;">Skip $6,000 in contractor overhead — labor, commissions, admin, and profit margins — and put that money back in your pocket.</strong><br><br>
+                <em style="color: #000000;">A PV hot water system is one of the most straightforward solar projects a homeowner can take on — no grid tie-in, no utility paperwork, no interconnection hassles.</em><br><br>
+                <em style="color: #000000;">Join the priority list and get first access to a free webinar showing exactly how handy homeowners are cutting their hot water bill for good — without paying a contractor.</em><br><br>
+                <strong style="color: #000000;">Make It Happen</strong><br>
                 <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
@@ -1838,13 +1836,12 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
+                <strong style="color: #FF8C00; font-size: 17px;">HANDY HOMEOWNERS</strong><br>
+                <em style="color: #000000; font-size: 13px;">Install and save big</em><br><br>
+                <strong style="color: #000000; font-size: 16px;">Skip $6,000 in contractor overhead — labor, commissions, admin, and profit margins — and put that money back in your pocket.</strong><br><br>
+                <em style="color: #000000;">A PV hot water system is one of the most straightforward solar projects a homeowner can take on — no grid tie-in, no utility paperwork, no interconnection hassles.</em><br><br>
+                <em style="color: #000000;">Join the priority list and get first access to a free webinar showing exactly how handy homeowners are cutting their hot water bill for good — without paying a contractor.</em><br><br>
+                <strong style="color: #000000;">Make It Happen</strong><br>
                 <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
@@ -1993,13 +1990,12 @@ function displayBothSystems(data) {
             <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
+                <strong style="color: #FF8C00; font-size: 17px;">HANDY HOMEOWNERS</strong><br>
+                <em style="color: #000000; font-size: 13px;">Install and save big</em><br><br>
+                <strong style="color: #000000; font-size: 16px;">Skip $6,000 in contractor overhead — labor, commissions, admin, and profit margins — and put that money back in your pocket.</strong><br><br>
+                <em style="color: #000000;">A PV hot water system is one of the most straightforward solar projects a homeowner can take on — no grid tie-in, no utility paperwork, no interconnection hassles.</em><br><br>
+                <em style="color: #000000;">Join the priority list and get first access to a free webinar showing exactly how handy homeowners are cutting their hot water bill for good — without paying a contractor.</em><br><br>
+                <strong style="color: #000000;">Make It Happen</strong><br>
                 <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
@@ -2136,13 +2132,12 @@ function displayBothSystems(data) {
             <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
             
             <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
+                <strong style="color: #FF8C00; font-size: 17px;">HANDY HOMEOWNERS</strong><br>
+                <em style="color: #000000; font-size: 13px;">Install and save big</em><br><br>
+                <strong style="color: #000000; font-size: 16px;">Skip $6,000 in contractor overhead — labor, commissions, admin, and profit margins — and put that money back in your pocket.</strong><br><br>
+                <em style="color: #000000;">A PV hot water system is one of the most straightforward solar projects a homeowner can take on — no grid tie-in, no utility paperwork, no interconnection hassles.</em><br><br>
+                <em style="color: #000000;">Join the priority list and get first access to a free webinar showing exactly how handy homeowners are cutting their hot water bill for good — without paying a contractor.</em><br><br>
+                <strong style="color: #000000;">Make It Happen</strong><br>
                 <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
                 
                 <div style="text-align: center; margin-top: 30px;">
