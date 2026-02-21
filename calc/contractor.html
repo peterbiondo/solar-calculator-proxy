@@ -701,6 +701,7 @@ function redirectToWaitlist() {
            =================================== */
         
         const metricTankConversions = {
+            75: 20,
             150: 40,
             200: 52,
             250: 66,
@@ -911,8 +912,8 @@ function redirectToWaitlist() {
         // Calculate optimal metric tank using energy formula
         function calculateOptimalMetricTank(dailyGallons, setpointF, highLimitF, incomingF) {
             // Available metric tank sizes in gallons
-            const metricTankGallons = [40, 52, 66, 79, 105, 132]; // = [150, 200, 250, 300, 400, 500] liters
-            const metricTankLiters = [150, 200, 250, 300, 400, 500];
+            const metricTankGallons = [20, 40, 52, 66, 79, 105, 132]; // = [150, 200, 250, 300, 400, 500] liters
+            const metricTankLiters = [75, 150, 200, 250, 300, 400, 500];
             
             // Step 1: Calculate daily energy needed
             const dailyEnergy = dailyGallons * (setpointF - incomingF);
@@ -937,7 +938,7 @@ function redirectToWaitlist() {
         // Calculate optimal imperial tank using energy formula
         function calculateOptimalImperialTank(dailyGallons, setpointF, highLimitF, incomingF) {
             // Available imperial tank sizes in gallons
-            const imperialTankGallons = [30, 40, 50, 65, 80, 105, 120];
+            const imperialTankGallons = [20, 30, 40, 50, 65, 80, 105, 120];
             
             // Step 1: Calculate daily energy needed
             const dailyEnergy = dailyGallons * (setpointF - incomingF);
