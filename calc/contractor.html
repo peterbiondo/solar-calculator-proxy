@@ -1002,7 +1002,7 @@ function redirectToWaitlist() {
                         <strong style="color: #E65100; font-size: 17px;">Click the video to learn more.</strong><br>
                         <em style="color: #000000; font-size: 13px;">The best PV water heater is here!</em><br>
                         <a href="https://youtu.be/TI5WKT8yeNU" target="_blank">
-                            <img src="/NewPVThmb.jpeg" 
+                            <img src="/calc/NewPVThmb.jpeg" 
                                  alt="PV Water Heating Video" 
                                  style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
                                  onmouseover="this.style.transform='scale(1.02)'" 
@@ -1728,6 +1728,9 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             actualColdTemp
         );
         
+        // Only show optional tank if smaller than daily usage
+        const showOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && tankDisplay < displayGallons;
+        
         let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
             💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
@@ -1748,7 +1751,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             • Element Size: ${system.element_size}W<br>
             • Tank Size: ${displayGallons} liters<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${tankDisplay} liters (mixing valve required)<br>` : ''}<br>
+            ${showOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${tankDisplay} liters (mixing valve required)<br>` : ''}<br>
             
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
@@ -1795,13 +1798,15 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
         const displayHotTemp = Math.round(userData.hotWaterTemp);
         const displayHighLimit = Math.round(userData.highLimit);
         
-        // Calculate optional tank size for Imperial
         const optionalTankDisplay = calculateOptimalImperialTank(
             parseFloat(userData.gallons),
             parseFloat(userData.hotWaterTemp),
             parseFloat(userData.highLimit),
             actualColdTemp
         );
+        
+        // Only show optional tank if smaller than daily usage
+        const showOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && optionalTankDisplay < displayGallons;
         
         let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
@@ -1823,7 +1828,7 @@ function displaySingleSystem(data, system, inverterModel, systemData) {
             • Element Size: ${system.element_size}W<br>
             • Tank Size: ${displayGallons} gallons<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${optionalTankDisplay} gallons (mixing valve required)<br>` : ''}<br>
+            ${showOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${optionalTankDisplay} gallons (mixing valve required)<br>` : ''}<br>
             
             This system can meet your hot water requirements.<br><br>
             ${getOptimalConditionsMessage(direction)}
@@ -1942,6 +1947,10 @@ function displayBothSystems(data) {
             actualColdTemp
         );
         
+        // Only show optional tanks if smaller than daily usage
+        const showRecOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && recTankDisplay < displayGallons;
+        const showAltOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && altTankDisplay < displayGallons;
+        
         let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
             💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
@@ -1962,7 +1971,7 @@ function displayBothSystems(data) {
             • Element Size: ${recommended.element_size}W<br>
             • Tank Size: ${displayGallons} liters<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recTankDisplay} liters (mixing valve required)<br>` : ''}<br>
+            ${showRecOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recTankDisplay} liters (mixing valve required)<br>` : ''}<br>
             
             <em>${reason}</em><br><br>
             
@@ -1975,7 +1984,7 @@ function displayBothSystems(data) {
             • Element Size: ${alternative.element_size}W<br>
             • Tank Size: ${displayGallons} liters<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>*Optional Tank Size: ${altTankDisplay} liters (mixing valve required)<br>` : ''}<br>
+            ${showAltOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>*Optional Tank Size: ${altTankDisplay} liters (mixing valve required)<br>` : ''}<br>
             
             ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
@@ -2068,7 +2077,6 @@ function displayBothSystems(data) {
             reason = "This system is the most cost-effective choice with a less expensive inverter.";
         }
         
-        // Calculate optional tank sizes for Imperial - both systems
         const recOptionalTank = calculateOptimalImperialTank(
             parseFloat(userData.gallons),
             parseFloat(userData.hotWaterTemp),
@@ -2081,6 +2089,10 @@ function displayBothSystems(data) {
             parseFloat(userData.highLimit),
             actualColdTemp
         );
+        
+        // Only show optional tanks if smaller than daily usage
+        const showRecOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && recOptionalTank < displayGallons;
+        const showAltOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && altOptionalTank < displayGallons;
         
         let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
             📍 <strong>Location:</strong> ${userData.location}<br>
@@ -2102,7 +2114,7 @@ function displayBothSystems(data) {
             • Element Size: ${recommended.element_size}W<br>
             • Tank Size: ${displayGallons} gallons<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recOptionalTank} gallons (mixing valve required)<br>` : ''}<br>
+            ${showRecOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recOptionalTank} gallons (mixing valve required)<br>` : ''}<br>
             
             <em>${reason}</em><br><br>
             
@@ -2115,7 +2127,7 @@ function displayBothSystems(data) {
             • Element Size: ${alternative.element_size}W<br>
             • Tank Size: ${displayGallons} gallons<br>
             • kWh/Day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
-            ${parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>*Optional Tank Size: ${altOptionalTank} gallons (mixing valve required)<br>` : ''}<br>
+            ${showAltOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>*Optional Tank Size: ${altOptionalTank} gallons (mixing valve required)<br>` : ''}<br>
             
             ${getOptimalConditionsMessage(direction)}
             <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
