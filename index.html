@@ -349,13 +349,24 @@ header {
 </section>
 
 <script>
-// Hide avatar cards if user has already opted in
 if (localStorage.getItem('opted_in') === 'true') {
     const avatarGrid = document.querySelector('.avatar-grid');
     const ctaHeading = document.querySelector('.cta-heading');
-    
+    const avatar = localStorage.getItem('selected_avatar');
+    const calcUrl = avatar === 'contractor' ? '/calc/contractor.html' : '/calc/diy.html';
+
     if (avatarGrid) avatarGrid.style.display = 'none';
-    if (ctaHeading) ctaHeading.style.display = 'none';
+    if (ctaHeading) {
+        ctaHeading.textContent = 'Welcome back!';
+        ctaHeading.insertAdjacentHTML('afterend', `
+            <p style="color:rgba(255,255,255,0.7); font-size:16px; margin-bottom:24px;">
+                Click below to jump back into the PV Designer.
+            </p>
+            <a href="${calcUrl}" style="display:inline-block; padding:14px 28px; border-radius:10px; background:#FFA500; color:#0F0F0F; font-size:17px; font-weight:700; font-family:Poppins,sans-serif; text-decoration:none;">
+                Take Me to the FREE PV Designer →
+            </a>
+        `);
+    }
 }
 </script>
 
