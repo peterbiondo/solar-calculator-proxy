@@ -1,1 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PV Contractor – iSolar Hot Water Academy</title>
 
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #0F0F0F;
+    color: #FFFFFF;
+    overflow-x: hidden;
+}
+
+/* ================= HEADER ================= */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    padding: 0 30px 0 160px;
+    display: flex;
+    align-items: center;
+    background: #0F0F0F;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 100;
+}
+
+.header-inner {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 36px;
+    width: auto;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .logo img { height: 32px; }
+}
+
+/* ================= HERO ================= */
+.hero {
+    padding: 100px 0 40px 160px;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    gap: 20px;
+    align-items: start;
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.hero-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 30px;
+}
+
+.highlight-blue {
+    background: linear-gradient(to top, rgba(70,150,255,0.7) 55%, transparent 55%);
+    padding: 0 4px;
+    border-radius: 2px;
+}
+
+.hero-tagline {
+    font-size: 19px;
+    font-weight: 600;
+    color: #00E676;
+    margin-bottom: 25px;
+}
+
+.hero-body {
+    font-size: 17px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 25px;
+}
+
+.hero-tagline-alt {
+    font-size: 19px;
+    font-weight: 600;
+    color: #00E676;
+    margin-bottom: 0px;
+}
+
+/* ================= IMAGE ================= */
+.hero-image {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-right: 35px;
+    padding-left: 35px;
+}
+
+.hero-image img {
+    width: 100%;
+    max-height: 55vh;
+    object-fit: cover;
+}
+
+/* ================= OPT-IN SECTION ================= */
+.optin-section {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 0 160px 60px;
+}
+
+.hero-intro {
+    max-width: 760px;
+    margin: 0 auto 30px;
+    font-size: 17px;
+    color: rgba(255,255,255,0.85);
+}
+
+.wave {
+    display: inline-block;
+    font-size: 1.5em;
+    animation: wave-animation 8s infinite;
+    transform-origin: 70% 70%;
+    filter: brightness(1.2);
+}
+
+@keyframes wave-animation {
+    0% { transform: rotate(0deg); }
+    5%, 12.5% { transform: rotate(14deg); }
+    8.5%, 16.7% { transform: rotate(-8deg); }
+    20.8% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.optin-heading {
+    font-size: 28px;
+    font-weight: 600;
+    color: #FFA500;
+    margin-bottom: 8px;
+}
+
+.optin-subheading {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 24px;
+}
+
+/* ================= EMAIL FORM ================= */
+.email-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+.email-form input[type="email"] {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.email-form input[type="email"]::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+
+.email-form input[type="email"]:focus {
+    border-color: #FFA500;
+}
+
+.email-form button {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: none;
+    background: #FFA500;
+    color: #0F0F0F;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.email-form button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
+}
+
+.privacy-note {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 4px;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+    header {
+        padding: 0 20px;
+        height: 64px;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 80px 20px 60px;
+    }
+
+    .hero-image {
+        padding-right: 0;
+        margin-bottom: 0px;
+    }
+
+    .optin-section {
+        padding: 6px 20px 40px;
+    }
+
+    .hero-title {
+        font-size: 38px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="logo">
+            <a href="https://pv-hotwater.com">
+                <img src="../Logo.svg" alt="iSolar Hot Water Academy">
+            </a>
+        </div>
+
+    </div>
+</header>
+
+<section class="hero">
+
+    <div class="hero-content">
+        <h1 class="hero-title">
+            Your contractor headline<br>
+            <span class="highlight-blue">goes right here.</span>
+        </h1>
+
+        <p class="hero-tagline">YOUR TAGLINE FOR PV CONTRACTORS</p>
+
+        <p class="hero-body">
+            Your body copy goes here — speak directly to the PV contractor.
+            <strong>Make it real, make it specific.</strong>
+        </p>
+
+        <p class="hero-tagline-alt">Your closing line here.</p>
+    </div>
+
+    <div class="hero-image">
+        <img src="../contractor-hero-image.jpg" alt="PV contractor solar installation">
+    </div>
+
+    <div class="optin-section">
+        <p class="hero-intro">
+            <strong>Hey, I'm Peter Biondo!</strong>
+            <span class="wave">👋</span>
+            Your personalized intro copy for PV contractors goes here —
+            <strong>speak to their specific situation and goals.</strong>
+        </p>
+
+        <h2 class="optin-heading">Enter your email to get started</h2>
+        <p class="optin-subheading">We'll send your free PV Hot Water sizing access right away.</p>
+
+        <form class="email-form" id="optinForm">
+            <input type="email" id="emailInput" placeholder="your@email.com" required>
+            <button type="submit">Take Me to the FREE PV Designer →</button>
+            <p class="privacy-note">🔒 No spam. Unsubscribe anytime.</p>
+        </form>
+    </div>
+
+</section>
+
+<script>
+document.getElementById('optinForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('emailInput').value;
+
+    // Set opted_in flag and avatar tag in localStorage
+    localStorage.setItem('opted_in', 'true');
+    localStorage.setItem('selected_avatar', 'contractor');
+
+    // Submit to Kajabi via hidden form POST (replace ACTION_URL with your Kajabi form endpoint)
+    const kajabiForm = document.createElement('form');
+    kajabiForm.method = 'POST';
+    kajabiForm.action = 'YOUR_KAJABI_FORM_ENDPOINT_HERE';
+    kajabiForm.style.display = 'none';
+
+    const emailField = document.createElement('input');
+    emailField.name = 'email';
+    emailField.value = email;
+    kajabiForm.appendChild(emailField);
+
+    // Redirect after Kajabi submission
+    const redirectField = document.createElement('input');
+    redirectField.name = 'redirect_url';
+    redirectField.value = 'https://pv-hotwater.com/calc/contractor.html';
+    kajabiForm.appendChild(redirectField);
+
+    document.body.appendChild(kajabiForm);
+    kajabiForm.submit();
+});
+</script>
+
+</body>
+</html>
