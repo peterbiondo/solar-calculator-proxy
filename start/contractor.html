@@ -315,27 +315,22 @@ document.getElementById('optinForm').addEventListener('submit', function(e) {
 
     // Set opted_in flag and avatar tag in localStorage
     localStorage.setItem('opted_in', 'true');
+    loc<script>
+document.getElementById('optinForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    localStorage.setItem('opted_in', 'true');
     localStorage.setItem('selected_avatar', 'contractor');
 
-    // Submit to Kajabi via hidden form POST (replace ACTION_URL with your Kajabi form endpoint)
-    const kajabiForm = document.createElement('form');
-    kajabiForm.method = 'POST';
-    kajabiForm.action = 'YOUR_KAJABI_FORM_ENDPOINT_HERE';
-    kajabiForm.style.display = 'none';
+    const KAJABI_FORM_URL = 'YOUR_KAJABI_CONTRACTOR_FORM_URL_HERE';
 
-    const emailField = document.createElement('input');
-    emailField.name = 'email';
-    emailField.value = email;
-    kajabiForm.appendChild(emailField);
-
-    // Redirect after Kajabi submission
-    const redirectField = document.createElement('input');
-    redirectField.name = 'redirect_url';
-    redirectField.value = 'https://pv-hotwater.com/calc/contractor.html';
-    kajabiForm.appendChild(redirectField);
-
-    document.body.appendChild(kajabiForm);
-    kajabiForm.submit();
+    fetch(KAJABI_FORM_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+    }).finally(() => {
+        window.location.href = '/calc/contractor.html';
+    });
 });
 </script>
 
