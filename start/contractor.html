@@ -308,6 +308,10 @@ header {
 </section>
 
 <script>
+if (localStorage.getItem('opted_in') === 'true') {
+    window.location.href = '/calc/contractor.html';
+}
+
 document.getElementById('optinForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const email = document.getElementById('emailInput').value;
