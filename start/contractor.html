@@ -309,7 +309,15 @@ header {
 
 <script>
 if (localStorage.getItem('opted_in') === 'true') {
-    window.location.href = '/calc/contractor.html';
+    document.getElementById('optinForm').style.display = 'none';
+    document.querySelector('.optin-heading').textContent = 'Welcome back!';
+    document.querySelector('.optin-subheading').textContent = 'Click below to jump back into the PV Designer.';
+    const btn = document.createElement('a');
+    btn.href = '/calc/contractor.html';
+    btn.className = 'email-form';
+    btn.style.cssText = 'display:block; max-width:460px; margin:0 auto; padding:14px 20px; border-radius:10px; background:#FFA500; color:#0F0F0F; font-size:17px; font-weight:700; font-family:Poppins,sans-serif; text-align:center; text-decoration:none;';
+    btn.textContent = 'Take Me to the FREE PV Designer →';
+    document.querySelector('.optin-section').appendChild(btn);
 }
 
 document.getElementById('optinForm').addEventListener('submit', function(e) {
