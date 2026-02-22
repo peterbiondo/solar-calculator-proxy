@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -313,16 +312,16 @@ document.getElementById('optinForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const email = document.getElementById('emailInput').value;
     localStorage.setItem('opted_in', 'true');
-    localStorage.setItem('selected_avatar', 'contractor');
+    localStorage.setItem('selected_avatar', 'diy');
 
-    const KAJABI_FORM_URL = 'YOUR_KAJABI_CONTRACTOR_FORM_URL_HERE';
+    const KAJABI_FORM_URL = 'YOUR_KAJABI_DIY_FORM_URL_HERE';
 
     fetch(KAJABI_FORM_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email })
     }).finally(() => {
-        window.location.href = '/calc/contractor.html';
+        window.location.href = '/calc/diy.html';
     });
 });
 </script>
