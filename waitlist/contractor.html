@@ -562,13 +562,10 @@
                 /* Open accordion immediately */
                 accordion.classList.add('open');
 
-                /* No email — still show confirmation visually, then redirect immediately */
+                /* No email — still show confirmation visually */
                 if (!userEmail) {
                     console.warn('⚠️ No email found — skipping submission');
                     successMessage.classList.add('show');
-                    
-                    /* Redirect to priority video page immediately */
-                    window.location.href = '/priority/contractor.html';
                     return;
                 }
 
@@ -579,9 +576,6 @@
                     successMessage.classList.add('show');
                     waitlistCheckbox.disabled = true;
                     console.log('✅ Waitlist confirmed');
-                    
-                    /* Redirect to priority video page immediately */
-                    window.location.href = '/priority/contractor.html';
                 } else {
                     console.error('❌ Waitlist submission failed');
                 }
