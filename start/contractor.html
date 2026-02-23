@@ -299,12 +299,6 @@ header {
     }
 }
 </style>
-    <script>
-// Hide form immediately if user is already opted in
-if (localStorage.getItem('opted_in') === 'true') {
-    document.write('<style>#optinForm { display: none !important; }</style>');
-}
-</script>
 </head>
 
 <body>
@@ -371,7 +365,7 @@ if (localStorage.getItem('opted_in') === 'true') {
     btn.href = '/calc/contractor.html';
     btn.className = 'email-form';
     btn.style.cssText = 'display:block; max-width:460px; margin:0 auto; padding:14px 20px; border-radius:10px; background:#FFA500; color:#0F0F0F; font-size:17px; font-weight:700; font-family:Poppins,sans-serif; text-align:center; text-decoration:none;';
-    btn.textContent = 'Take Me to the FREE PV Designer →';
+    btn.textContent = 'Take Me to the PV Sizing Calulator';
     document.querySelector('.optin-section').appendChild(btn);
 }
 
