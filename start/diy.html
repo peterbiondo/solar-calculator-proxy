@@ -292,12 +292,6 @@ header {
     }
 }
 </style>
-    <script>
-// Hide form immediately if user is already opted in
-if (localStorage.getItem('opted_in') === 'true') {
-    document.write('<style>#optinForm { display: none !important; }</style>');
-}
-</script>
 </head>
 
 <body>
@@ -342,12 +336,12 @@ if (localStorage.getItem('opted_in') === 'true') {
             The PV Hot Water Design Calculator delivers quick results and is easy to use.
         </p>
 
-        <h2 class="optin-heading">Get a clear look at PV water heating</h2>
+        <h2 class="optin-heading">Get a better look at PV water heating</h2>
         <p class="optin-subheading">Instant access. No waiting.</p>
 
         <form class="email-form" id="optinForm">
             <input type="email" id="emailInput" placeholder="your@email.com" required>
-            <button type="submit">Take Me to the FREE PV Designer →</button>
+            <button type="submit">Take Me to the PV Sizing Calculator →</button>
             <p class="privacy-note">🔒 No spam. Unsubscribe anytime.</p>
         </form>
     </div>
