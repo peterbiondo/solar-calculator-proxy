@@ -104,6 +104,8 @@ header {
 
 /* ================= HERO ================= */
 .hero {
+    position: relative;
+    z-index: 10;
     padding: 100px 0 40px 160px;
     display: grid;
     grid-template-columns: 55% 45%;
@@ -150,12 +152,19 @@ header {
     margin-bottom: 0px;
 }
 
+.footnote {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 20px;
+    font-style: italic;
+}
+
 /* ================= IMAGE ================= */
 .hero-image {
     display: flex;
     justify-content: flex-end;
     align-items: flex-start;
-    padding-right: 35px;
+    padding-right: 120px;
     padding-left: 35px;
 }
 
@@ -309,18 +318,19 @@ header {
 
     <div class="hero-content">
         <h1 class="hero-title">
-            Your contractor headline<br>
-            <span class="highlight-blue">goes right here.</span>
+            Create fast<br>
+            <span class="highlight-blue">$2,500+ net profit days<sup>1</sup></span>
         </h1>
 
-        <p class="hero-tagline">YOUR TAGLINE FOR PV CONTRACTORS</p>
+        <p class="hero-tagline">without batteries, utility interconnection, and far fewer delay hassles</p>
 
         <p class="hero-body">
-            Your body copy goes here — speak directly to the PV contractor.
-            <strong>Make it real, make it specific.</strong>
+            Helps homeowners cut a major energy cost - with an easier yes than committing to a full scale PV system.
         </p>
 
-        <p class="hero-tagline-alt">Your closing line here.</p>
+        <p class="hero-tagline-alt">See why $12-14K PV Water Heaters are simpler than most contractors expect.</p>
+        
+        <p class="footnote"><sup>1</sup> Assumes a $12.5K install, 4-man crew, one-day job, includes 20% admin, permitting, and sales commission.</p>
     </div>
 
     <div class="hero-image">
@@ -330,13 +340,12 @@ header {
     <div class="optin-section">
         <p class="hero-intro">
             <strong>Hey, I'm Peter Biondo!</strong>
-            <span class="wave">👋</span>
-            Your personalized intro copy for PV contractors goes here —
-            <strong>speak to their specific situation and goals.</strong>
+            <span class="wave">👋</span><br>
+            The PV Hot Water Design Calculator delivers quick results and is easy to use.
         </p>
 
-        <h2 class="optin-heading">Enter your email to get started</h2>
-        <p class="optin-subheading">We'll send your free PV Hot Water sizing access right away.</p>
+        <h2 class="optin-heading">Size your PV hot water design in minutes</h2>
+        <p class="optin-subheading">The PV Solar Hot Water Designer builds your panel count, inverter selection, tank size and energy output for your location.</p>
 
         <form class="email-form" id="optinForm">
             <input type="email" id="emailInput" placeholder="your@email.com" required>
