@@ -26,12 +26,12 @@ body {
     position: relative;
 }
 
-/* Main glow - DIRECTLY BEHIND IMAGE */
+/* Main glow - UPPER RIGHT BEHIND IMAGE */
 body::before {
     content: '';
     position: fixed;
-    width: 650px;          /* ← Smaller (was 900px) */
-    height: 650px;         /* ← Smaller (was 900px) */
+    width: 500px;          /* ← Even smaller (was 650px) */
+    height: 500px;         /* ← Even smaller (was 650px) */
     background: radial-gradient(
         circle at 30% 50%, 
         rgba(0, 230, 118, 0.18) 0%,
@@ -39,19 +39,19 @@ body::before {
         rgba(118, 75, 162, 0.08) 60%,
         transparent 80%
     );
-    top: 12%;              /* ← Adjusted */
-    right: 8%;             /* ← Closer to right edge */
+    top: 8%;               /* ← Higher up (was 12%) */
+    right: 5%;             /* ← More to right (was 8%) */
     pointer-events: none;
     z-index: 0;
     filter: blur(60px);
 }
 
-/* Fill glow - BEHIND IMAGE */
+/* Fill glow - UPPER RIGHT BEHIND IMAGE */
 body::after {
     content: '';
     position: fixed;
-    width: 450px;          /* ← Smaller (was 600px) */
-    height: 450px;         /* ← Smaller (was 600px) */
+    width: 350px;          /* ← Even smaller (was 450px) */
+    height: 350px;         /* ← Even smaller (was 450px) */
     background: radial-gradient(
         circle at 70% 30%, 
         rgba(0, 230, 118, 0.08) 0%,
@@ -59,8 +59,8 @@ body::after {
         rgba(118, 75, 162, 0.03) 70%,
         transparent 85%
     );
-    top: 18%;              /* ← Adjusted */
-    right: 5%;             /* ← Very close to edge */
+    top: 12%;              /* ← Higher up (was 18%) */
+    right: 2%;             /* ← Very close to edge (was 5%) */
     pointer-events: none;
     z-index: 0;
     filter: blur(50px);
