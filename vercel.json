@@ -1,9 +1,0 @@
-{
-  "redirects": [
-    {
-      "source": "/opt-in-calc.html",
-      "destination": "/",
-      "permanent": false
-    }
-  ]
-}
