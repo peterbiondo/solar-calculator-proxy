@@ -299,6 +299,12 @@ header {
     }
 }
 </style>
+    <script>
+// Hide form immediately if user is already opted in
+if (localStorage.getItem('opted_in') === 'true') {
+    document.write('<style>#optinForm { display: none !important; }</style>');
+}
+</script>
 </head>
 
 <body>
