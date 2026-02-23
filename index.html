@@ -381,5 +381,14 @@ if (localStorage.getItem('opted_in') === 'true') {
     }
 }
 </script>
+    <script>
+// Force check on page show (catches back button)
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted || performance.navigation.type === 2) {
+        // Page was restored from cache (back button used)
+        location.reload();
+    }
+});
+</script>
 </body>
 </html>
