@@ -369,6 +369,17 @@ if (localStorage.getItem('opted_in') === 'true') {
     }
 }
 </script>
-
+<script>
+// Fix header CTA button for returning users
+if (localStorage.getItem('opted_in') === 'true') {
+    const headerCta = document.querySelector('.header-cta');
+    const avatar = localStorage.getItem('selected_avatar');
+    const calcUrl = avatar === 'contractor' ? '/calc/contractor.html' : '/calc/diy.html';
+    
+    if (headerCta) {
+        headerCta.href = calcUrl;
+    }
+}
+</script>
 </body>
 </html>
