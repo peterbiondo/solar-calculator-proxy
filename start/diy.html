@@ -339,18 +339,28 @@ header {
         <h2 class="optin-heading">Get a better look at PV water heating</h2>
         <p class="optin-subheading">Instant access. No waiting.</p>
 
-        <form class="email-form" id="optinForm">
-            <input type="email" id="emailInput" placeholder="your@email.com" required>
-            <button type="submit">Take Me to the PV Sizing Calculator →</button>
+        <div class="email-form" id="optinFormWrap">
+            <!-- Kajabi DIY Form Embed -->
+            <!-- Replace the script line below with your exact Kajabi DIY embed snippet -->
+            <script src="https://www.isolarhotwater.com/forms/1234567890/embed.js"></script>
             <p class="privacy-note">🔒 No spam. Unsubscribe anytime.</p>
-        </form>
+        </div>
     </div>
 
 </section>
 
 <script>
+const existingOptinForm = document.getElementById('optinForm');
+
 if (localStorage.getItem('opted_in') === 'true') {
-    document.getElementById('optinForm').style.display = 'none';
+    if (existingOptinForm) {
+        existingOptinForm.style.display = 'none';
+    }
+    const embeddedWrap = document.getElementById('optinFormWrap');
+    if (embeddedWrap) {
+        embeddedWrap.style.display = 'none';
+    }
+
     document.querySelector('.optin-heading').textContent = 'Welcome back!';
     document.querySelector('.optin-subheading').textContent = 'Click below to jump back into the PV Designer.';
     const btn = document.createElement('a');
@@ -361,22 +371,25 @@ if (localStorage.getItem('opted_in') === 'true') {
     document.querySelector('.optin-section').appendChild(btn);
 }
 
-document.getElementById('optinForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const email = document.getElementById('emailInput').value;
-    localStorage.setItem('opted_in', 'true');
-    localStorage.setItem('selected_avatar', 'diy');
+// Safety guard: only run old custom submit logic if the old form still exists
+if (existingOptinForm) {
+    existingOptinForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('emailInput').value;
+        localStorage.setItem('opted_in', 'true');
+        localStorage.setItem('selected_avatar', 'diy');
 
-    const KAJABI_FORM_URL = 'YOUR_KAJABI_DIY_FORM_URL_HERE';
+        const KAJABI_FORM_URL = 'YOUR_KAJABI_DIY_FORM_URL_HERE';
 
-    fetch(KAJABI_FORM_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email })
-    }).finally(() => {
-        window.location.href = '/calc/diy.html';
+        fetch(KAJABI_FORM_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        }).finally(() => {
+            window.location.href = '/calc/diy.html';
+        });
     });
-});
+}
 </script>
 <script>
 // Force check on page show (catches back button)
