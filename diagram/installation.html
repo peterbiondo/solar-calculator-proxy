@@ -666,12 +666,11 @@
             <div class="component-icon">🚿</div>
             <div>
                 <div class="component-title">Electric Water Heater</div>
-                <div class="component-meta">${tankSize} ${tankUnit} &nbsp;·&nbsp; ${parseInt(elementSize).toLocaleString()}W elements</div>
             </div>
         </div>
         <div class="component-specs centered">
-            <span class="spec-pill orange">${tankSize} ${tankUnit.charAt(0).toUpperCase()+tankUnit.slice(1)}</span>
-            <span class="spec-pill green">${parseInt(elementSize).toLocaleString()}W Elements</span>
+            <span class="spec-pill">${tankSize} ${tankUnit.charAt(0).toUpperCase()+tankUnit.slice(1)}</span>
+            <span class="spec-pill">${parseInt(elementSize).toLocaleString()}W Elements</span>
             <span class="spec-pill">${kwhDay} kWh/Day</span>
             ${kwhDayMax !== kwhDay ? `<span class="spec-pill">${kwhDayMax} kWh/Day Max</span>` : ''}
         </div>
