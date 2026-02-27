@@ -277,7 +277,10 @@
                 tankSize: tankSize,
                 kwhDay: kwhDay,
                 kwhDayMax: kwhDayMax || kwhDay,
-                gridType: 'off-grid'
+                gridType: 'off-grid',
+                userLocation: userData.location || '',
+                peakSunHours: lastAps || '',
+                season: userData.season || 'annual'
             });
             window.open('/diagram/installation.html?' + params.toString(), '_blank');
         }
@@ -289,6 +292,7 @@
         let unitSystem = '';
         let pendingLocation = '';
         let tryCount = parseInt(localStorage.getItem('calculatorTries') || '0');
+        let lastAps = 5.5; // stores actual peak sun hours after results are returned
 
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
@@ -744,6 +748,7 @@
             const act = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
             const lat = data.latitude_actual || 35;
             const direction = lat < 0 ? 'north' : 'south';
+            lastAps = aps;
 
             if (unitSystem === 'metric') {
                 const dg = gallonsToExactLiters(parseFloat(userData.gallons));
@@ -827,6 +832,7 @@ ${marketingBlock()}`);
             const act = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
             const lat = data.latitude_actual || 35;
             const direction = lat < 0 ? 'north' : 'south';
+            lastAps = aps;
 
             let recommended, alternative, recommendedName, alternativeName, reason;
             const i1250 = parseInt(sys1250.inverters), i1500 = parseInt(sys1500.inverters);
@@ -957,4 +963,3 @@ ${marketingBlock()}`);
     </script>
 </body>
 </html>
-
