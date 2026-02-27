@@ -71,6 +71,7 @@ async function createContact(token, email) {
         type: 'contacts',
         attributes: {
           email: email,
+          subscribed: true,
         },
         relationships: {
           site: {
