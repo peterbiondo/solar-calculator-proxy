@@ -332,7 +332,7 @@
                 <input type="email" id="email" name="email" placeholder="you@example.com" required>
             </div>
             
-            <button type="submit" class="submit-btn" id="submitBtn">Get Direct Access</button>
+            <button type="submit" class="submit-btn" id="submitBtn">Get Access + Join for Design Tips →</button>
         </form>
         
         <p class="privacy-note">
@@ -399,8 +399,15 @@
 
     // Persist state for downstream pages
     localStorage.setItem("avatar", selectedAvatar);
+    localStorage.setItem("selected_avatar", selectedAvatar);
     localStorage.setItem("opted_in", "true");
-
+    localStorage.setItem("user_email", email);
+    // Send to Kajabi
+    fetch('/api/kajabi-tag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, tag: selectedAvatar })
+    });       
     // Route by avatar
     if (selectedAvatar === "contractor") {
         window.location.href =
@@ -421,7 +428,7 @@
     // Safety fallback
     showError("Please select PV Contractor or DIY Homeowner.");
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Get Direct Access';
+    submitBtn.textContent = 'Get Access + Join for Design Tips →';
 });
 
         // Keyboard accessibility
