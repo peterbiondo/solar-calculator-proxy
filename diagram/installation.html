@@ -140,7 +140,7 @@
         }
         .spec-pill {
             background: #0F0F0F; border: 1px solid #2A2A2A;
-            border-radius: 20px; padding: 3px 10px;
+            border-radius: 20px; padding: 2px 7px;
             font-size: 12px; font-weight: 500; color: #E8E8E8;
         }
         .spec-pill.green { border-color: #00E676; color: #00E676; }
@@ -669,8 +669,8 @@
             </div>
         </div>
         <div class="component-specs centered">
-            <span class="spec-pill">${tankSize} ${tankUnit.charAt(0).toUpperCase()+tankUnit.slice(1)}</span>
-            <span class="spec-pill">${parseInt(elementSize).toLocaleString()}W Elements</span>
+            <span class="spec-pill orange">${tankSize} ${tankUnit.charAt(0).toUpperCase()+tankUnit.slice(1)}</span>
+            <span class="spec-pill green">${parseInt(elementSize).toLocaleString()}W Elements</span>
             <span class="spec-pill">${kwhDay} kWh/Day</span>
             ${kwhDayMax !== kwhDay ? `<span class="spec-pill">${kwhDayMax} kWh/Day Max</span>` : ''}
         </div>
