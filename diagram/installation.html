@@ -1,1 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It All Connects - iSolar Hot Water Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0F0F0F;
+            color: #FFFFFF;
+            min-height: 100vh;
+            padding: 20px 20px 50px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(0,230,118,0.07) 0%, rgba(0,217,255,0.04) 50%, transparent 75%);
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            filter: blur(80px);
+            z-index: 0;
+        }
+
+        /* ===================================
+           CLOSE BUTTON
+           =================================== */
+        .close-btn {
+            position: fixed;
+            top: 16px; right: 16px;
+            background: #1A1A1A;
+            border: 1px solid #2A2A2A;
+            color: #E8E8E8;
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, border-color 0.2s, transform 0.2s;
+            z-index: 1000;
+        }
+        .close-btn:hover {
+            background: #FFA500; color: #0F0F0F;
+            border-color: #FFA500; transform: scale(1.1);
+        }
+
+        /* ===================================
+           PAGE HEADER
+           =================================== */
+        .page-header {
+            text-align: center;
+            margin-bottom: 24px;
+            position: relative; z-index: 1;
+        }
+        .logo-lockup {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: radial-gradient(circle at 40% 40%, #FFE000, #FFA500);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 0 14px rgba(255,165,0,0.5);
+            flex-shrink: 0;
+        }
+        .logo-text {
+            text-align: left;
+        }
+        .logo-text .logo-main {
+            font-size: 15px; font-weight: 700; color: #FFFFFF;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+        }
+        .logo-text .logo-main span {
+            color: #FFA500;
+        }
+        .logo-text .logo-sub {
+            font-size: 10px; font-weight: 500; color: #888;
+            letter-spacing: 0.08em; text-transform: uppercase;
+        }
+        .page-header h1 {
+            font-size: 21px; font-weight: 700; color: #FFFFFF;
+        }
+
+        /* ===================================
+           DIAGRAM WRAPPER
+           =================================== */
+        .diagram-wrapper {
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative; z-index: 1;
+        }
+
+        /* ===================================
+           FULL-WIDTH COMPONENT BOXES
+           =================================== */
+        .component {
+            background: #1A1A1A;
+            border: 1.5px solid #2A2A2A;
+            border-radius: 14px;
+            padding: 15px 18px;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        }
+        .component:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0,230,118,0.12);
+            border-color: #00E676;
+        }
+        .component-header {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .component-header.centered {
+            justify-content: center; text-align: center;
+        }
+        .component-icon { font-size: 24px; line-height: 1; flex-shrink: 0; }
+        .component-title { font-size: 15px; font-weight: 700; color: #FFFFFF; }
+        .component-meta { font-size: 12px; color: #888; margin-top: 2px; }
+        .component-specs {
+            margin-top: 10px; padding-top: 10px;
+            border-top: 1px solid #2A2A2A;
+            display: flex; flex-wrap: wrap; gap: 7px;
+        }
+        .component-specs.centered {
+            justify-content: center;
+        }
+        .spec-pill {
+            background: #0F0F0F; border: 1px solid #2A2A2A;
+            border-radius: 20px; padding: 3px 10px;
+            font-size: 12px; font-weight: 500; color: #E8E8E8;
+        }
+        .spec-pill.green { border-color: #00E676; color: #00E676; }
+        .spec-pill.orange { border-color: #FFA500; color: #FFA500; }
+
+        /* ===================================
+           STRAIGHT VERTICAL CONNECTOR (used between disconnect and heater)
+           =================================== */
+        .connector {
+            display: flex; flex-direction: column; align-items: center;
+            height: 50px; position: relative;
+        }
+        .connector-line {
+            width: 2px; flex: 1;
+            background: linear-gradient(to bottom, #00E676, #FFA500);
+            position: relative;
+        }
+        .connector-arrow {
+            width: 0; height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 9px solid #FFA500;
+            animation: pulse-arrow 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes pulse-arrow {
+            0%, 100% { opacity: 0.5; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(3px); }
+        }
+        .particle {
+            position: absolute; width: 5px; height: 5px;
+            background: #00E676; border-radius: 50%;
+            left: 50%; transform: translateX(-50%);
+            animation: flow-down 2s linear infinite;
+            box-shadow: 0 0 5px #00E676;
+        }
+        .particle:nth-child(1) { animation-delay: 0s; }
+        .particle:nth-child(2) { animation-delay: 0.67s; }
+        .particle:nth-child(3) { animation-delay: 1.34s; }
+        @keyframes flow-down {
+            0%   { top: 0%; opacity: 0; }
+            10%  { opacity: 1; }
+            90%  { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .connector-label {
+            position: absolute; right: calc(100% + 8px); top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px; font-weight: 600; color: #FFA500;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            white-space: nowrap; background: #1A1A1A;
+            border: 1px solid #FFA500; border-radius: 8px; padding: 2px 7px;
+        }
+
+        /* ===================================
+           SVG CONNECTOR WRAPPERS
+           =================================== */
+        .svg-connector {
+            width: 100%;
+            display: block;
+            overflow: visible;
+        }
+
+        /* ===================================
+           PARALLEL SECTION
+           =================================== */
+        .parallel-section {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .string-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Short connector within a column — with particles */
+        .col-connector {
+            display: flex; flex-direction: column; align-items: center;
+            height: 36px; width: 100%; position: relative;
+        }
+        .col-connector-line {
+            width: 2px; flex: 1;
+            background: linear-gradient(to bottom, #00E676, #FFA500);
+            position: relative;
+        }
+        .col-connector-label {
+            position: absolute;
+            right: calc(100% + 5px);
+            top: 50%; transform: translateY(-50%);
+            font-size: 10px; font-weight: 600; color: #888;
+            letter-spacing: 0.06em;
+            white-space: nowrap;
+        }
+        .col-connector-arrow {
+            width: 0; height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 7px solid #FFA500;
+            animation: pulse-arrow 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        .col-particle {
+            position: absolute; width: 4px; height: 4px;
+            background: #00E676; border-radius: 50%;
+            left: 50%; transform: translateX(-50%);
+            animation: flow-down 1.5s linear infinite;
+            box-shadow: 0 0 4px #00E676;
+        }
+        .col-particle:nth-child(1) { animation-delay: 0s; }
+        .col-particle:nth-child(2) { animation-delay: 0.5s; }
+        .col-particle:nth-child(3) { animation-delay: 1s; }
+
+        /* ===================================
+           PANEL GROUP BOX
+           =================================== */
+        .panel-group {
+            background: #141414;
+            border: 1.5px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 12px 10px;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+        .panel-group:hover { border-color: #00E676; }
+        .panel-group-label {
+            font-size: 11px; font-weight: 600; color: #888;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            margin-bottom: 10px; text-align: center;
+        }
+        .panels-row {
+            display: flex; justify-content: center;
+            gap: 6px; align-items: flex-end;
+        }
+
+        /* ===================================
+           INVERTER BOX (within column)
+           =================================== */
+        .inverter-box {
+            background: #1A1A1A;
+            border: 1.5px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 12px 10px;
+            width: 100%;
+            text-align: center;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .inverter-box:hover {
+            border-color: #FFA500;
+            transform: translateY(-2px);
+        }
+        .inverter-box-icon { font-size: 20px; margin-bottom: 4px; }
+        .inverter-box-title {
+            font-size: 12px; font-weight: 700; color: #FFA500;
+            line-height: 1.4;
+        }
+        .inverter-box-sub {
+            font-size: 10px; color: #666; margin-top: 2px;
+        }
+
+        /* ===================================
+           FOOTER
+           =================================== */
+        .footer-note {
+            text-align: center; margin-top: 26px;
+            font-size: 11px; color: #444; line-height: 1.6;
+            position: relative; z-index: 1;
+        }
+
+        @media (max-width: 400px) {
+            body { padding: 14px 8px 40px 8px; }
+            .page-header h1 { font-size: 18px; }
+            .connector-label { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="close-btn" onclick="window.close()" title="Close">✕</button>
+
+<div class="page-header">
+    <img src="/logo.svg" alt="iSolar Hot Water Academy" style="height:48px; margin-bottom:12px; display:block; margin-left:auto; margin-right:auto;">
+    <h1>⚡ How It All Connects</h1>
+</div>
+
+<div class="diagram-wrapper" id="diagramWrapper"></div>
+
+<div class="footer-note">
+    Diagram represents system flow only.<br>
+    Consult a licensed electrician for installation.
+</div>
+
+<script>
+    /* ===================================
+       READ URL PARAMETERS
+       =================================== */
+    const p = new URLSearchParams(window.location.search);
+
+    const inverterModel  = p.get('inverterModel')  || 'CIM 1500H';
+    const inverterCount  = parseInt(p.get('inverterCount')  || '2');
+    const panelCount     = parseInt(p.get('panelCount')     || '6');
+    const panelWattage   = p.get('panelWattage')   || '450';
+    const elementSize    = p.get('elementSize')    || '2500';
+    const tankSize       = p.get('tankSize')       || '80';
+    const kwhDay         = p.get('kwhDay')         || '12.6';
+    const kwhDayMax      = p.get('kwhDayMax')      || kwhDay;
+    const gridType       = p.get('gridType')       || 'off-grid';
+    const userLocation   = p.get('userLocation')   || 'Your Location';
+    const peakSunHours   = p.get('peakSunHours')   || null;
+    const season         = p.get('season')         || '';
+
+    // Derived
+    const panelsPerInverter = Math.round(panelCount / inverterCount);
+    const ratedPowerW  = panelCount * parseInt(panelWattage);
+    const ratedPowerKw = (ratedPowerW / 1000).toFixed(2);
+    const tankUnit     = parseInt(tankSize) > 50 ? 'gallons' : 'liters';
+    const seasonLabel  = (season && season !== '') ? season.charAt(0).toUpperCase() + season.slice(1) : 'Annual';
+
+    /* ===================================
+       COLUMN CENTER POSITIONS
+       viewBox 0-100, N columns with equal spacing
+       =================================== */
+    function colCenters(n) {
+        // The parallel-section uses flex with gap:10px on a ~460px container.
+        // In viewBox units (0-100), the gap is approx 10/460*100 = 2.17 units.
+        // This ensures the lines land on the true center of each column box.
+        const g = 2.17;
+        const colW = (100 - (n - 1) * g) / n;
+        return Array.from({length: n}, (_, i) => i * (colW + g) + colW / 2);
+    }
+
+    /* ===================================
+       FAN-OUT SVG
+       Single stem down from center, then
+       diagonal branches to each column bottom.
+       Animated green dots travel each branch.
+       =================================== */
+    function fanOutSVG(n) {
+        if (n === 1) {
+            return `<div class="connector">
+                <div class="connector-line">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="connector-label">DC Power</div>
+                </div>
+                <div class="connector-arrow"></div>
+            </div>`;
+        }
+        // T-shape: vertical stem down, horizontal bar, short drops + arrows
+        const cx = 50;
+        const stemH  = 20;
+        const dropH  = 18;
+        const totalH = stemH + dropH + 10;
+        const centers = colCenters(n);
+        const leftX  = centers[0];
+        const rightX = centers[n - 1];
+        const barY   = stemH;
+        const dropEndY = stemH + dropH;
+
+        const defs = `<filter id="fo-glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="1.2" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>`;
+
+        let pathDefs = '';
+        centers.forEach((colX, i) => {
+            const pid = `fo-p${i}`;
+            const d = `M ${cx},0 L ${cx},${barY} L ${colX},${barY} L ${colX},${dropEndY}`;
+            pathDefs += `<path id="${pid}" d="${d}" fill="none" stroke="none"/>`;
+        });
+
+        let visuals = '';
+        // Stem
+        visuals += `<line x1="${cx}" y1="0" x2="${cx}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
+        // Bar
+        visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
+        // Drops + arrows
+        centers.forEach(colX => {
+            visuals += `<line x1="${colX}" y1="${barY}" x2="${colX}" y2="${dropEndY}" stroke="#00E676" stroke-width="1"/>`;
+            visuals += `<polygon points="${colX},${dropEndY + 7} ${colX - 3},${dropEndY} ${colX + 3},${dropEndY}" fill="#FFA500"/>`;
+        });
+
+        let dots = '';
+        centers.forEach((colX, i) => {
+            const pid = `fo-p${i}`;
+            for (let d2 = 0; d2 < 3; d2++) {
+                const delay = (d2 * 0.67).toFixed(2);
+                dots += `<circle r="2.2" fill="#00E676" filter="url(#fo-glow)">
+                    <animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear">
+                        <mpath href="#${pid}" xlink:href="#${pid}"/>
+                    </animateMotion>
+                </circle>`;
+            }
+        });
+
+        return `<svg class="svg-connector" viewBox="0 0 100 ${totalH + 8}"
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            style="display:block;width:100%;height:${totalH + 8}px;overflow:visible;">
+            <defs>${defs}${pathDefs}</defs>
+            ${visuals}${dots}
+        </svg>`;
+    }
+
+    function mergeInSVG(n) {
+        if (n === 1) {
+            return `<div class="connector">
+                <div class="connector-line">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="connector-label">AC Power</div>
+                </div>
+                <div class="connector-arrow"></div>
+            </div>`;
+        }
+        // Upside-down T: short rises from each inverter, horizontal bar, stem down to arrow
+        const cx = 50;
+        const riseH  = 18;
+        const stemH  = 20;
+        const totalH = riseH + stemH + 10;
+        const centers = colCenters(n);
+        const leftX  = centers[0];
+        const rightX = centers[n - 1];
+        const barY   = riseH;
+        const stemEndY = riseH + stemH;
+
+        const defs = `<filter id="mi-glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="1.2" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>`;
+
+        let pathDefs = '';
+        centers.forEach((colX, i) => {
+            const pid = `mi-p${i}`;
+            const d = `M ${colX},0 L ${colX},${barY} L ${cx},${barY} L ${cx},${stemEndY}`;
+            pathDefs += `<path id="${pid}" d="${d}" fill="none" stroke="none"/>`;
+        });
+
+        let visuals = '';
+        // Rises
+        centers.forEach(colX => {
+            visuals += `<line x1="${colX}" y1="0" x2="${colX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
+        });
+        // Bar
+        visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
+        // Stem down
+        visuals += `<line x1="${cx}" y1="${barY}" x2="${cx}" y2="${stemEndY}" stroke="#FFA500" stroke-width="1"/>`;
+        // Arrow
+        visuals += `<polygon points="${cx},${stemEndY + 8} ${cx - 3},${stemEndY} ${cx + 3},${stemEndY}" fill="#FFA500"/>`;
+
+        let dots = '';
+        centers.forEach((colX, i) => {
+            const pid = `mi-p${i}`;
+            for (let d2 = 0; d2 < 3; d2++) {
+                const delay = (d2 * 0.67).toFixed(2);
+                dots += `<circle r="2.2" fill="#00E676" filter="url(#mi-glow)">
+                    <animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear">
+                        <mpath href="#${pid}" xlink:href="#${pid}"/>
+                    </animateMotion>
+                </circle>`;
+            }
+        });
+
+        return `<svg class="svg-connector" viewBox="0 0 100 ${totalH + 8}"
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            style="display:block;width:100%;height:${totalH + 8}px;overflow:visible;">
+            <defs>${defs}${pathDefs}</defs>
+            ${visuals}${dots}
+        </svg>`;
+    }
+
+        function straightConnector(label) {
+        return `<div class="connector">
+            <div class="connector-line">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                ${label ? `<div class="connector-label">${label}</div>` : ''}
+            </div>
+            <div class="connector-arrow"></div>
+        </div>`;
+    }
+
+    /* ===================================
+       SVG SOLAR PANEL
+       Portrait, 3 cols × 2 rows of cells
+       Navy body, aluminum frame, busbars
+       =================================== */
+    function makePanelSVG() {
+        return `<svg width="50" height="74" viewBox="0 0 50 74" xmlns="http://www.w3.org/2000/svg">
+            <!-- Aluminum frame -->
+            <rect x="0" y="0" width="50" height="74" rx="2.5" fill="#7a8e9e"/>
+            <rect x="0.5" y="0.5" width="49" height="73" rx="2" fill="none" stroke="#9aaebc" stroke-width="0.8"/>
+            <!-- Panel body -->
+            <rect x="3" y="3" width="44" height="68" rx="1" fill="#0b1a2e"/>
+            <!-- Gloss sheen -->
+            <polygon points="3,3 26,3 3,18" fill="rgba(255,255,255,0.03)"/>
+            <!-- Cell grid: 3 cols, 2 rows -->
+            <line x1="17.7" y1="3" x2="17.7" y2="71" stroke="#162d50" stroke-width="1.2"/>
+            <line x1="32.3" y1="3" x2="32.3" y2="71" stroke="#162d50" stroke-width="1.2"/>
+            <line x1="3" y1="37" x2="47" y2="37" stroke="#162d50" stroke-width="1.2"/>
+            <!-- Busbars top row -->
+            <line x1="4"  y1="14" x2="17" y2="14" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4"  y1="22" x2="17" y2="22" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4"  y1="30" x2="17" y2="30" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="19" y1="14" x2="31" y2="14" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="19" y1="22" x2="31" y2="22" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="19" y1="30" x2="31" y2="30" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="33" y1="14" x2="46" y2="14" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="33" y1="22" x2="46" y2="22" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="33" y1="30" x2="46" y2="30" stroke="#1e3d6a" stroke-width="0.7"/>
+            <!-- Busbars bottom row -->
+            <line x1="4"  y1="49" x2="17" y2="49" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4"  y1="57" x2="17" y2="57" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4"  y1="65" x2="17" y2="65" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="19" y1="49" x2="31" y2="49" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="19" y1="57" x2="31" y2="57" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="19" y1="65" x2="31" y2="65" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="33" y1="49" x2="46" y2="49" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="33" y1="57" x2="46" y2="57" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="33" y1="65" x2="46" y2="65" stroke="#1e3d6a" stroke-width="0.7"/>
+            <!-- Junction box -->
+            <rect x="19" y="69" width="12" height="4" rx="1" fill="#5a6a7a"/>
+            <rect x="21" y="70" width="3" height="2" rx="0.5" fill="#3a4a5a"/>
+            <rect x="26" y="70" width="3" height="2" rx="0.5" fill="#3a4a5a"/>
+        </svg>`;
+    }
+
+    /* ===================================
+       ASSEMBLE DIAGRAM - two-pass:
+       1. Render columns into DOM
+       2. Measure real pixel centers
+       3. Draw SVG connectors exactly
+       =================================== */
+    const wrapper = document.getElementById('diagramWrapper');
+
+    // --- PEAK SUN HOURS PILL (always show, placeholder if missing) ---
+    const peakPillVal = peakSunHours ? `${peakSunHours} Peak Sun Hrs/Day` : '— Peak Sun Hrs/Day';
+    const peakPillClass = peakSunHours ? 'spec-pill green' : 'spec-pill';
+
+    // --- SUN BOX ---
+    let html = `<div class="component" id="sunBox">
+        <div class="component-header centered">
+            <div class="component-icon">☀️</div>
+            <div>
+                <div class="component-title">Solar Energy Source</div>
+            </div>
+        </div>
+        <div class="component-specs centered">
+            <span class="spec-pill orange">📍 ${userLocation}</span>
+            <span class="${peakPillClass}">${peakPillVal}</span>
+            <span class="spec-pill">${seasonLabel} Performance</span>
+        </div>
+    </div>`;
+
+    // Placeholder for fan-out SVG
+    html += `<div id="fanoutPlaceholder" style="width:100%;"></div>`;
+
+    // --- PARALLEL SECTION: panel groups + inverters ---
+    let columns = '';
+    for (let i = 0; i < inverterCount; i++) {
+        const pgLabel = `${panelsPerInverter} &times; ${panelWattage}W`;
+        let panelSVGs = '';
+        for (let j = 0; j < panelsPerInverter; j++) {
+            panelSVGs += makePanelSVG();
+        }
+        const invTitle = inverterCount > 1
+            ? `${inverterModel}<br><span style="font-size:10px;color:#888;font-weight:400;">Unit ${i + 1}</span>`
+            : inverterModel;
+
+        columns += `<div class="string-column" id="col${i}">
+            <div class="panel-group" id="panelGroup${i}">
+                <div class="panel-group-label">${pgLabel}</div>
+                <div class="panels-row">${panelSVGs}</div>
+            </div>
+            <div class="col-connector">
+                <div class="col-connector-line">
+                    <div class="col-particle"></div>
+                    <div class="col-particle"></div>
+                    <div class="col-particle"></div>
+                    <div class="col-connector-label">DC</div>
+                </div>
+                <div class="col-connector-arrow"></div>
+            </div>
+            <div class="inverter-box" id="invBox${i}">
+                <div class="inverter-box-icon">⚡</div>
+                <div class="inverter-box-title">${invTitle}</div>
+                <div class="inverter-box-sub">DC → AC</div>
+            </div>
+        </div>`;
+    }
+
+    html += `<div class="parallel-section" id="parallelSection">${columns}</div>`;
+
+    // Placeholder for merge SVG
+    html += `<div id="mergePlaceholder" style="width:100%;"></div>`;
+
+    // --- AC DISCONNECT ---
+    html += `<div class="component">
+        <div class="component-header centered">
+            <div class="component-icon">🔌</div>
+            <div>
+                <div class="component-title">AC Disconnect Switch</div>
+                <div class="component-meta">Safety shutoff &nbsp;·&nbsp; Required by code</div>
+            </div>
+        </div>
+        <div class="component-specs centered">
+            <span class="spec-pill">Lockable Disconnect</span>
+            <span class="spec-pill">NEC Compliant</span>
+        </div>
+    </div>`;
+
+    // --- CONNECTOR: 240V AC ---
+    html += straightConnector('240V AC');
+
+    // --- WATER HEATER ---
+    html += `<div class="component">
+        <div class="component-header centered">
+            <div class="component-icon">🚿</div>
+            <div>
+                <div class="component-title">Electric Water Heater</div>
+                <div class="component-meta">${tankSize} ${tankUnit} &nbsp;·&nbsp; ${parseInt(elementSize).toLocaleString()}W elements</div>
+            </div>
+        </div>
+        <div class="component-specs centered">
+            <span class="spec-pill orange">${tankSize} ${tankUnit.charAt(0).toUpperCase()+tankUnit.slice(1)}</span>
+            <span class="spec-pill green">${parseInt(elementSize).toLocaleString()}W Elements</span>
+            <span class="spec-pill">${kwhDay} kWh/Day</span>
+            ${kwhDayMax !== kwhDay ? `<span class="spec-pill">${kwhDayMax} kWh/Day Max</span>` : ''}
+        </div>
+    </div>`;
+
+    // Render everything into DOM
+    wrapper.innerHTML = html;
+
+    /* ===================================
+       PASS 2: Measure and draw SVG connectors
+       =================================== */
+    function drawConnectors() {
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const wW = wrapperRect.width;
+
+        // Get center X of each panel group and inverter box, relative to wrapper
+        const panelCenters = [];
+        const invCenters   = [];
+        for (let i = 0; i < inverterCount; i++) {
+            const pg = document.getElementById(`panelGroup${i}`).getBoundingClientRect();
+            const ib = document.getElementById(`invBox${i}`).getBoundingClientRect();
+            panelCenters.push(pg.left + pg.width / 2 - wrapperRect.left);
+            invCenters.push(ib.left + ib.width / 2 - wrapperRect.left);
+        }
+
+        // --- DRAW FAN-OUT ---
+        const foEl = document.getElementById('fanoutPlaceholder');
+        if (inverterCount === 1) {
+            foEl.outerHTML = straightConnector('DC Power');
+        } else {
+            const stemH = 20;
+            const dropH = 20;
+            const svgH  = stemH + dropH + 12;
+            const cx    = wW / 2;
+            const barY  = stemH;
+            const dropEndY = stemH + dropH;
+            const leftX  = panelCenters[0];
+            const rightX = panelCenters[panelCenters.length - 1];
+
+            let pathDefs = '';
+            panelCenters.forEach((colX, i) => {
+                const pid = `fo-p${i}`;
+                const d = `M ${cx},0 L ${cx},${barY} L ${colX},${barY} L ${colX},${dropEndY}`;
+                pathDefs += `<path id="${pid}" d="${d}" fill="none" stroke="none"/>`;
+            });
+
+            let visuals = '';
+            visuals += `<line x1="${cx}" y1="0" x2="${cx}" y2="${barY}" stroke="#FFE000" stroke-width="1.5"/>`;
+            visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#FFE000" stroke-width="1.5"/>`;
+            panelCenters.forEach(colX => {
+                visuals += `<line x1="${colX}" y1="${barY}" x2="${colX}" y2="${dropEndY}" stroke="#FFE000" stroke-width="1.5"/>`;
+                visuals += `<polygon points="${colX},${dropEndY + 9} ${colX - 4},${dropEndY} ${colX + 4},${dropEndY}" fill="#FFA500"/>`;
+            });
+
+            const defs = `<filter id="fo-glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="1.5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>`;
+
+            let dots = '';
+            panelCenters.forEach((colX, i) => {
+                const pid = `fo-p${i}`;
+                for (let d = 0; d < 3; d++) {
+                    const delay = (d * 0.67).toFixed(2);
+                    dots += `<circle r="3" fill="#FFE000" filter="url(#fo-glow)">
+                        <animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear">
+                            <mpath href="#${pid}" xlink:href="#${pid}"/>
+                        </animateMotion>
+                    </circle>`;
+                }
+            });
+
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                style="display:block;width:100%;height:${svgH}px;overflow:visible;" viewBox="0 0 ${wW} ${svgH}">
+                <defs>${defs}${pathDefs}</defs>
+                ${visuals}${dots}
+            </svg>`;
+            foEl.outerHTML = svg;
+        }
+
+        // --- DRAW MERGE ---
+        const miEl = document.getElementById('mergePlaceholder');
+        if (inverterCount === 1) {
+            miEl.outerHTML = straightConnector('AC Power');
+        } else {
+            const riseH = 20;
+            const stemH = 20;
+            const svgH  = riseH + stemH + 12;
+            const cx    = wW / 2;
+            const barY  = riseH;
+            const stemEndY = riseH + stemH;
+            const leftX  = invCenters[0];
+            const rightX = invCenters[invCenters.length - 1];
+
+            let pathDefs = '';
+            invCenters.forEach((colX, i) => {
+                const pid = `mi-p${i}`;
+                const d = `M ${colX},0 L ${colX},${barY} L ${cx},${barY} L ${cx},${stemEndY}`;
+                pathDefs += `<path id="${pid}" d="${d}" fill="none" stroke="none"/>`;
+            });
+
+            let visuals = '';
+            invCenters.forEach(colX => {
+                visuals += `<line x1="${colX}" y1="0" x2="${colX}" y2="${barY}" stroke="#00E676" stroke-width="1.5"/>`;
+            });
+            visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#00E676" stroke-width="1.5"/>`;
+            visuals += `<line x1="${cx}" y1="${barY}" x2="${cx}" y2="${stemEndY}" stroke="#FFA500" stroke-width="1.5"/>`;
+            visuals += `<polygon points="${cx},${stemEndY + 9} ${cx - 4},${stemEndY} ${cx + 4},${stemEndY}" fill="#FFA500"/>`;
+            visuals += `<text x="${cx + 5}" y="${barY + (stemEndY - barY) / 2 + 4}" font-family="Inter, sans-serif" font-size="9" font-weight="600" fill="#888" letter-spacing="0.06em">AC</text>`;
+
+            const defs = `<filter id="mi-glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="1.5" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>`;
+
+            let dots = '';
+            invCenters.forEach((colX, i) => {
+                const pid = `mi-p${i}`;
+                for (let d = 0; d < 3; d++) {
+                    const delay = (d * 0.67).toFixed(2);
+                    dots += `<circle r="3" fill="#00E676" filter="url(#mi-glow)">
+                        <animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear">
+                            <mpath href="#${pid}" xlink:href="#${pid}"/>
+                        </animateMotion>
+                    </circle>`;
+                }
+            });
+
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                style="display:block;width:100%;height:${svgH}px;overflow:visible;" viewBox="0 0 ${wW} ${svgH}">
+                <defs>${defs}${pathDefs}</defs>
+                ${visuals}${dots}
+            </svg>`;
+            miEl.outerHTML = svg;
+        }
+    }
+
+    // Wait for layout to settle, then measure and draw
+    requestAnimationFrame(() => requestAnimationFrame(drawConnectors));
+</script>
+
+</body>
+</html>
 
