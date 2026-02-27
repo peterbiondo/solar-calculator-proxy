@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -291,63 +292,7 @@ header {
         font-size: 38px;
     }
 }
-    /* ===== Kajabi embed: make it look like our clean form ===== */
-#kajabi-form {
-  max-width: 460px !important;
-  margin: 0 auto !important;
-}
-
-#kajabi-form .kajabi-form__content {
-  background: transparent !important;
-  padding: 0 !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-#kajabi-form .kajabi-form__title,
-#kajabi-form .kajabi-form__subtitle {
-  display: none !important;
-}
-
-/* Make Kajabi email input match our style */
-#kajabi-form input[type="email"] {
-  width: 100% !important;
-  padding: 14px 20px !important;
-  border-radius: 10px !important;
-  border: 2px solid rgba(255,255,255,0.2) !important;
-  background: rgba(255,255,255,0.06) !important;
-  color: #FFFFFF !important;
-  font-size: 16px !important;
-  font-family: 'Poppins', sans-serif !important;
-  outline: none !important;
-}
-
-#kajabi-form input[type="email"]::placeholder {
-  color: rgba(255,255,255,0.4) !important;
-}
-
-/* Make Kajabi button match our orange CTA */
-#kajabi-form button,
-#kajabi-form .kajabi-form__btn {
-  width: 100% !important;
-  padding: 14px 20px !important;
-  border-radius: 10px !important;
-  border: none !important;
-  background: #FFA500 !important;
-  color: #0F0F0F !important;
-  font-size: 17px !important;
-  font-weight: 700 !important;
-  font-family: 'Poppins', sans-serif !important;
-  cursor: pointer !important;
-}
-
-#kajabi-form button:hover,
-#kajabi-form .kajabi-form__btn:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4) !important;
-}
 </style>
-<script src="https://isolarhotwater.mykajabi.com/forms/2149464854/embed.js"></script>    
 </head>
 
 <body>
@@ -395,20 +340,18 @@ header {
         <h2 class="optin-heading">Get a better look at PV water heating</h2>
         <p class="optin-subheading">Instant access. No waiting.</p>
 
-        <div id="kajabi-form-2149464854"></div>
-<p class="privacy-note">🔒 No spam. Unsubscribe anytime.</p>
+        <form class="email-form" id="optinForm">
+            <input type="email" id="emailInput" placeholder="your@email.com" required>
+            <button type="submit">Take Me to the PV Sizing Calculator →</button>
+            <p class="privacy-note">🔒 No spam. Unsubscribe anytime.</p>
+        </form>
     </div>
 
 </section>
 
 <script>
-const optinForm = document.getElementById('optinForm');
-const kajabiWrap = document.getElementById('kajabi-form-2149464854');
-
 if (localStorage.getItem('opted_in') === 'true') {
-    // Hide the Kajabi form area for returning visitors
-    if (kajabiWrap) kajabiWrap.style.display = 'none';
-
+    document.getElementById('optinForm').style.display = 'none';
     document.querySelector('.optin-heading').textContent = 'Welcome back!';
     document.querySelector('.optin-subheading').textContent = 'Click below to jump back into the PV Designer.';
     const btn = document.createElement('a');
@@ -419,26 +362,22 @@ if (localStorage.getItem('opted_in') === 'true') {
     document.querySelector('.optin-section').appendChild(btn);
 }
 
-// If the old custom form exists (it won't now), keep the old behavior.
-// This guard prevents errors.
-if (optinForm) {
-    optinForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.getElementById('emailInput').value;
-        localStorage.setItem('opted_in', 'true');
-        localStorage.setItem('selected_avatar', 'diy');
+document.getElementById('optinForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    localStorage.setItem('opted_in', 'true');
+    localStorage.setItem('selected_avatar', 'diy');
 
-        const KAJABI_FORM_URL = 'YOUR_KAJABI_DIY_FORM_URL_HERE';
+    const KAJABI_FORM_URL = 'YOUR_KAJABI_DIY_FORM_URL_HERE';
 
-        fetch(KAJABI_FORM_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email })
-        }).finally(() => {
-            window.location.href = '/calc/diy.html';
-        });
+    fetch(KAJABI_FORM_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+    }).finally(() => {
+        window.location.href = '/calc/diy.html';
     });
-}
+});
 </script>
 <script>
 // Force check on page show (catches back button)
