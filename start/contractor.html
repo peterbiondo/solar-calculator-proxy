@@ -374,7 +374,8 @@ document.getElementById('optinForm').addEventListener('submit', function(e) {
     const email = document.getElementById('emailInput').value;
     localStorage.setItem('opted_in', 'true');
     localStorage.setItem('selected_avatar', 'contractor');
-
+    localStorage.setItem('user_email', email);
+    
     const KAJABI_FORM_URL = '/api/kajabi-tag';
 
     fetch(KAJABI_FORM_URL, {
