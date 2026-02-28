@@ -4,33 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PV Solar Hot Water Calculator - iSolar Hot Water Academy</title>
-    
-    <!-- Inter Font from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
 <style>
-        /* ===================================
-           RESET & BASE STYLES - iSolar Branding
-           =================================== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0F0F0F; /* iSolar Black */
-            
-            /* ADD YOUR TILED BACKGROUND HERE */
-            /* Uncomment and add your image path when ready: */
-            /* background-image: url('path-to-your-solar-icons-tile.png'); */
-            /* background-size: 200px 200px; */ /* Adjust size as needed */
-            /* background-repeat: repeat; */
-            /* background-position: center; */
-            
+            background: #0F0F0F;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -39,618 +20,232 @@
             overflow-x: hidden;
             position: relative;
         }
-        
-        /* Main glow - Left side (Energy Green to Violet) */
         body::before {
             content: '';
             position: absolute;
-            width: 900px;
-            height: 900px;
-            background: radial-gradient(
-                circle at 30% 50%, 
-                rgba(0, 230, 118, 0.12) 0%,      /* Energy Green #00E676 */
-                rgba(0, 217, 255, 0.08) 30%,     /* Electric Cyan */
-                rgba(118, 75, 162, 0.06) 60%,    /* Violet */
-                transparent 80%
-            );
-            top: 50%;
-            left: 50%;
+            width: 900px; height: 900px;
+            background: radial-gradient(circle at 30% 50%, rgba(0,230,118,0.12) 0%, rgba(0,217,255,0.08) 30%, rgba(118,75,162,0.06) 60%, transparent 80%);
+            top: 50%; left: 50%;
             transform: translate(-60%, -50%);
-            pointer-events: none;
-            z-index: 1; /* Above background, below chat */
-            filter: blur(60px);
+            pointer-events: none; z-index: 1; filter: blur(60px);
         }
-        
-        /* Subtle fill glow - Top-right side (softer, smaller) */
         body::after {
             content: '';
             position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(
-                circle at 70% 30%, 
-                rgba(0, 230, 118, 0.05) 0%,      /* Energy Green - softer */
-                rgba(0, 217, 255, 0.03) 40%,     /* Electric Cyan - softer */
-                rgba(118, 75, 162, 0.02) 70%,    /* Violet - softer */
-                transparent 85%
-            );
-            top: 20%;
-            right: 10%;
-            pointer-events: none;
-            z-index: 1; /* Above background, below chat */
-            filter: blur(50px);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle at 70% 30%, rgba(0,230,118,0.05) 0%, rgba(0,217,255,0.03) 40%, rgba(118,75,162,0.02) 70%, transparent 85%);
+            top: 20%; right: 10%;
+            pointer-events: none; z-index: 1; filter: blur(50px);
         }
-        
-        /* ===================================
-           CHAT CONTAINER
-           =================================== */
         .chat-container {
-            width: 100%;
-            max-width: 600px;
-            height: 90vh;
-            max-height: 700px;
-            background: #1A1A1A; /* Card Charcoal */
-            border-radius: 20px;
+            width: 100%; max-width: 600px; height: 90vh; max-height: 700px;
+            background: #1A1A1A; border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid #2A2A2A;
-            position: relative;
-            z-index: 10; /* Above glows */
+            display: flex; flex-direction: column; overflow: hidden;
+            border: 1px solid #2A2A2A; position: relative; z-index: 10;
         }
-        
-        /* ===================================
-           HEADER - iSolar Branding
-           =================================== */
         .chat-header {
-            background: #0F0F0F; /* iSolar Black */
-            color: #FFFFFF; /* Pure White */
-            padding: 20px;
-            text-align: center;
-            flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 2px solid #FFA500; /* Solar Orange accent */
+            background: #0F0F0F; color: #FFFFFF; padding: 20px;
+            text-align: center; flex-shrink: 0; position: sticky; top: 0; z-index: 100;
+            border-bottom: 2px solid #FFA500;
         }
-        
-        .chat-header h1 {
-            font-size: 24px;
-            font-weight: 700; /* Inter Bold */
-            margin-bottom: 5px;
-            color: #FFFFFF;
-        }
-        
-        .chat-header p {
-            font-size: 14px;
-            font-weight: 400; /* Inter Regular */
-            color: #E8E8E8; /* Soft Gray */
-        }
-        /* Header logo image (replaces the text line) */
-        .header-logo {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .header-logo-img {
-            height: 34px;     /* clean, not overpowering */
-            width: auto;
-            max-width: 85%;
-            display: block;
-        }
-        .chat-header p:first-child {
-            font-size: 14px;
-            font-weight: 500; /* Inter Medium */
-            color: #FFA500; /* Solar Orange */
-            margin-bottom: 5px;
-        }
-        
-        /* ===================================
-           START SCREEN
-           =================================== */
+        .chat-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 5px; color: #FFFFFF; }
+        .chat-header p { font-size: 14px; font-weight: 400; color: #E8E8E8; }
+        .header-logo { display: flex; justify-content: center; align-items: center; margin-bottom: 10px; }
+        .header-logo-img { height: 34px; width: auto; max-width: 85%; display: block; }
+        .chat-header p:first-child { font-size: 14px; font-weight: 500; color: #FFA500; margin-bottom: 5px; }
         .start-screen {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 40px 40px 20px 40px;
-            text-align: center;
-            overflow-y: auto;
-            background: #0F0F0F; /* iSolar Black */
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: flex-start; padding: 40px 40px 20px 40px;
+            text-align: center; overflow-y: auto; background: #0F0F0F;
         }
-        
-        .start-screen h2 {
-            color: #FFA500; /* Solar Orange */
-            font-size: 28px;
-            font-weight: 700; /* Inter Bold */
-            margin-bottom: 15px;
-        }
-        
-        .start-screen p {
-            color: #E8E8E8; /* Soft Gray */
-            font-size: 16px;
-            font-weight: 400; /* Inter Regular */
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-        
-        .start-screen p strong {
-            color: #FFFFFF; /* Pure White for emphasis */
-            font-weight: 600; /* Inter SemiBold */
-        }
-        
+        .start-screen h2 { color: #FFA500; font-size: 28px; font-weight: 700; margin-bottom: 15px; }
+        .start-screen p { color: #E8E8E8; font-size: 16px; font-weight: 400; margin-bottom: 10px; line-height: 1.6; }
+        .start-screen p strong { color: #FFFFFF; font-weight: 600; }
         .start-screen button {
-            margin-top: 30px;
-            background: #FFA500; /* Solar Orange */
-            color: #0F0F0F; /* Black text on orange button */
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600; /* Inter SemiBold */
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-family: 'Inter', sans-serif;
+            margin-top: 30px; background: #FFA500; color: #0F0F0F; border: none;
+            padding: 15px 40px; border-radius: 30px; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; font-family: 'Inter', sans-serif;
         }
-        
-        .start-screen button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
-        }
-        
-        /* ===================================
-           CHAT INTERFACE
-           =================================== */
-        .chat-interface {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 0;
-        }
-        
+        .start-screen button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,165,0,0.4); }
+        .chat-interface { display: flex; flex-direction: column; height: 100%; min-height: 0; }
         .chat-messages {
-            flex: 0 1 auto;
-            max-height: 250px;
-            overflow-y: auto;
-            padding: 20px;
-            padding-bottom: 10px;
-            background: #0F0F0F; /* iSolar Black */
-            min-height: 150px;
-            transition: max-height 1.5s ease;
+            flex: 0 1 auto; max-height: 250px; overflow-y: auto;
+            padding: 20px; padding-bottom: 10px; background: #0F0F0F;
+            min-height: 150px; transition: max-height 1.5s ease;
         }
-
-        .chat-messages.expanded {
-            flex: 1;
-            max-height: none;
-        }
-        
-        /* ===================================
-           MESSAGE BUBBLES - iSolar Colors
-           =================================== */
-        .message {
-            margin-bottom: 15px;
-            display: flex;
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .message.bot {
-            justify-content: flex-start;
-        }
-        
-        .message.user {
-            justify-content: flex-end;
-        }
-        
+        .chat-messages.expanded { flex: 1; max-height: none; }
+        .message { margin-bottom: 15px; display: flex; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message.bot { justify-content: flex-start; }
+        .message.user { justify-content: flex-end; }
         .message-content {
-            max-width: 75%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            word-wrap: break-word;
-            font-family: 'Inter', sans-serif;
-            font-size: 15px; /* Bot/User message text size */
-            font-weight: 400; /* Inter Regular */
-            line-height: 1.5;
+            max-width: 75%; padding: 12px 16px; border-radius: 18px;
+            word-wrap: break-word; font-family: 'Inter', sans-serif;
+            font-size: 15px; font-weight: 400; line-height: 1.5;
         }
-        
         .message.bot .message-content {
-            background: #1A1A1A; /* Card Charcoal */
-            color: #FFFFFF; /* Pure White */
-            border-bottom-left-radius: 4px;
+            background: #1A1A1A; color: #FFFFFF; border-bottom-left-radius: 4px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-        
-        .message.bot .message-content strong {
-            color: #FFA500; /* Solar Orange for emphasis */
-            font-weight: 600; /* Inter SemiBold */
-        }
-        
-        .message.bot .message-content em {
-            color: #E8E8E8; /* Soft Gray for italics */
-            font-weight: 400;
-        }
-        
-        .message.bot .message-content a {
-            color: #FFA500; /* Solar Orange for links */
-            font-weight: 500;
-        }
-        
+        .message.bot .message-content strong { color: #FFA500; font-weight: 600; }
+        .message.bot .message-content em { color: #E8E8E8; font-weight: 400; }
+        .message.bot .message-content a { color: #FFA500; font-weight: 500; }
         .message.user .message-content {
-            background: #FFA500; /* Solar Orange */
-            color: #0F0F0F; /* iSolar Black text on orange */
-            border-bottom-right-radius: 4px;
-            font-weight: 500; /* Inter Medium */
+            background: #FFA500; color: #0F0F0F;
+            border-bottom-right-radius: 4px; font-weight: 500;
         }
-        
-        /* ===================================
-           TYPING INDICATOR
-           =================================== */
         .typing-indicator {
-            display: none;
-            padding: 12px 16px;
-            background: #1A1A1A; /* Card Charcoal */
-            border-radius: 18px;
-            width: fit-content;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            display: none; padding: 12px 16px; background: #1A1A1A;
+            border-radius: 18px; width: fit-content; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-        
         .typing-indicator span {
-            height: 8px;
-            width: 8px;
-            background: #FFA500; /* Solar Orange */
-            border-radius: 50%;
-            display: inline-block;
-            margin: 0 2px;
-            animation: bounce 1.4s infinite ease-in-out;
+            height: 8px; width: 8px; background: #FFA500; border-radius: 50%;
+            display: inline-block; margin: 0 2px; animation: bounce 1.4s infinite ease-in-out;
         }
-        
-        .typing-indicator span:nth-child(1) {
-            animation-delay: -0.32s;
-        }
-        
-        .typing-indicator span:nth-child(2) {
-            animation-delay: -0.16s;
-        }
-        
-        @keyframes bounce {
-            0%, 80%, 100% {
-                transform: scale(0);
-            }
-            40% {
-                transform: scale(1);
-            }
-        }
-        
-        /* ===================================
-           INPUT AREA - iSolar Branding
-           =================================== */
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
         .chat-input-area {
-            padding: 10px 15px 5px 15px;
-            background: #1A1A1A; /* Card Charcoal */
-            border-top: 1px solid #2A2A2A;
-            flex-shrink: 0;
+            padding: 10px 15px 5px 15px; background: #1A1A1A;
+            border-top: 1px solid #2A2A2A; flex-shrink: 0;
         }
-        
-        .gallon-buttons {
-            display: none;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
+        .gallon-buttons { display: none; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
         .gallon-btn {
-            padding: 12px;
-            background: #FFA500; /* Solar Orange */
-            color: #0F0F0F; /* Black text on orange button */
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 15px; /* Button text size */
-            font-weight: 600; /* Inter SemiBold */
-            font-family: 'Inter', sans-serif;
-            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 12px; background: #FFA500; color: #0F0F0F; border: none;
+            border-radius: 15px; cursor: pointer; font-size: 15px; font-weight: 600;
+            font-family: 'Inter', sans-serif; transition: transform 0.2s, box-shadow 0.2s;
         }
-        
-        .gallon-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
-        }
-        
-        .gallon-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Smaller spec sheet buttons */
+        .gallon-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255,165,0,0.4); }
+        .gallon-btn:active { transform: scale(0.98); }
         .message.bot .message-content a.spec-btn {
-            padding: 8px 16px;
+            padding: 8px 16px; background: #FFA500; color: #0F0F0F !important;
+            border: none; border-radius: 15px; cursor: pointer; font-size: 13px;
+            font-weight: 600 !important; font-family: 'Inter', sans-serif;
+            transition: transform 0.2s, box-shadow 0.2s; text-decoration: none;
+            display: inline-block; margin-right: 8px; margin-top: 8px;
+        }
+        .message.bot .message-content a.spec-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(255,165,0,0.4); color: #0F0F0F !important; }
+        .message.bot .message-content a.spec-btn:active { transform: scale(0.98); }
+
+        /* ===================================
+           DIAGRAM BUTTON
+           =================================== */
+        .diagram-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
             background: #FFA500;
-            color: #0F0F0F !important; /* Black text - !important to override link color */
+            color: #0F0F0F;
             border: none;
             border-radius: 15px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 600 !important;
+            font-size: 15px;
+            font-weight: 600;
             font-family: 'Inter', sans-serif;
             transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            display: inline-block;
-            margin-right: 8px;
-            margin-top: 8px;
+            margin-top: 10px;
+            margin-bottom: 4px;
+            text-align: center;
         }
-        
-        .message.bot .message-content a.spec-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
-            color: #0F0F0F !important; /* Keep black on hover too */
-        }
-        
-        .message.bot .message-content a.spec-btn:active {
-            transform: scale(0.98);
-        }
-        
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 0;
-        }
-        
+        .diagram-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,165,0,0.5); }
+        .diagram-btn:active { transform: scale(0.98); }
+
+        .input-group { display: flex; gap: 10px; margin-bottom: 0; }
         #userInput {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #2A2A2A;
-            background: #0F0F0F; /* iSolar Black */
-            color: #FFFFFF; /* Pure White */
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 400; /* Inter Regular */
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: border-color 0.3s;
+            flex: 1; padding: 12px 15px; border: 2px solid #2A2A2A;
+            background: #0F0F0F; color: #FFFFFF; border-radius: 25px;
+            font-size: 16px; font-weight: 400; font-family: 'Inter', sans-serif;
+            outline: none; transition: border-color 0.3s;
         }
-        
-        #userInput::placeholder {
-            color: #E8E8E8; /* Soft Gray */
-            font-weight: 400;
-        }
-        
-        #userInput:focus {
-            border-color: #FFA500; /* Solar Orange on focus */
-        }
-        
+        #userInput::placeholder { color: #E8E8E8; font-weight: 400; }
+        #userInput:focus { border-color: #FFA500; }
         #sendBtn {
-            background: #FFA500; /* Solar Orange */
-            color: #0F0F0F; /* Black text on orange button */
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600; /* Inter SemiBold */
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            flex-shrink: 0;
+            background: #FFA500; color: #0F0F0F; border: none; padding: 12px 24px;
+            border-radius: 25px; cursor: pointer; font-weight: 600;
+            font-family: 'Inter', sans-serif; font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s; flex-shrink: 0;
         }
-        
-        #sendBtn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
-        }
-        
-        #sendBtn:active {
-            transform: translateY(0);
-        }
-        
-        .hidden {
-            display: none !important;
-        }
-        
+        #sendBtn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255,165,0,0.4); }
+        #sendBtn:active { transform: translateY(0); }
+        .hidden { display: none !important; }
         @keyframes wave {
             0%, 100% { transform: rotate(0deg); }
             10%, 30%, 50%, 70%, 90% { transform: rotate(14deg); }
             20%, 40%, 60%, 80% { transform: rotate(-8deg); }
         }
-        
-        .wave-emoji {
-            display: inline-block;
-            animation: wave 2s ease-in-out;
-            transform-origin: 70% 70%;
-            font-size: 28px;
-        }
-        
-        /* Checkmark styling for success elements */
-        .checkmark {
-            color: #00E676; /* Energy Green */
-        }
-        
-        /* Scrollbar styling for dark theme */
-        .chat-messages::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .chat-messages::-webkit-scrollbar-track {
-            background: #1A1A1A;
-        }
-        
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: #FFA500;
-            border-radius: 4px;
-        }
-        
-        .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: #E65100;
-        }
-        /* ===================================
-           MOBILE: FORCE SINGLE-COLUMN CHAT
-           =================================== */
+        .wave-emoji { display: inline-block; animation: wave 2s ease-in-out; transform-origin: 70% 70%; font-size: 28px; }
+        .checkmark { color: #00E676; }
+        .chat-messages::-webkit-scrollbar { width: 8px; }
+        .chat-messages::-webkit-scrollbar-track { background: #1A1A1A; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #FFA500; border-radius: 4px; }
+        .chat-messages::-webkit-scrollbar-thumb:hover { background: #E65100; }
         @media (max-width: 600px) {
-
-          .message.bot,
-          .message.user {
-            justify-content: flex-start;
-          }
-
-          .message-content {
-            max-width: 95%;
-          }
-
-          .message.user .message-content {
-            margin-left: auto;
-          }
+            .message.bot, .message.user { justify-content: flex-start; }
+            .message-content { max-width: 95%; }
+            .message.user .message-content { margin-left: auto; }
+            .chat-header { padding: 12px 14px; }
+            .header-logo-img { height: 28px; }
+            .chat-header h1 { font-size: 20px; }
+            .chat-header p { font-size: 13px; }
+            .chat-messages { padding-left: 10px; padding-right: 10px; }
+            body { padding: 10px; }
+            .chat-container { max-width: 100%; }
         }
-
-        /* ===================================
-           MOBILE: TIGHTER HEADER TO MATCH CHAT
-           =================================== */
-        @media (max-width: 600px) {
-
-          .chat-header {
-            padding: 12px 14px;
-          }
-            
-        @media (max-width: 600px) {
-          .header-logo-img {
-            height: 28px;
-          }
-        }
-
-          .chat-header h1 {
-            font-size: 20px;
-          }
-
-          .chat-header p {
-            font-size: 13px;
-          }
-        }    
-         /* ===================================
-           MOBILE: USE MORE HORIZONTAL SPACE
-           =================================== */
-        @media (max-width: 600px) {
-
-          .chat-messages {
-            padding-left: 10px;   /* was 20px */
-            padding-right: 10px;  /* was 20px */
-          }
-        }
-        /* ===================================
-           MOBILE: USE MORE HORIZONTAL SPACE
-           =================================== */
-        @media (max-width: 600px) {
-
-          .chat-messages {
-            padding-left: 10px;   /* was 20px */
-            padding-right: 10px;  /* was 20px */
-          }
-        }
-        /* ===================================
-           MOBILE: REDUCE BODY PADDING FOR FULL WIDTH
-           =================================== */
-        @media (max-width: 600px) {
-          body {
-            padding: 10px;  /* Reduce from 20px - safe middle ground */
-          }
-        .chat-container {
-            max-width: 100%;  /* Allow full width on mobile */
-          }
-        }
-   
-    </style>
-    
-    <!-- iOS Safari scroll position fix -->
+</style>
     <script>
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
-        
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
         window.scrollTo(0, 0);
-        
         document.addEventListener('DOMContentLoaded', function() {
             window.scrollTo(0, 0);
             document.body.scrollTop = 0;
             document.documentElement.scrollTop = 0;
-            
             const startScreen = document.querySelector('.start-screen');
-            if (startScreen) {
-                startScreen.scrollTop = 0;
-            }
+            if (startScreen) startScreen.scrollTop = 0;
         });
-        
         window.addEventListener('load', function() {
             setTimeout(function() {
                 window.scrollTo(0, 0);
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
-                
                 const startScreen = document.querySelector('.start-screen');
-                if (startScreen) {
-                    startScreen.scrollTop = 0;
-                }
+                if (startScreen) startScreen.scrollTop = 0;
             }, 0);
         });
     </script>
 </head>
 <body>
     <div class="chat-container">
-        <!-- ===================================
-             HEADER - iSolar Branding
-             =================================== -->
         <div class="chat-header">
             <div class="header-logo">
                 <img src="/Logo.svg" alt="iSolar Hot Water Academy" class="header-logo-img">
             </div>
-            <h1>☀️ PV Solar Hot Water Designer</h1>
-            <p>International Support - Metric & Imperial</p>
+            <h1>&#9728;&#65039; PV Solar Hot Water Designer</h1>
+            <p>International Support - Metric &amp; Imperial</p>
         </div>
-        
-        <!-- ===================================
-             START SCREEN
-             =================================== -->
         <div id="startScreen" class="start-screen">
             <h2>Welcome to Your Photovoltaic Hot Water System Designer!</h2>
             <p><strong>I'll help you design a solar electric water heater.</strong></p>
             <p>This takes about 2 minutes.</p>
             <p>Let's get started!</p>
             <button onclick="startChat()">Start Calculator</button>
-            
             <p style="font-size: 13px; color: #E8E8E8; margin-top: 30px; line-height: 1.5; max-width: 500px;">
-                Modeling estimates solar hot water using local solar radiation and groundwater temperature. <strong>It targets 75–85% of annual hot-water demand from solar</strong> for balance of cost and performance.
+                Modeling estimates solar hot water using local solar radiation and groundwater temperature. <strong>It targets 75&ndash;85% of annual hot-water demand from solar</strong> for balance of cost and performance.
             </p>
-
             <p style="font-size: 13px; color: #E8E8E8; line-height: 1.5; max-width: 500px;">
                 You can select annual or seasonal averages, or enter your own custom values.<br>
                 The goal is to provide a practical starting point for system sizing rather than detailed hour-by-hour or day-by-day performance modeling.
             </p>
         </div>
-        
-        <!-- ===================================
-             CHAT INTERFACE
-             =================================== -->
         <div id="chatInterface" class="chat-interface hidden">
             <div class="chat-messages" id="chatMessages">
                 <div class="typing-indicator" id="typingIndicator">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span></span><span></span><span></span>
                 </div>
             </div>
-            
             <div class="chat-input-area" id="chatInputArea">
                 <div id="gallonButtons" class="gallon-buttons"></div>
                 <div id="scenarioButtons" class="gallon-buttons"></div>
-                
                 <div class="input-group">
                     <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
                     <button id="sendBtn">Send</button>
@@ -660,1515 +255,711 @@
     </div>
 
     <script>
-        /* ===================================
-           CONFIGURATION & GLOBAL VARIABLES
-           =================================== */
-        
         const WEBHOOK_URL = 'https://solar-calculator-proxy.vercel.app/api/webhook-proxy';
-        
+
+        function redirectToWaitlist() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userEmail = urlParams.get('email') || 'unknown@example.com';
+            window.location.href = `/waitlist/contractor.html?email=${encodeURIComponent(userEmail)}&avatar=contractor`;
+        }
+
         /* ===================================
-   WAITLIST REDIRECT FUNCTION
-   =================================== */
-function redirectToWaitlist() {
-    // Get email from URL parameters (passed from opt-in page)
-    const urlParams = new URLSearchParams(window.location.search);
-    const userEmail = urlParams.get('email') || 'unknown@example.com';
-    
-    // Redirect to waitlist page with email and avatar
-    window.location.href = `/waitlist/contractor.html?email=${encodeURIComponent(userEmail)}&avatar=contractor`;
-}
-        
+           OPEN DIAGRAM FUNCTION
+           Builds URL params and opens diagram in new tab
+           =================================== */
+        function openDiagram(inverterModel, inverterCount, panelCount, panelWattage, elementSize, tankSize, kwhDay, kwhDayMax) {
+            const params = new URLSearchParams({
+                inverterModel: inverterModel,
+                inverterCount: inverterCount,
+                panelCount: panelCount,
+                panelWattage: panelWattage,
+                elementSize: elementSize,
+                tankSize: tankSize,
+                kwhDay: kwhDay,
+                kwhDayMax: kwhDayMax || kwhDay,
+                gridType: 'off-grid',
+                userLocation: userData.location || '',
+                peakSunHours: lastAps || '',
+                season: userData.season || 'annual'
+            });
+            window.open('/diagram/installation.html?' + params.toString(), '_blank');
+        }
+
         let conversationStep = 0;
-        let userData = {
-            season: '',
-            useAIClimate: false
-        };
+        let userData = { season: '', useAIClimate: false };
         let estimatedAnnualSun = 5.5;
         let estimatedAnnualColdWater = 68;
         let unitSystem = '';
         let pendingLocation = '';
         let tryCount = parseInt(localStorage.getItem('calculatorTries') || '0');
-        
+        let lastAps = 5.5; // stores actual peak sun hours after results are returned
+
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
         const typingIndicator = document.getElementById('typingIndicator');
         const gallonButtons = document.getElementById('gallonButtons');
         const chatInputArea = document.getElementById('chatInputArea');
-        
-        /* ===================================
-           DATA MAPPINGS
-           =================================== */
-        
-        const metricTankConversions = {
-            80: 20,
-            150: 40,
-            200: 52,
-            250: 66,
-            300: 79,
-            400: 105,
-            500: 132
-        };
-        
+
+        const metricTankConversions = { 80: 20, 150: 40, 200: 52, 250: 66, 300: 79, 400: 105, 500: 132 };
+
         const stateAbbreviations = {
-            'al': 'Alabama', 'ak': 'Alaska', 'az': 'Arizona', 'ar': 'Arkansas', 'ca': 'California',
-            'co': 'Colorado', 'ct': 'Connecticut', 'de': 'Delaware', 'fl': 'Florida', 'ga': 'Georgia',
-            'hi': 'Hawaii', 'id': 'Idaho', 'il': 'Illinois', 'in': 'Indiana', 'ia': 'Iowa',
-            'ks': 'Kansas', 'ky': 'Kentucky', 'la': 'Louisiana', 'me': 'Maine', 'md': 'Maryland',
-            'ma': 'Massachusetts', 'mi': 'Michigan', 'mn': 'Minnesota', 'ms': 'Mississippi', 'mo': 'Missouri',
-            'mt': 'Montana', 'ne': 'Nebraska', 'nv': 'Nevada', 'nh': 'New Hampshire', 'nj': 'New Jersey',
-            'nm': 'New Mexico', 'ny': 'New York', 'nc': 'North Carolina', 'nd': 'North Dakota', 'oh': 'Ohio',
-            'ok': 'Oklahoma', 'or': 'Oregon', 'pa': 'Pennsylvania', 'ri': 'Rhode Island', 'sc': 'South Carolina',
-            'sd': 'South Dakota', 'tn': 'Tennessee', 'tx': 'Texas', 'ut': 'Utah', 'vt': 'Vermont',
-            'va': 'Virginia', 'wa': 'Washington', 'wv': 'West Virginia', 'wi': 'Wisconsin', 'wy': 'Wyoming',
-            'dc': 'District of Columbia'
+            'al':'Alabama','ak':'Alaska','az':'Arizona','ar':'Arkansas','ca':'California',
+            'co':'Colorado','ct':'Connecticut','de':'Delaware','fl':'Florida','ga':'Georgia',
+            'hi':'Hawaii','id':'Idaho','il':'Illinois','in':'Indiana','ia':'Iowa',
+            'ks':'Kansas','ky':'Kentucky','la':'Louisiana','me':'Maine','md':'Maryland',
+            'ma':'Massachusetts','mi':'Michigan','mn':'Minnesota','ms':'Mississippi','mo':'Missouri',
+            'mt':'Montana','ne':'Nebraska','nv':'Nevada','nh':'New Hampshire','nj':'New Jersey',
+            'nm':'New Mexico','ny':'New York','nc':'North Carolina','nd':'North Dakota','oh':'Ohio',
+            'ok':'Oklahoma','or':'Oregon','pa':'Pennsylvania','ri':'Rhode Island','sc':'South Carolina',
+            'sd':'South Dakota','tn':'Tennessee','tx':'Texas','ut':'Utah','vt':'Vermont',
+            'va':'Virginia','wa':'Washington','wv':'West Virginia','wi':'Wisconsin','wy':'Wyoming',
+            'dc':'District of Columbia'
         };
-        
+
         const countryCorrections = {
-            'uk': 'United Kingdom',
-            'usa': 'United States',
-            'us': 'United States',
-            'uae': 'United Arab Emirates',
-            'nz': 'New Zealand',
-            'au': 'Australia',
-            'sa': 'South Africa',
-            'can': 'Canada',
-            'mex': 'Mexico',
-            'ger': 'Germany',
-            'fra': 'France',
-            'esp': 'Spain',
-            'ita': 'Italy',
-            'jpn': 'Japan',
-            'chn': 'China',
-            'ind': 'India',
-            'bra': 'Brazil',
-            'arg': 'Argentina',
-            'united kingdom': 'United Kingdom',
-            'united states': 'United States',
-            'south africa': 'South Africa',
-            'new zealand': 'New Zealand',
-            'united arab emirates': 'United Arab Emirates'
+            'uk':'United Kingdom','usa':'United States','us':'United States',
+            'uae':'United Arab Emirates','nz':'New Zealand','au':'Australia',
+            'sa':'South Africa','can':'Canada','mex':'Mexico','ger':'Germany',
+            'fra':'France','esp':'Spain','ita':'Italy','jpn':'Japan','chn':'China',
+            'ind':'India','bra':'Brazil','arg':'Argentina',
+            'united kingdom':'United Kingdom','united states':'United States',
+            'south africa':'South Africa','new zealand':'New Zealand',
+            'united arab emirates':'United Arab Emirates'
         };
-        
+
         const cityDatabase = [
-            'San Jose', 'San Francisco', 'Los Angeles', 'San Diego', 'San Antonio',
-            'Santa Fe',
-            'New York', 'Las Vegas', 'Phoenix', 'Houston', 'Philadelphia',
-            'Chicago', 'Dallas', 'Austin', 'Seattle', 'Portland',
-            'Denver', 'Boston', 'Miami', 'Atlanta', 'Detroit',
-            'Minneapolis', 'Tampa', 'Orlando', 'Charlotte', 'Nashville',
-            'Pittsburgh', 'Cincinnati', 'Cleveland', 'Milwaukee', 'Kansas City',
-            'Salt Lake City', 'Oklahoma City', 'New Orleans', 'Memphis',
-            'Louisville', 'Baltimore', 'Albuquerque', 'Sacramento', 'Indianapolis',
-            'Fort Worth', 'El Paso', 'Virginia Beach', 'Raleigh', 'Tucson',
-            'London', 'Manchester', 'Birmingham', 'Liverpool', 'Edinburgh',
-            'Paris', 'Lyon', 'Marseille', 'Nice', 'Toulouse',
-            'Berlin', 'Munich', 'Hamburg', 'Frankfurt', 'Cologne',
-            'Madrid', 'Barcelona', 'Valencia', 'Seville', 'Bilbao',
-            'Rome', 'Milan', 'Naples', 'Turin', 'Florence',
-            'Tokyo', 'Osaka', 'Kyoto', 'Yokohama', 'Nagoya',
-            'Beijing', 'Shanghai', 'Guangzhou', 'Shenzhen', 'Chengdu',
-            'Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide',
-            'Toronto', 'Montreal', 'Vancouver', 'Calgary', 'Ottawa',
-            'Mumbai', 'Delhi', 'Bangalore', 'Kolkata', 'Chennai',
-            'Mexico City', 'Guadalajara', 'Monterrey', 'Cancun', 'Tijuana',
-            'Dubai', 'Abu Dhabi', 'Doha', 'Riyadh', 'Jeddah',
-            'Amsterdam', 'Brussels', 'Vienna', 'Copenhagen', 'Stockholm',
-            'Oslo', 'Helsinki', 'Warsaw', 'Prague', 'Budapest',
-            'Lisbon', 'Athens', 'Istanbul', 'Moscow', 'St Petersburg',
-            'Cape Town', 'Johannesburg', 'Durban', 'Pretoria',
-            'Buenos Aires', 'Sao Paulo', 'Rio de Janeiro', 'Lima', 'Bogota',
-            'Santiago', 'Caracas', 'Havana', 'San Juan'
+            'San Jose','San Francisco','Los Angeles','San Diego','San Antonio','Santa Fe',
+            'New York','Las Vegas','Phoenix','Houston','Philadelphia','Chicago','Dallas',
+            'Austin','Seattle','Portland','Denver','Boston','Miami','Atlanta','Detroit',
+            'Minneapolis','Tampa','Orlando','Charlotte','Nashville','Pittsburgh','Cincinnati',
+            'Cleveland','Milwaukee','Kansas City','Salt Lake City','Oklahoma City','New Orleans',
+            'Memphis','Louisville','Baltimore','Albuquerque','Sacramento','Indianapolis',
+            'Fort Worth','El Paso','Virginia Beach','Raleigh','Tucson',
+            'London','Manchester','Birmingham','Liverpool','Edinburgh',
+            'Paris','Lyon','Marseille','Nice','Toulouse',
+            'Berlin','Munich','Hamburg','Frankfurt','Cologne',
+            'Madrid','Barcelona','Valencia','Seville','Bilbao',
+            'Rome','Milan','Naples','Turin','Florence',
+            'Tokyo','Osaka','Kyoto','Yokohama','Nagoya',
+            'Beijing','Shanghai','Guangzhou','Shenzhen','Chengdu',
+            'Sydney','Melbourne','Brisbane','Perth','Adelaide',
+            'Toronto','Montreal','Vancouver','Calgary','Ottawa',
+            'Mumbai','Delhi','Bangalore','Kolkata','Chennai',
+            'Mexico City','Guadalajara','Monterrey','Cancun','Tijuana',
+            'Dubai','Abu Dhabi','Doha','Riyadh','Jeddah',
+            'Amsterdam','Brussels','Vienna','Copenhagen','Stockholm',
+            'Oslo','Helsinki','Warsaw','Prague','Budapest',
+            'Lisbon','Athens','Istanbul','Moscow','St Petersburg',
+            'Cape Town','Johannesburg','Durban','Pretoria',
+            'Buenos Aires','Sao Paulo','Rio de Janeiro','Lima','Bogota',
+            'Santiago','Caracas','Havana','San Juan'
         ];
-        
-        /* ===================================
-           HELPER FUNCTIONS
-           =================================== */
-        
+
         function similarityScore(str1, str2) {
-            str1 = str1.toLowerCase();
-            str2 = str2.toLowerCase();
-            
+            str1 = str1.toLowerCase(); str2 = str2.toLowerCase();
             if (str1 === str2) return 100;
             if (str1.includes(str2) || str2.includes(str1)) return 90;
-            
-            let matches = 0;
-            let str1Idx = 0;
+            let matches = 0, str1Idx = 0;
             for (let i = 0; i < str2.length; i++) {
-                while (str1Idx < str1.length && str1[str1Idx] !== str2[i]) {
-                    str1Idx++;
-                }
-                if (str1Idx < str1.length) {
-                    matches++;
-                    str1Idx++;
-                }
+                while (str1Idx < str1.length && str1[str1Idx] !== str2[i]) str1Idx++;
+                if (str1Idx < str1.length) { matches++; str1Idx++; }
             }
-            
-            const score = (matches / Math.max(str1.length, str2.length)) * 100;
-            return score;
+            return (matches / Math.max(str1.length, str2.length)) * 100;
         }
-        
+
         function findBestCityMatch(input) {
-            let bestMatch = null;
-            let bestScore = 0;
-            
+            let bestMatch = null, bestScore = 0;
             for (let city of cityDatabase) {
                 const score = similarityScore(city, input);
-                if (score > bestScore && score >= 60) {
-                    bestScore = score;
-                    bestMatch = city;
-                }
+                if (score > bestScore && score >= 60) { bestScore = score; bestMatch = city; }
             }
-            
             return bestMatch;
         }
-        
+
         function parseAndCorrectLocation(input) {
             let corrected = input.trim().toLowerCase();
             let parts = corrected.split(/,/).map(p => p.trim()).filter(p => p.length > 0);
-            
             if (parts.length === 0) return input;
-            
             let allParts = [];
-            parts.forEach(part => {
-                allParts = allParts.concat(part.split(/\s+/).filter(p => p.length > 0));
-            });
-            
-            let city = '';
-            let state = '';
-            let country = '';
-            
-            if (allParts.length >= 2 && allParts[allParts.length - 1].length === 2) {
-                const stateAbbr = allParts[allParts.length - 1].toLowerCase();
-                if (stateAbbreviations[stateAbbr]) {
-                    state = stateAbbreviations[stateAbbr];
-                    allParts.pop();
-                }
+            parts.forEach(part => { allParts = allParts.concat(part.split(/\s+/).filter(p => p.length > 0)); });
+            let city = '', state = '', country = '';
+            if (allParts.length >= 2 && allParts[allParts.length-1].length === 2) {
+                const sa = allParts[allParts.length-1].toLowerCase();
+                if (stateAbbreviations[sa]) { state = stateAbbreviations[sa]; allParts.pop(); }
             }
-            
             if (!state && allParts.length >= 2) {
-                const lastPart = allParts[allParts.length - 1].toLowerCase();
-                const matchedState = Object.values(stateAbbreviations).find(s => 
-                    s.toLowerCase() === lastPart
-                );
-                if (matchedState) {
-                    state = matchedState;
-                    allParts.pop();
-                }
+                const lp = allParts[allParts.length-1].toLowerCase();
+                const ms = Object.values(stateAbbreviations).find(s => s.toLowerCase() === lp);
+                if (ms) { state = ms; allParts.pop(); }
             }
-            
             if (!state && allParts.length >= 1) {
-                const lastPart = allParts[allParts.length - 1].toLowerCase();
-                if (countryCorrections[lastPart]) {
-                    country = countryCorrections[lastPart];
-                    allParts.pop();
-                } else {
-                    const commonCountries = ['canada', 'mexico', 'japan', 'china', 'india', 'australia', 
-                                            'germany', 'france', 'spain', 'italy', 'brazil', 'argentina',
-                                            'england', 'ireland', 'scotland', 'wales'];
-                    if (commonCountries.includes(lastPart)) {
-                        country = lastPart.charAt(0).toUpperCase() + lastPart.slice(1);
-                        allParts.pop();
-                    }
+                const lp = allParts[allParts.length-1].toLowerCase();
+                if (countryCorrections[lp]) { country = countryCorrections[lp]; allParts.pop(); }
+                else {
+                    const cc = ['canada','mexico','japan','china','india','australia','germany','france','spain','italy','brazil','argentina','england','ireland','scotland','wales'];
+                    if (cc.includes(lp)) { country = lp.charAt(0).toUpperCase() + lp.slice(1); allParts.pop(); }
                 }
             }
-            
             city = allParts.join(' ');
-            
-            const matchedCity = findBestCityMatch(city);
-            if (matchedCity) {
-                city = matchedCity;
-            } else {
-                city = city.split(' ').map(word => 
-                    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-                ).join(' ');
-            }
-            
-            if (state) {
-                return `${city}, ${state}`;
-            } else if (country) {
-                return `${city}, ${country}`;
-            } else {
-                return city;
-            }
+            const mc = findBestCityMatch(city);
+            if (mc) city = mc;
+            else city = city.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+            if (state) return `${city}, ${state}`;
+            else if (country) return `${city}, ${country}`;
+            else return city;
         }
-        
-        function litersToGallons(liters) {
-            return liters / 3.78541;
-        }
-        
-        function gallonsToLiters(gallons) {
-            return gallons * 3.78541;
-        }
-        
-        function fahrenheitToCelsius(fahrenheit) {
-            return (fahrenheit - 32) * 5/9;
-        }
-        
+
+        function fahrenheitToCelsius(f) { return (f - 32) * 5/9; }
+        function gallonsToLiters(g) { return g * 3.78541; }
+
         function getOptimalConditionsMessage(direction) {
             return `<em><strong>Results shown reflect optimal conditions.</strong><br>Panels face within 35° of due ${direction}, are tilted at an angle within ±15° of your site's latitude, and free from shading 9am - 3pm.</em><br><br>`;
         }
-        
-        // Calculate optimal metric tank using energy formula
+
         function calculateOptimalMetricTank(dailyGallons, setpointF, highLimitF, incomingF) {
-            // Available metric tank sizes in gallons
-            const metricTankGallons = [20, 40, 52, 66, 79, 105, 132]; // = [150, 200, 250, 300, 400, 500] liters
-            const metricTankLiters = [80, 150, 200, 250, 300, 400, 500];
-            
-            // Step 1: Calculate daily energy needed
-            const dailyEnergy = dailyGallons * (setpointF - incomingF);
-            
-            // Step 2: Apply 5% margin (tank operates at 95% capacity)
-            const minimumEnergy = dailyEnergy / 1.05;
-            
-            // Step 3: Calculate minimum tank size in gallons
-            const minimumTankGallons = minimumEnergy / (highLimitF - incomingF);
-            
-            // Step 4: Find smallest metric tank that meets requirement
-            for (let i = 0; i < metricTankGallons.length; i++) {
-                if (metricTankGallons[i] >= minimumTankGallons) {
-                    return metricTankLiters[i]; // Return in liters
-                }
-            }
-            
-            // If exceeds largest tank, return 500L
+            const tG = [20,40,52,66,79,105,132], tL = [80,150,200,250,300,400,500];
+            const minE = (dailyGallons * (setpointF - incomingF)) / 1.05;
+            const minTank = minE / (highLimitF - incomingF);
+            for (let i = 0; i < tG.length; i++) if (tG[i] >= minTank) return tL[i];
             return 500;
         }
-        
-        // Calculate optimal imperial tank using energy formula
+
         function calculateOptimalImperialTank(dailyGallons, setpointF, highLimitF, incomingF) {
-            // Available imperial tank sizes in gallons
-            const imperialTankGallons = [20, 30, 40, 50, 65, 80, 105, 120];
-            
-            // Step 1: Calculate daily energy needed
-            const dailyEnergy = dailyGallons * (setpointF - incomingF);
-            
-            // Step 2: Apply 5% margin (tank operates at 95% capacity)
-            const minimumEnergy = dailyEnergy / 1.05;
-            
-            // Step 3: Calculate minimum tank size in gallons
-            const minimumTankGallons = minimumEnergy / (highLimitF - incomingF);
-            
-            // Step 4: Find smallest imperial tank that meets requirement
-            for (let i = 0; i < imperialTankGallons.length; i++) {
-                if (imperialTankGallons[i] >= minimumTankGallons) {
-                    return imperialTankGallons[i]; // Return in gallons
-                }
-            }
-            
-            // If exceeds largest tank, return 120
+            const tG = [20,30,40,50,65,80,105,120];
+            const minE = (dailyGallons * (setpointF - incomingF)) / 1.05;
+            const minTank = minE / (highLimitF - incomingF);
+            for (let i = 0; i < tG.length; i++) if (tG[i] >= minTank) return tG[i];
             return 120;
         }
-        
-        // Convert gallons back to exact metric button value
+
         function gallonsToExactLiters(gallons) {
-            const reverseTable = {
-                40: 150,
-                52: 200,
-                66: 250,
-                79: 300,
-                105: 400,
-                132: 500
-            };
-            
-            const roundedGallons = Math.round(gallons);
-            return reverseTable[roundedGallons] || Math.round(gallons * 3.78541);
+            const rt = {40:150,52:200,66:250,79:300,105:400,132:500};
+            const rg = Math.round(gallons);
+            return rt[rg] || Math.round(gallons * 3.78541);
         }
-        
-        /* ===================================
-           CORE CHAT FUNCTIONS
-           =================================== */
-        
+
         function startChat() {
-            // ALWAYS show interface first (even if locked)
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('chatInterface').classList.remove('hidden');
-            
-            // Check if user has reached limit
             if (tryCount >= 10) {
-                addMessage(`<strong><span style="color: #00E676;">🎉</span> You've reached the maximum of 10 calculations!</strong><br>You've explored many scenarios! Ready to take the next step?<br><br>
-                
-                <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                    <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                    <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                    
-                    <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                    <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                    
-                    <strong style="color: #000000;">Win more projects</strong><br>
-                    <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
-                    
-                    <div style="text-align: center; margin-top: 30px;">
-                        <strong style="color: #E65100; font-size: 17px;">Click the video to learn more.</strong><br>
-                        <em style="color: #000000; font-size: 13px;">The best PV water heater is here!</em><br>
-                        <a href="https://youtu.be/TI5WKT8yeNU" target="_blank">
-                            <img src="/calc/NewPVThmb.jpeg" 
-                                 alt="PV Water Heating Video" 
-                                 style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
-                                 onmouseover="this.style.transform='scale(1.02)'" 
-                                 onmouseout="this.style.transform='scale(1)'">
-                        </a>
-                    </div>
-                </div>`);
-                return; // Don't reload - calculator is now locked
+                addMessage(`<strong><span style="color:#00E676;">🎉</span> You've reached the maximum of 10 calculations!</strong><br>You've explored many scenarios! Ready to take the next step?<br><br><div style="background:#FFFFFF;padding:30px;margin-top:20px;border-radius:10px;"><strong style="color:#E65100;font-size:17px;">FOR SOLAR CONTRACTORS</strong><br><strong style="color:#000000;font-size:16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br><strong style="color:#000000;font-size:16px;">Turn the hard 'No' into a 'Yes.'</strong><br><em style="color:#000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br><strong style="color:#000000;">Win more projects</strong><br><button class="gallon-btn" onclick="redirectToWaitlist();return false;" style="margin-top:10px;background:#00E676;color:#000000;">Continue</button><br><div style="text-align:center;margin-top:30px;"><strong style="color:#E65100;font-size:17px;">Click the video to learn more.</strong><br><em style="color:#000000;font-size:13px;">The best PV water heater is here!</em><br><a href="https://youtu.be/TI5WKT8yeNU" target="_blank"><img src="/calc/NewPVThmb.jpeg" alt="PV Water Heating Video" style="max-width:350px;width:100%;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.3);cursor:pointer;transition:transform 0.2s;margin-top:5px;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"></a></div></div>`);
+                return;
             }
-            
             setTimeout(() => {
-                addMessage("<strong>Welcome, Solar Contractor! <span class='wave-emoji'>👋</span></strong><br><span style='color: #FFFFFF;'>I'm your PV water-heating assistant.<br>🎯 There's a bonus waiting at the end.</span>");
+                addMessage("<strong>Welcome, Solar Contractor! <span class='wave-emoji'>👋</span></strong><br><span style='color:#FFFFFF;'>I'm your PV water-heating assistant.<br>🎯 There's a bonus waiting at the end.</span>");
                 setTimeout(() => {
                     addMessage('<strong>Which units do you prefer?<br>Click a button or enter</strong><br>• <strong>"Imperial"</strong> for US units (gallons, °F)<br>• <strong>"Metric"</strong> for international units (liters, °C)');
-                    
-                    // Add unit system buttons
-                    const unitButtons = document.getElementById('gallonButtons');
-                    unitButtons.innerHTML = `
-                        <button class="gallon-btn" onclick="selectUnitSystem('imperial')">Imperial</button>
-                        <button class="gallon-btn" onclick="selectUnitSystem('metric')">Metric</button>
-                    `;
-                    unitButtons.style.display = 'grid';
-                    unitButtons.style.gridTemplateColumns = 'repeat(2, 1fr)';
-                    
-                    conversationStep = 0.5;
-                    chatMessages.scrollTop = 0;
-                    userInput.focus();
+                    const ub = document.getElementById('gallonButtons');
+                    ub.innerHTML = `<button class="gallon-btn" onclick="selectUnitSystem('imperial')">Imperial</button><button class="gallon-btn" onclick="selectUnitSystem('metric')">Metric</button>`;
+                    ub.style.display = 'grid'; ub.style.gridTemplateColumns = 'repeat(2,1fr)';
+                    conversationStep = 0.5; chatMessages.scrollTop = 0; userInput.focus();
                 }, 1000);
             }, 500);
         }
-        
+
         function selectUnitSystem(system) {
-            const displayText = system.charAt(0).toUpperCase() + system.slice(1);
-            addMessage(displayText, true);
-            
+            addMessage(system.charAt(0).toUpperCase() + system.slice(1), true);
             document.getElementById('gallonButtons').style.display = 'none';
-            
-            setTimeout(() => {
-                showTyping();
-                setTimeout(() => {
-                    hideTyping();
-                    processMessage(system);
-                }, 800);
-            }, 300);
+            setTimeout(() => { showTyping(); setTimeout(() => { hideTyping(); processMessage(system); }, 800); }, 300);
         }
-        
+
         function addMessage(text, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            contentDiv.innerHTML = text;
-            
-            messageDiv.appendChild(contentDiv);
-            chatMessages.appendChild(messageDiv);
-            
-            const messageCount = chatMessages.querySelectorAll('.message').length;
-            if (messageCount >= 9) {
-                chatMessages.classList.add('expanded');
-            }
-            
+            const div = document.createElement('div');
+            div.className = `message ${isUser ? 'user' : 'bot'}`;
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = text;
+            div.appendChild(content);
+            chatMessages.appendChild(div);
+            if (chatMessages.querySelectorAll('.message').length >= 9) chatMessages.classList.add('expanded');
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-        
-        function showTyping() {
-            typingIndicator.style.display = 'block';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-        
-        function hideTyping() {
-            typingIndicator.style.display = 'none';
-        }
-        
+
+        function showTyping() { typingIndicator.style.display = 'block'; chatMessages.scrollTop = chatMessages.scrollHeight; }
+        function hideTyping() { typingIndicator.style.display = 'none'; }
+
         function selectWaterAmount(amount) {
-            if (unitSystem === 'metric') {
-                userData.gallons = metricTankConversions[amount];
-                addMessage(`${amount} liters`, true);
-            } else {
-                userData.gallons = amount;
-                addMessage(`${amount} gallons`, true);
-            }
-            
-            gallonButtons.style.display = 'none';
-            userInput.focus();
-            
+            if (unitSystem === 'metric') { userData.gallons = metricTankConversions[amount]; addMessage(`${amount} liters`, true); }
+            else { userData.gallons = amount; addMessage(`${amount} gallons`, true); }
+            gallonButtons.style.display = 'none'; userInput.focus();
             setTimeout(() => {
                 showTyping();
                 setTimeout(() => {
                     hideTyping();
-                    const displayAmount = unitSystem === 'metric' ? 
-                        `${amount} liters` : `${amount} gallons`;
-                    addMessage(`Perfect! ${displayAmount} per day.`);
-                    
+                    const da = unitSystem === 'metric' ? `${amount} liters` : `${amount} gallons`;
+                    addMessage(`Perfect! ${da} per day.`);
                     setTimeout(() => {
                         showTyping();
                         setTimeout(() => {
                             hideTyping();
                             addMessage(`<strong>Choose your solar energy modeling scenario. Click a button or enter</strong><br><br>• Type <strong>"annual"</strong> for year-round average conditions<br>• Type a season, <strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong> for seasonal conditions<br>• Type <strong>"custom"</strong> to enter your own specific values<br><br>Need help deciding? Type <strong>"help"</strong> for guidance!`);
-                            
-                            const scenarioButtons = document.getElementById('scenarioButtons');
-                            scenarioButtons.innerHTML = `
-                                <button class="gallon-btn" onclick="selectScenario('annual')" style="font-weight: 700;">Annual</button>
-                                <button class="gallon-btn" onclick="selectScenario('custom')">Custom</button>
-                                <button class="gallon-btn" onclick="selectScenario('help')">Help</button>
-                                <button class="gallon-btn" onclick="selectScenario('spring')">Spring</button>
-                                <button class="gallon-btn" onclick="selectScenario('summer')">Summer</button>
-                                <button class="gallon-btn" onclick="selectScenario('fall')">Fall</button>
-                                <button class="gallon-btn" onclick="selectScenario('winter')">Winter</button>
-                            `;
-                            
-                            scenarioButtons.style.display = 'grid';
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                            conversationStep = 3;
-                            userInput.focus();
+                            const sb = document.getElementById('scenarioButtons');
+                            sb.innerHTML = `<button class="gallon-btn" onclick="selectScenario('annual')" style="font-weight:700;">Annual</button><button class="gallon-btn" onclick="selectScenario('custom')">Custom</button><button class="gallon-btn" onclick="selectScenario('help')">Help</button><button class="gallon-btn" onclick="selectScenario('spring')">Spring</button><button class="gallon-btn" onclick="selectScenario('summer')">Summer</button><button class="gallon-btn" onclick="selectScenario('fall')">Fall</button><button class="gallon-btn" onclick="selectScenario('winter')">Winter</button>`;
+                            sb.style.display = 'grid'; chatMessages.scrollTop = chatMessages.scrollHeight;
+                            conversationStep = 3; userInput.focus();
                         }, 800);
                     }, 500);
-
-
                 }, 800);
             }, 300);
         }
 
         function selectScenario(scenario) {
-            const displayText = scenario.charAt(0).toUpperCase() + scenario.slice(1);
-            addMessage(displayText, true);
-            
+            addMessage(scenario.charAt(0).toUpperCase() + scenario.slice(1), true);
             document.getElementById('scenarioButtons').style.display = 'none';
-            
-            setTimeout(() => {
-                showTyping();
-                setTimeout(() => {
-                    hideTyping();
-                    processMessage(scenario);
-                }, 800);
-            }, 300);
+            setTimeout(() => { showTyping(); setTimeout(() => { hideTyping(); processMessage(scenario); }, 800); }, 300);
         }
-        
+
         function copyResults() {
             const messages = chatMessages.querySelectorAll('.message.bot .message-content');
             const lastMessage = messages[messages.length - 1];
-            
             if (lastMessage) {
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = lastMessage.innerHTML;
-                
-                // Remove everything after the optimal conditions message
-                // This includes: buttons, marketing message, and YouTube section
-                
-                // Find the optimal conditions paragraph (contains "Results shown reflect optimal conditions")
                 const allElements = tempDiv.querySelectorAll('*');
-                let foundOptimalConditions = false;
-                
+                let found = false;
                 for (let i = 0; i < allElements.length; i++) {
-                    const element = allElements[i];
-                    
-                    // Check if this element contains the optimal conditions text
-                    if (element.textContent.includes('Results shown reflect optimal conditions')) {
-                        foundOptimalConditions = true;
-                        // Remove all siblings after this element
-                        let nextSibling = element.nextSibling;
-                        while (nextSibling) {
-                            const toRemove = nextSibling;
-                            nextSibling = nextSibling.nextSibling;
-                            if (toRemove.parentNode) {
-                                toRemove.parentNode.removeChild(toRemove);
-                            }
-                        }
+                    const el = allElements[i];
+                    if (el.textContent.includes('Results shown reflect optimal conditions')) {
+                        found = true;
+                        let ns = el.nextSibling;
+                        while (ns) { const tr = ns; ns = ns.nextSibling; if (tr.parentNode) tr.parentNode.removeChild(tr); }
                         break;
                     }
-                    
-                    // If we've already passed the optimal conditions, remove this element
-                    if (foundOptimalConditions) {
-                        element.remove();
-                    }
+                    if (found) el.remove();
                 }
-                
-                // Also remove any remaining buttons just to be safe
-                const buttons = tempDiv.querySelectorAll('button');
-                buttons.forEach(btn => btn.remove());
-                
-                // Remove any HR elements (horizontal rules)
-                const hrs = tempDiv.querySelectorAll('hr');
-                hrs.forEach(hr => hr.remove());
-                
-                let textToCopy = tempDiv.innerText.trim();
-                
-                // Tighten spacing: replace multiple consecutive blank lines with single blank line
-                textToCopy = textToCopy.replace(/\n\s*\n\s*\n/g, '\n\n');
-                
-                // Clean up any remaining excessive whitespace
-                textToCopy = textToCopy.replace(/\n{3,}/g, '\n\n');
-                
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    alert('Results copied to clipboard!');
-                }).catch(err => {
-                    console.error('Copy failed:', err);
-                    alert('Copy failed. Please try selecting and copying manually.');
-                });
+                tempDiv.querySelectorAll('button').forEach(b => b.remove());
+                tempDiv.querySelectorAll('hr').forEach(h => h.remove());
+                let text = tempDiv.innerText.trim().replace(/\n\s*\n\s*\n/g,'\n\n').replace(/\n{3,}/g,'\n\n');
+                navigator.clipboard.writeText(text).then(() => alert('Results copied to clipboard!')).catch(() => alert('Copy failed. Please select and copy manually.'));
             }
         }
-        
+
         function tryAgain() {
             tryCount++;
             localStorage.setItem('calculatorTries', tryCount.toString());
-            
-            if (tryCount === 5) {
-                addMessage(`<strong>🎯 You've completed 5 calculations!</strong><br><br>Want to explore more scenarios? You have <strong>5 more tries</strong> to refine your system design!<br><br><button class="gallon-btn" onclick="continueCalculating()" style="margin-top: 10px;">5 More</button>`);
-                return;
-            }
-            
-            if (tryCount >= 10) {
-                addMessage(`<strong>🎉 You've reached the maximum of 10 calculations!</strong><br><br>You've explored many scenarios! Ready to take the next step?<br><br><em>Time to move forward with your solar hot water system design.</em><br><br><strong>The calculator will now be locked. Contact us to continue or clear your browser data to reset.</strong>`);
-                return; // Don't reload - calculator is now locked
-            }
-            
+            if (tryCount === 5) { addMessage(`<strong>🎯 You've completed 5 calculations!</strong><br><br>Want to explore more scenarios? You have <strong>5 more tries</strong> to refine your system design!<br><br><button class="gallon-btn" onclick="continueCalculating()" style="margin-top:10px;">5 More</button>`); return; }
+            if (tryCount >= 10) { addMessage(`<strong>🎉 You've reached the maximum of 10 calculations!</strong><br><br>You've explored many scenarios! Ready to take the next step?<br><br><em>Time to move forward with your solar hot water system design.</em><br><br><strong>The calculator will now be locked. Contact us to continue or clear your browser data to reset.</strong>`); return; }
             location.reload();
         }
-        
-        function continueCalculating() {
-            location.reload();
-        }
-        
-        /* ===================================
-           EVENT LISTENERS
-           =================================== */
-        
+
+        function continueCalculating() { location.reload(); }
+
         sendBtn.addEventListener('click', handleUserInput);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleUserInput();
-        });
-        
-        // ===================================
-        // FIX: Hide buttons immediately when user starts typing
-        // ===================================
+        userInput.addEventListener('keypress', e => { if (e.key === 'Enter') handleUserInput(); });
         userInput.addEventListener('input', () => {
-            const gallonBtns = document.getElementById('gallonButtons');
-            const scenarioBtns = document.getElementById('scenarioButtons');
-            
-            // Hide Imperial/Metric buttons (step 0.5)
-            if (gallonBtns.style.display === 'grid' && conversationStep === 0.5) {
-                gallonBtns.style.display = 'none';
-            }
-            
-            // Hide gallon amount buttons (step 2)
-            if (gallonBtns.style.display === 'grid' && conversationStep === 2) {
-                gallonBtns.style.display = 'none';
-            }
-            
-            // Hide scenario buttons (step 3)
-            if (scenarioBtns.style.display === 'grid' && conversationStep === 3) {
-                scenarioBtns.style.display = 'none';
-            }
+            const gb = document.getElementById('gallonButtons'), sb = document.getElementById('scenarioButtons');
+            if (gb.style.display === 'grid' && (conversationStep === 0.5 || conversationStep === 2)) gb.style.display = 'none';
+            if (sb.style.display === 'grid' && conversationStep === 3) sb.style.display = 'none';
         });
-        
+
         async function handleUserInput() {
             const message = userInput.value.trim();
             if (!message) return;
-            
-            addMessage(message, true);
-            userInput.value = '';
-            
-            showTyping();
-            
-            setTimeout(async () => {
-                hideTyping();
-                await processMessage(message);
-            }, 800);
+            addMessage(message, true); userInput.value = ''; showTyping();
+            setTimeout(async () => { hideTyping(); await processMessage(message); }, 800);
         }
-        
-        /* ===================================
-           CONVERSATION FLOW
-           =================================== */
-        
+
         async function processMessage(message) {
             switch (conversationStep) {
                 case 0.5:
-                    const choice = message.toLowerCase();
-                    if (choice === 'metric' || choice === 'm') {
-                        unitSystem = 'metric';
-                        addMessage("Fantastic! We'll use metric units (liters and Celsius).");
-                        setTimeout(() => {
-                            addMessage("<strong>What's your location?</strong> (City, State/Country)");
-                            conversationStep = 1;
-                            userInput.focus();
-                        }, 800);
-                    } else if (choice === 'imperial' || choice === 'i') {
-                        unitSystem = 'imperial';
-                        addMessage("Great! We'll use imperial units (gallons and Fahrenheit).");
-                        setTimeout(() => {
-                            addMessage("<strong>What's your location?</strong> (City, State/Country)");
-                            conversationStep = 1;
-                            userInput.focus();
-                        }, 800);
-                    } else {
-                        addMessage('Please type <strong>"metric"</strong> or <strong>"imperial"</strong>.');
-                        userInput.focus();
-                    }
+                    const ch = message.toLowerCase();
+                    if (ch === 'metric' || ch === 'm') {
+                        unitSystem = 'metric'; addMessage("Fantastic! We'll use metric units (liters and Celsius).");
+                        setTimeout(() => { addMessage("<strong>What's your location?</strong> (City, State/Country)"); conversationStep = 1; userInput.focus(); }, 800);
+                    } else if (ch === 'imperial' || ch === 'i') {
+                        unitSystem = 'imperial'; addMessage("Great! We'll use imperial units (gallons and Fahrenheit).");
+                        setTimeout(() => { addMessage("<strong>What's your location?</strong> (City, State/Country)"); conversationStep = 1; userInput.focus(); }, 800);
+                    } else { addMessage('Please type <strong>"metric"</strong> or <strong>"imperial"</strong>.'); userInput.focus(); }
                     break;
-                
                 case 1:
                     pendingLocation = parseAndCorrectLocation(message);
                     addMessage(`Is your location <strong>${pendingLocation}</strong>? Type <strong>"yes"</strong> or enter your location again.`);
-                    conversationStep = 1.5;
-                    userInput.focus();
-                    break;
-                
+                    conversationStep = 1.5; userInput.focus(); break;
                 case 1.5:
-                    const confirmation = message.toLowerCase();
-                    if (confirmation === 'yes' || confirmation === 'y') {
-                        userData.location = pendingLocation;
-                        addMessage(`Got it! ${pendingLocation}.`);
+                    const conf = message.toLowerCase();
+                    if (conf === 'yes' || conf === 'y') {
+                        userData.location = pendingLocation; addMessage(`Got it! ${pendingLocation}.`);
                         setTimeout(() => {
                             showTyping();
                             setTimeout(() => {
                                 hideTyping();
-                                const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
-                                const usageNote = unitSystem === 'metric' ? 
-                                    'Note: Most consumers use 60-75 liters per person of hot water each day. Usage varies by individual.': 
-                                    'Note: Most consumers use 15-20 gallons per person of hot water each day. Usage varies by individual.';
-                                const waterQuestion = unitSystem === 'metric' ?
-                                    'How many liters of hot water does your household use each day?' :
-                                    'How many gallons of hot water does your household use each day?';
-                                addMessage(`<strong>Perfect!<br>${waterQuestion}</strong><br><br><em>${usageNote}</em>`);
-
+                                const usageNote = unitSystem === 'metric' ? 'Note: Most consumers use 60-75 liters per person of hot water each day. Usage varies by individual.' : 'Note: Most consumers use 15-20 gallons per person of hot water each day. Usage varies by individual.';
+                                const wq = unitSystem === 'metric' ? 'How many liters of hot water does your household use each day?' : 'How many gallons of hot water does your household use each day?';
+                                addMessage(`<strong>Perfect!<br>${wq}</strong><br><br><em>${usageNote}</em>`);
                                 setTimeout(() => {
                                     showTyping();
                                     setTimeout(() => {
-                                        hideTyping();
-                                        addMessage(`<strong>Select amount from a button or enter</strong>`);
-                                        
-                                        if (unitSystem === 'metric') {
-                                            gallonButtons.innerHTML = `
-                                                <button class="gallon-btn" onclick="selectWaterAmount(150)">150 L</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(200)">200 L</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(250)">250 L</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(300)">300 L</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(400)">400 L</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(500)">500 L</button>
-                                            `;
-                                        } else {
-                                            gallonButtons.innerHTML = `
-                                                <button class="gallon-btn" onclick="selectWaterAmount(20)">20 gal</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button>
-                                                <button class="gallon-btn" onclick="selectWaterAmount(120)">120 gal</button>
-                                            `;
-                                        }
-                                        
-                                        gallonButtons.style.display = 'grid';
-                                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                                        conversationStep = 2;
-                                        userInput.focus();
+                                        hideTyping(); addMessage(`<strong>Select amount from a button or enter</strong>`);
+                                        gallonButtons.innerHTML = unitSystem === 'metric' ?
+                                            `<button class="gallon-btn" onclick="selectWaterAmount(150)">150 L</button><button class="gallon-btn" onclick="selectWaterAmount(200)">200 L</button><button class="gallon-btn" onclick="selectWaterAmount(250)">250 L</button><button class="gallon-btn" onclick="selectWaterAmount(300)">300 L</button><button class="gallon-btn" onclick="selectWaterAmount(400)">400 L</button><button class="gallon-btn" onclick="selectWaterAmount(500)">500 L</button>` :
+                                            `<button class="gallon-btn" onclick="selectWaterAmount(20)">20 gal</button><button class="gallon-btn" onclick="selectWaterAmount(30)">30 gal</button><button class="gallon-btn" onclick="selectWaterAmount(40)">40 gal</button><button class="gallon-btn" onclick="selectWaterAmount(50)">50 gal</button><button class="gallon-btn" onclick="selectWaterAmount(60)">60 gal</button><button class="gallon-btn" onclick="selectWaterAmount(80)">80 gal</button><button class="gallon-btn" onclick="selectWaterAmount(100)">100 gal</button><button class="gallon-btn" onclick="selectWaterAmount(120)">120 gal</button>`;
+                                        gallonButtons.style.display = 'grid'; chatMessages.scrollTop = chatMessages.scrollHeight;
+                                        conversationStep = 2; userInput.focus();
                                     }, 800);
                                 }, 500);
                             }, 1000);
                         }, 500);
-                    } else {
-                        pendingLocation = parseAndCorrectLocation(message);
-                        addMessage(`Is your location <strong>${pendingLocation}</strong>? Type <strong>"yes"</strong> or enter your location again.`);
-                        userInput.focus();
-                    }
+                    } else { pendingLocation = parseAndCorrectLocation(message); addMessage(`Is your location <strong>${pendingLocation}</strong>? Type <strong>"yes"</strong> or enter your location again.`); userInput.focus(); }
                     break;
-                
                 case 2:
-                    const amount = parseFloat(message);
+                    const amt = parseFloat(message);
                     if (unitSystem === 'metric') {
-                        const validAmounts = [150, 200, 250, 300, 400, 500];
-                        if (validAmounts.includes(Math.round(amount))) {
-                            selectWaterAmount(Math.round(amount));
-                        } else {
-                            addMessage('Please click a button or enter a standard amount (150, 200, 250, 300, 400, or 500 liters)');
-                            userInput.focus();
-                        }
+                        if ([150,200,250,300,400,500].includes(Math.round(amt))) selectWaterAmount(Math.round(amt));
+                        else { addMessage('Please click a button or enter a standard amount (150, 200, 250, 300, 400, or 500 liters)'); userInput.focus(); }
                     } else {
-                        const validAmounts = [20, 30, 40, 50, 60, 80, 100, 120];
-                        if (validAmounts.includes(Math.round(amount))) {
-                            selectWaterAmount(Math.round(amount));
-                        } else {
-                            addMessage('Please click a button or enter: 20, 30, 40, 50, 60, 80, 100, or 120');
-                            userInput.focus();
-                        }
+                        if ([20,30,40,50,60,80,100,120].includes(Math.round(amt))) selectWaterAmount(Math.round(amt));
+                        else { addMessage('Please click a button or enter: 20, 30, 40, 50, 60, 80, 100, or 120'); userInput.focus(); }
                     }
                     break;
-                
                 case 3:
-                    const scenario = message.toLowerCase().trim();
+                    const sc = message.toLowerCase().trim();
                     document.getElementById('scenarioButtons').style.display = 'none';
-                    
-                    if (scenario === 'help') {
-                        addMessage(`<strong>📚 MODELING SCENARIOS EXPLAINED:</strong><br><br>
-        
-        <strong>"Annual"</strong><br>
-        Annual sizing uses year-round average solar radiation and groundwater temperature at your location. This provides a balanced system that performs well most of the year. Choose <strong>"annual"</strong> if the system will be used year-round. It is the most common and cost-effective approach for most homes.<br><br>
-        
-        <strong>Seasonal</strong><br>
-        <strong>("Winter", "Spring", "Summer", "Fall")</strong><br>
-        Seasonal sizing uses climate data for a specific time of year. Choose this option when hot water demand occurs primarily during one season. For example, choosing "Summer" is ideal for a cabin or resort that operates mainly in warmer months, making the system more economical. Winter sizing is generally not recommended, as shorter days and lower solar radiation in latitudes farther from the equator would require a much larger array—often 40–80% larger than what is needed for most of the year.<br><br>
-        
-        <strong>"Custom"</strong><br>
-        Custom sizing allows you to manually enter your own peak sun hours and cold-water temperature values. Select <strong>"custom"</strong> if you have unique data for your site or want to model a specific scenario. This gives you full control over the sizing inputs and performance assumptions.<br><br>
-        
-        Now, which scenario would you like? Type <strong>"annual"</strong>, <strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>, or <strong>"custom"</strong>.`);
-                        userInput.focus();
-                        return;
+                    if (sc === 'help') {
+                        addMessage(`<strong>📚 MODELING SCENARIOS EXPLAINED:</strong><br><br><strong>"Annual"</strong><br>Annual sizing uses year-round average solar radiation and groundwater temperature at your location. This provides a balanced system that performs well most of the year. Choose <strong>"annual"</strong> if the system will be used year-round. It is the most common and cost-effective approach for most homes.<br><br><strong>Seasonal</strong><br><strong>("Winter", "Spring", "Summer", "Fall")</strong><br>Seasonal sizing uses climate data for a specific time of year. Choose this option when hot water demand occurs primarily during one season. For example, choosing "Summer" is ideal for a cabin or resort that operates mainly in warmer months, making the system more economical. Winter sizing is generally not recommended, as shorter days and lower solar radiation in latitudes farther from the equator would require a much larger array—often 40–80% larger than what is needed for most of the year.<br><br><strong>"Custom"</strong><br>Custom sizing allows you to manually enter your own peak sun hours and cold-water temperature values. Select <strong>"custom"</strong> if you have unique data for your site or want to model a specific scenario. This gives you full control over the sizing inputs and performance assumptions.<br><br>Now, which scenario would you like? Type <strong>"annual"</strong>, <strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>, or <strong>"custom"</strong>.`);
+                        userInput.focus(); return;
                     }
-                    
-                    if (scenario === 'annual') {
-                        userData.season = '';
-                        userData.useAIClimate = true;
-                        
+                    if (sc === 'annual') {
+                        userData.season = ''; userData.useAIClimate = true;
                         addMessage("Great choice! I'll use year-round average climate data for your location.");
-                        
-                        setTimeout(() => {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                                const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
-                                const scaldTemp = unitSystem === 'metric' ? '55°C' : '130°F';
-                                const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><strong>${defaultTemp} is recommended to prevent scalding risk.</strong> Temperatures above ${scaldTemp} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tempRange}).`);
-                                conversationStep = 4;
-                                userInput.focus();
-                            }, 800);
-                        }, 500);
-                    } 
-                    else if (['winter', 'spring', 'summer', 'fall'].includes(scenario)) {
-                        userData.season = scenario;
-                        userData.useAIClimate = true;
-                        
-                        addMessage(`Excellent! I'll use ${scenario} climate data for your location.`);
-                        
-                        setTimeout(() => {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                                const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
-                                const scaldTemp = unitSystem === 'metric' ? '55°C' : '130°F';
-                                const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><strong>${defaultTemp} is recommended to prevent scalding risk.</strong> Temperatures above ${scaldTemp} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tempRange}).`);
-                                conversationStep = 4;
-                                userInput.focus();
-                            }, 800);
-                        }, 500);
-                    } 
-                    else if (scenario === 'custom') {
-                        userData.season = '';
-                        userData.useAIClimate = false;
-                        
+                        setTimeout(() => { showTyping(); setTimeout(() => { hideTyping(); const dt = unitSystem==='metric'?'50°C':'120°F', st = unitSystem==='metric'?'55°C':'130°F', tr = unitSystem==='metric'?'38-60°C':'100-140°F'; addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><strong>${dt} is recommended to prevent scalding risk.</strong> Temperatures above ${st} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tr}).`); conversationStep = 4; userInput.focus(); }, 800); }, 500);
+                    } else if (['winter','spring','summer','fall'].includes(sc)) {
+                        userData.season = sc; userData.useAIClimate = true;
+                        addMessage(`Excellent! I'll use ${sc} climate data for your location.`);
+                        setTimeout(() => { showTyping(); setTimeout(() => { hideTyping(); const dt = unitSystem==='metric'?'50°C':'120°F', st = unitSystem==='metric'?'55°C':'130°F', tr = unitSystem==='metric'?'38-60°C':'100-140°F'; addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><strong>${dt} is recommended to prevent scalding risk.</strong> Temperatures above ${st} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tr}).`); conversationStep = 4; userInput.focus(); }, 800); }, 500);
+                    } else if (sc === 'custom') {
+                        userData.season = ''; userData.useAIClimate = false;
                         addMessage("Got it! I'll use your custom values.");
-                        
-                        setTimeout(() => {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                                addMessage(`Great! What are your peak sun hours per day? (2-9)<br><br>Type <strong>"help"</strong> if you need more information.`);
-                                conversationStep = 3.1;
-                                userInput.focus();
-                            }, 800);
-                        }, 500);
-                    } else {
-                        addMessage('Please type <strong>"annual"</strong>, a season (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>), <strong>"custom"</strong>, or <strong>"help"</strong>.');
-                        userInput.focus();
-                    }
+                        setTimeout(() => { showTyping(); setTimeout(() => { hideTyping(); addMessage(`Great! What are your peak sun hours per day? (2-9)<br><br>Type <strong>"help"</strong> if you need more information.`); conversationStep = 3.1; userInput.focus(); }, 800); }, 500);
+                    } else { addMessage('Please type <strong>"annual"</strong>, a season (<strong>"winter"</strong>, <strong>"spring"</strong>, <strong>"summer"</strong>, <strong>"fall"</strong>), <strong>"custom"</strong>, or <strong>"help"</strong>.'); userInput.focus(); }
                     break;
-                
                 case 3.1:
-                    if (message.toLowerCase().trim() === 'help') {
-                        addMessage(`<strong>📚 PEAK SUN HOURS EXPLAINED:</strong><br><br>
-                            Peak sun hours measure the equivalent hours per day of full-strength sunlight (1,000 W/m²)—not total daylight hours. Most U.S. locations average 3-7 peak sun hours. Find your location's data at pvwatts.nrel.gov or similar solar databases.<br><br>
-                            
-                            Now, please enter your peak sun hours (2-9).`);
-                        userInput.focus();
-                        return;
-                    }
-                    
-                    const peakSun = parseFloat(message);
-                    if (!isNaN(peakSun) && peakSun >= 2 && peakSun <= 9) {
-                        userData.peakSunHours = peakSun;
-                        addMessage(`Fantastic! ${peakSun} peak sun hours per day.`);
-                        
-                        setTimeout(() => {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                                const tempRange = unitSystem === 'metric' ? '4-27°C' : '40-80°F';
-                                addMessage(`What is your cold water temperature? (${tempRange})<br><br>Type <strong>"help"</strong> if you need more information.`);
-                                conversationStep = 3.2;
-                                userInput.focus();
-                            }, 800);
-                        }, 500);
-                    } else {
-                        addMessage('Please enter a number between 2 and 9 for peak sun hours, or type <strong>"help"</strong> for more information.');
-                        userInput.focus();
-                    }
+                    if (message.toLowerCase().trim() === 'help') { addMessage(`<strong>📚 PEAK SUN HOURS EXPLAINED:</strong><br><br>Peak sun hours measure the equivalent hours per day of full-strength sunlight (1,000 W/m²)—not total daylight hours. Most U.S. locations average 3-7 peak sun hours. Find your location's data at pvwatts.nrel.gov or similar solar databases.<br><br>Now, please enter your peak sun hours (2-9).`); userInput.focus(); return; }
+                    const ps = parseFloat(message);
+                    if (!isNaN(ps) && ps >= 2 && ps <= 9) {
+                        userData.peakSunHours = ps; addMessage(`Fantastic! ${ps} peak sun hours per day.`);
+                        setTimeout(() => { showTyping(); setTimeout(() => { hideTyping(); const tr = unitSystem==='metric'?'4-27°C':'40-80°F'; addMessage(`What is your cold water temperature? (${tr})<br><br>Type <strong>"help"</strong> if you need more information.`); conversationStep = 3.2; userInput.focus(); }, 800); }, 500);
+                    } else { addMessage('Please enter a number between 2 and 9 for peak sun hours, or type <strong>"help"</strong> for more information.'); userInput.focus(); }
                     break;
-                
                 case 3.2:
-                    if (message.toLowerCase().trim() === 'help') {
-                        const tempRange = unitSystem === 'metric' ? '4-27°C' : '40-80°F';
-                        addMessage(`<strong>📚 COLD WATER TEMPERATURE EXPLAINED:</strong><br><br>
-                            Cold water temperature is your incoming water supply temperature from underground pipes. It affects how much energy is needed to heat your water. Most locations average 40-80°F or 4-27°C annually. Measure it by running cold tap water for a few minutes with a thermometer.<br><br>
-                            
-                            Now, please enter your cold water temperature (${tempRange}).`);
-                        userInput.focus();
-                        return;
-                    }
-                    
-                    const coldTemp = parseFloat(message);
-                    const minTemp = unitSystem === 'metric' ? 4 : 40;
-                    const maxTemp = unitSystem === 'metric' ? 27 : 80;
-                    
-                    if (!isNaN(coldTemp) && coldTemp >= minTemp && coldTemp <= maxTemp) {
-                        userData.coldWaterTemp = unitSystem === 'metric' ? 
-                            (coldTemp * 9/5) + 32 : coldTemp;
-                        const displayTemp = unitSystem === 'metric' ? 
-                            `${coldTemp}°C` : `${coldTemp}°F`;
-                        addMessage(`OK, good! Cold water at ${displayTemp}.`);
-                        
-                        setTimeout(() => {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                                const defaultTemp = unitSystem === 'metric' ? '50°C' : '120°F';
-                                const scaldTemp = unitSystem === 'metric' ? '55°C' : '130°F';
-                                const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                                addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><strong>${defaultTemp} is recommended to prevent scalding risk.</strong> Temperatures above ${scaldTemp} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tempRange}).`);
-                                conversationStep = 4;
-                                userInput.focus();
-                            }, 800);
-                        }, 500);
-                    } else {
-                        const tempRange = unitSystem === 'metric' ? '4-27°C' : '40-80°F';
-                        addMessage(`Please enter a temperature between ${tempRange}, or type <strong>"help"</strong> for more information.`);
-                        userInput.focus();
-                    }
+                    if (message.toLowerCase().trim() === 'help') { const tr = unitSystem==='metric'?'4-27°C':'40-80°F'; addMessage(`<strong>📚 COLD WATER TEMPERATURE EXPLAINED:</strong><br><br>Cold water temperature is your incoming water supply temperature from underground pipes. It affects how much energy is needed to heat your water. Most locations average 40-80°F or 4-27°C annually. Measure it by running cold tap water for a few minutes with a thermometer.<br><br>Now, please enter your cold water temperature (${tr}).`); userInput.focus(); return; }
+                    const ct = parseFloat(message), minT = unitSystem==='metric'?4:40, maxT = unitSystem==='metric'?27:80;
+                    if (!isNaN(ct) && ct >= minT && ct <= maxT) {
+                        userData.coldWaterTemp = unitSystem==='metric'?(ct*9/5)+32:ct;
+                        const dct = unitSystem==='metric'?`${ct}°C`:`${ct}°F`; addMessage(`OK, good! Cold water at ${dct}.`);
+                        setTimeout(() => { showTyping(); setTimeout(() => { hideTyping(); const dt = unitSystem==='metric'?'50°C':'120°F', st = unitSystem==='metric'?'55°C':'130°F', tr = unitSystem==='metric'?'38-60°C':'100-140°F'; addMessage(`<strong>Enter the 'Setpoint' hot water temperature.</strong><br><strong>${dt} is recommended to prevent scalding risk.</strong> Temperatures above ${st} can cause serious burns in seconds, especially for children and elderly. Enter your desired hot water temperature (${tr}).`); conversationStep = 4; userInput.focus(); }, 800); }, 500);
+                    } else { const tr = unitSystem==='metric'?'4-27°C':'40-80°F'; addMessage(`Please enter a temperature between ${tr}, or type <strong>"help"</strong> for more information.`); userInput.focus(); }
                     break;
-                
                 case 4:
-                    const hotTemp = parseFloat(message);
-                    const minHot = unitSystem === 'metric' ? 38 : 100;
-                    const maxHot = unitSystem === 'metric' ? 60 : 140;
-                    
-                    if (!isNaN(hotTemp) && hotTemp >= minHot && hotTemp <= maxHot) {
-                        userData.hotWaterTemp = unitSystem === 'metric' ? 
-                            (hotTemp * 9/5) + 32 : hotTemp;
-                        const displayTemp = unitSystem === 'metric' ? 
-                            `${hotTemp}°C` : `${hotTemp}°F`;
-                        addMessage(`Perfect! Set to ${displayTemp}.`);
-                        
-                        setTimeout(() => {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                               addMessage(`<strong>Enter the wattage rating of your PV panels.</strong><br>Panels around 400–450 W are ideal for matching the output of the listed inverters.<br><strong>Choose a value between 250–550 W.</strong>`);
-                                conversationStep = 5;
-                                userInput.focus();
-                            }, 800);
-                        }, 500);
-                    } else {
-                        const tempRange = unitSystem === 'metric' ? '38-60°C' : '100-140°F';
-                        addMessage(`Please enter a temperature between ${tempRange}.`);
-                        userInput.focus();
-                    }
+                    const ht = parseFloat(message), minH = unitSystem==='metric'?38:100, maxH = unitSystem==='metric'?60:140;
+                    if (!isNaN(ht) && ht >= minH && ht <= maxH) {
+                        userData.hotWaterTemp = unitSystem==='metric'?(ht*9/5)+32:ht;
+                        const dht = unitSystem==='metric'?`${ht}°C`:`${ht}°F`; addMessage(`Perfect! Set to ${dht}.`);
+                        setTimeout(() => { showTyping(); setTimeout(() => { hideTyping(); addMessage(`<strong>Enter the wattage rating of your PV panels.</strong><br>Panels around 400–450 W are ideal for matching the output of the listed inverters.<br><strong>Choose a value between 250–550 W.</strong>`); conversationStep = 5; userInput.focus(); }, 800); }, 500);
+                    } else { const tr = unitSystem==='metric'?'38-60°C':'100-140°F'; addMessage(`Please enter a temperature between ${tr}.`); userInput.focus(); }
                     break;
-                
                 case 5:
-                    const watts = parseInt(message);
-                    if (!isNaN(watts) && watts >= 250 && watts <= 550) {
-                        userData.panelWatts = watts;
-                        addMessage(`Got it! ${watts}W panels.`);
-                        
-                        setTimeout(() => {
-                            showTyping();
-                            setTimeout(() => {
-                                hideTyping();
-                                const tempRange = unitSystem === 'metric' ? '50-65°C' : '120-150°F';
-                                const limitTemp = unitSystem === 'metric' ? '65°C' : '150°F';
-                                const warningText = unitSystem === 'metric' ? 
-                                    '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.' :
-                                    '<br><br>⚠️ <strong style="color: #e74c3c;">WARNING:</strong> High limit above 120°F requires an anti-scald mixing valve on the water heater.';
-                                addMessage(`<strong>Enter the high-limit temperature for the water heater.</strong> Setting a high limit to ${limitTemp} enables smaller tank sizing by storing water at higher temperatures. Smaller tank = lower cost, easier retrofit, and less space required. You get the same daily hot water at your desired temperature, just from a smaller tank. <strong>Choose between ${tempRange}.</strong>${warningText}`);
-                                conversationStep = 6;
-                                userInput.focus();
-                            }, 800);
-                        }, 500);
-                    } else {
-                        addMessage('Please enter a wattage between 250 and 550.');
-                        userInput.focus();
-                    }
+                    const w = parseInt(message);
+                    if (!isNaN(w) && w >= 250 && w <= 550) {
+                        userData.panelWatts = w; addMessage(`Got it! ${w}W panels.`);
+                        setTimeout(() => { showTyping(); setTimeout(() => { hideTyping(); const tr = unitSystem==='metric'?'50-65°C':'120-150°F', lt = unitSystem==='metric'?'65°C':'150°F', wt = unitSystem==='metric'?'<br><br>⚠️ <strong style="color:#e74c3c;">WARNING:</strong> High limit above 50°C (120°F) requires an anti-scald mixing valve on the water heater.':'<br><br>⚠️ <strong style="color:#e74c3c;">WARNING:</strong> High limit above 120°F requires an anti-scald mixing valve on the water heater.'; addMessage(`<strong>Enter the high-limit temperature for the water heater.</strong> Setting a high limit to ${lt} enables smaller tank sizing by storing water at higher temperatures. Smaller tank = lower cost, easier retrofit, and less space required. You get the same daily hot water at your desired temperature, just from a smaller tank. <strong>Choose between ${tr}.</strong>${wt}`); conversationStep = 6; userInput.focus(); }, 800); }, 500);
+                    } else { addMessage('Please enter a wattage between 250 and 550.'); userInput.focus(); }
                     break;
-                
                 case 6:
-                    const highLimit = parseFloat(message);
-                    const minLimit = unitSystem === 'metric' ? 50 : 120;
-                    const maxLimit = unitSystem === 'metric' ? 65 : 150;
-                    
-                    if (!isNaN(highLimit) && highLimit >= minLimit && highLimit <= maxLimit) {
-                        userData.highLimit = unitSystem === 'metric' ? 
-                            (highLimit * 9/5) + 32 : highLimit;
-                        const displayLimit = unitSystem === 'metric' ? 
-                            `${highLimit}°C` : `${highLimit}°F`;
-                        addMessage(`Excellent! High limit set to ${displayLimit}.`);
-                        
-                        setTimeout(() => {
-                            addMessage("Perfect! ☀️<br>I have all the information I need.<br>⏳ Please wait a few moments and I will calculate your results...");
-                            setTimeout(() => {
-                                showTyping();
-                                sendToWebhook();
-                            }, 1000);
-                        }, 500);
-                    } else {
-                        const limitRange = unitSystem === 'metric' ? '50-65°C' : '120-150°F';
-                        addMessage(`Please enter a high limit between ${limitRange}.`);
-                        userInput.focus();
-                    }
+                    const hl = parseFloat(message), minL = unitSystem==='metric'?50:120, maxL = unitSystem==='metric'?65:150;
+                    if (!isNaN(hl) && hl >= minL && hl <= maxL) {
+                        userData.highLimit = unitSystem==='metric'?(hl*9/5)+32:hl;
+                        const dhl = unitSystem==='metric'?`${hl}°C`:`${hl}°F`; addMessage(`Excellent! High limit set to ${dhl}.`);
+                        setTimeout(() => { addMessage("Perfect! ☀️<br>I have all the information I need.<br>⏳ Please wait a few moments and I will calculate your results..."); setTimeout(() => { showTyping(); sendToWebhook(); }, 1000); }, 500);
+                    } else { const lr = unitSystem==='metric'?'50-65°C':'120-150°F'; addMessage(`Please enter a high limit between ${lr}.`); userInput.focus(); }
                     break;
             }
         }
-        
+
+        async function sendToWebhook() {
+            try {
+                const response = await fetch(WEBHOOK_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(userData) });
+                const data = await response.json();
+                hideTyping();
+                if (data.success && data.system_1250w && data.system_1500w) displayResults(data);
+                else addMessage("I apologize, but I encountered an issue calculating your system. Please try again or contact support.");
+            } catch (error) { hideTyping(); addMessage("Connection error. Please check your internet and try again."); console.error('Error:', error); }
+        }
+
+        function displayResults(data) {
+            chatInputArea.style.display = 'none';
+            const sys1250 = data.system_1250w, sys1500 = data.system_1500w;
+            const nullInv = !sys1250.inverters || sys1250.inverters === null || sys1250.inverters === 'null';
+            if (nullInv) { displaySingleSystem(data, sys1500, '1500H'); return; }
+            const exc1250 = typeof sys1250.panels === 'string' && sys1250.panels.toLowerCase().includes('exceeds');
+            const exc1500 = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
+            if (exc1250 && exc1500) {
+                const aps = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+                const dg = unitSystem==='metric'?gallonsToExactLiters(parseFloat(userData.gallons)):Math.round(userData.gallons);
+                const dht = unitSystem==='metric'?Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))):Math.round(userData.hotWaterTemp);
+                const unit = unitSystem==='metric'?'liters':'gallons', tu = unitSystem==='metric'?'°C':'°F';
+                addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>The system cannot provide sufficient energy for your hot water specifications:<br><br>• Daily Usage: ${dg} ${unit}<br>• Target Temperature: ${dht}${tu}<br>• Peak Sun Hours: ${aps} hrs/day<br>• Panel Wattage: ${userData.panelWatts}W<br><br><strong>Please try again with a lower hot water temperature and rerun the calculator.</strong><br><br><button class="gallon-btn" onclick="tryAgain()">Try Again</button>`);
+                return;
+            }
+            if (exc1500 && !exc1250) { displaySingleSystem(data, sys1250, '1200H'); return; }
+            if (exc1250 && !exc1500) { displaySingleSystem(data, sys1500, '1500H'); return; }
+            displayBothSystems(data);
+        }
+
         /* ===================================
-   WEBHOOK & RESULTS
-   =================================== */
-
-async function sendToWebhook() {
-    try {
-        const response = await fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData)
-        });
-        
-        const data = await response.json();
-        
-        hideTyping();
-        
-        if (data.success && data.system_1250w && data.system_1500w) {
-            displayResults(data);
-        } else {
-            addMessage("I apologize, but I encountered an issue calculating your system. Please try again or contact support.");
+           MARKETING BLOCK (reusable)
+           =================================== */
+        function marketingBlock() {
+            return `<div style="background:#FFFFFF;padding:30px;margin-top:20px;border-radius:10px;">
+                <strong style="color:#E65100;font-size:17px;">FOR SOLAR CONTRACTORS</strong><br>
+                <strong style="color:#000000;font-size:16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
+                <strong style="color:#000000;font-size:16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
+                <em style="color:#000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
+                <strong style="color:#000000;">Win more projects</strong><br>
+                <button class="gallon-btn" onclick="redirectToWaitlist();return false;" style="margin-top:10px;background:#00E676;color:#000000;">Continue</button><br>
+                <div style="text-align:center;margin-top:30px;">
+                    <strong style="color:#E65100;font-size:17px;">Click the video to learn more.</strong><br>
+                    <em style="color:#000000;font-size:13px;">The best PV water heater is here!</em><br>
+                    <a href="https://youtu.be/TI5WKT8yeNU" target="_blank">
+                        <img src="/calc/NewPVThmb.jpeg" alt="PV Water Heating Video" style="max-width:350px;width:100%;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.3);cursor:pointer;transition:transform 0.2s;margin-top:5px;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    </a>
+                </div>
+            </div>`;
         }
-    } catch (error) {
-        hideTyping();
-        addMessage("Connection error. Please check your internet and try again.");
-        console.error('Error:', error);
-    }
-}
 
-function displayResults(data) {
-    chatInputArea.style.display = 'none';
-    
-    const sys1250 = data.system_1250w;
-    const sys1500 = data.system_1500w;
-    
-    const sys1250InverterNull = !sys1250.inverters || sys1250.inverters === null || sys1250.inverters === 'null';
-    
-    if (sys1250InverterNull) {
-        displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
-        return;
-    }
-    
-    const sys1250Exceeds = typeof sys1250.panels === 'string' && sys1250.panels.toLowerCase().includes('exceeds');
-    const sys1500Exceeds = typeof sys1500.panels === 'string' && sys1500.panels.toLowerCase().includes('exceeds');
-    
-    if (sys1250Exceeds && sys1500Exceeds) {
-        const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-        const displayGallons = unitSystem === 'metric' ? 
-            gallonsToExactLiters(parseFloat(userData.gallons)) : 
-            Math.round(userData.gallons);
-        const displayHotTemp = unitSystem === 'metric' ? 
-            Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp))) : 
-            Math.round(userData.hotWaterTemp);
-        const unit = unitSystem === 'metric' ? 'liters' : 'gallons';
-        const tempUnit = unitSystem === 'metric' ? '°C' : '°F';
-        
-        addMessage(`<strong>⚠️ System Cannot Produce Required Energy</strong><br><br>
-            The system cannot provide sufficient energy for your hot water specifications:<br><br>
-            • Daily Usage: ${displayGallons} ${unit}<br>
-            • Target Temperature: ${displayHotTemp}${tempUnit}<br>
-            • Peak Sun Hours: ${actualPeakSun} hrs/day<br>
-            • Panel Wattage: ${userData.panelWatts}W<br><br>
-            <strong>Please try again with a lower hot water temperature and rerun the calculator.</strong><br><br>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button>`);
-        return;
-    }
-    
-    if (sys1500Exceeds && !sys1250Exceeds) {
-        displaySingleSystem(data, sys1250, '1200H', data.system_1250w);
-        return;
-    }
-    
-    if (sys1250Exceeds && !sys1500Exceeds) {
-        displaySingleSystem(data, sys1500, '1500H', data.system_1500w);
-        return;
-    }
-    
-    displayBothSystems(data);
-}
-
-function displaySingleSystem(data, system, inverterModel, systemData) {
-    const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-    const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
-    const actualLat = data.latitude_actual || 35;
-    
-    const latDisplay = Math.abs(Math.round(actualLat));
-    const direction = actualLat < 0 ? 'north' : 'south';
-    
-    if (unitSystem === 'metric') {
-        const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
-        const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
-        const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
-        const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
-        const tankDisplay = calculateOptimalMetricTank(
-            parseFloat(userData.gallons),
-            parseFloat(userData.hotWaterTemp),
-            parseFloat(userData.highLimit),
-            actualColdTemp
-        );
-        
-        // Only show optional tank if smaller than daily usage
-        const showOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && tankDisplay < displayGallons;
-        
-        let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
-            📍 <strong>Location:</strong> ${userData.location}<br>
-            💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
-            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C*<br>
-            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
-            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-            📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
-            
-            <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
-            
-            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-            
-            <strong>Use the Off-Grid CIM ${inverterModel} Inverter</strong><br>
-            • Inverters: ${system.inverters}<br>
-            • Panels: ${system.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Element Size: ${system.element_size}W<br>
-            • Tank Size: ${displayGallons} liters<br>
-            • kWh/Day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-            ${showOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${tankDisplay} liters (mixing valve required)<br>` : ''}<br>
-            
-            This system can meet your hot water requirements.<br><br>
-            ${getOptimalConditionsMessage(direction)}
-            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
-            
-            <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #E65100; font-size: 17px;">Click the video to learn more.</strong><br>
-                    <em style="color: #000000; font-size: 13px;">The best PV water heater is here!</em><br>
-                    <a href="https://youtu.be/TI5WKT8yeNU" target="_blank">
-                        <img src="/calc/NewPVThmb.jpeg" 
-                             alt="PV Water Heating Video" 
-                             style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
-                             onmouseover="this.style.transform='scale(1.02)'" 
-                             onmouseout="this.style.transform='scale(1)'">
-                    </a>
-                </div>
-            </div>`;
-            
-        addMessage(messageContent);
-         
-        setTimeout(() => {
-            const messages = chatMessages.querySelectorAll('.message');
-            const lastMessage = messages[messages.length - 1];
-            if (lastMessage) {
-                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }, 100);
-    } else {
-        const displayGallons = Math.round(userData.gallons);
-        const displayColdTemp = Math.round(actualColdTemp);
-        const displayHotTemp = Math.round(userData.hotWaterTemp);
-        const displayHighLimit = Math.round(userData.highLimit);
-        
-        const optionalTankDisplay = calculateOptimalImperialTank(
-            parseFloat(userData.gallons),
-            parseFloat(userData.hotWaterTemp),
-            parseFloat(userData.highLimit),
-            actualColdTemp
-        );
-        
-        // Only show optional tank if smaller than daily usage
-        const showOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && optionalTankDisplay < displayGallons;
-        
-        let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
-            📍 <strong>Location:</strong> ${userData.location}<br>
-            💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
-            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F*<br>
-            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
-            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-            📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
-            
-            <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
-            
-            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-            
-            <strong>Use the Off-Grid CIM ${inverterModel} Inverter</strong><br>
-            • Inverters: ${system.inverters}<br>
-            • Panels: ${system.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Element Size: ${system.element_size}W<br>
-            • Tank Size: ${displayGallons} gallons<br>
-            • kWh/Day: <span style="color: #00E676; font-weight: 600;">${system.kwh_day}</span><br>
-            ${showOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${system.kwh_max}</span><br>*Optional Tank Size: ${optionalTankDisplay} gallons (mixing valve required)<br>` : ''}<br>
-            
-            This system can meet your hot water requirements.<br><br>
-            ${getOptimalConditionsMessage(direction)}
-            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
-            
-            <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #E65100; font-size: 17px;">Click the video to learn more.</strong><br>
-                    <em style="color: #000000; font-size: 13px;">The best PV water heater is here!</em><br>
-                    <a href="https://youtu.be/TI5WKT8yeNU" target="_blank">
-                        <img src="/calc/NewPVThmb.jpeg" 
-                             alt="PV Water Heating Video" 
-                             style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
-                             onmouseover="this.style.transform='scale(1.02)'" 
-                             onmouseout="this.style.transform='scale(1)'">
-                    </a>
-                </div>
-            </div>`;
-
-        addMessage(messageContent);
-   
-        setTimeout(() => {
-            const messages = chatMessages.querySelectorAll('.message');
-            const lastMessage = messages[messages.length - 1];
-            if (lastMessage) {
-                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }, 100);
-    }
-}
-
-function displayBothSystems(data) {
-    const sys1250 = data.system_1250w;
-    const sys1500 = data.system_1500w;
-    const actualPeakSun = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
-    const actualColdTemp = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
-    const actualLat = data.latitude_actual || 35;
-    
-    const latDisplay = Math.abs(Math.round(actualLat));
-    const direction = actualLat < 0 ? 'north' : 'south';
-    
-    if (unitSystem === 'metric') {
-        const displayGallons = gallonsToExactLiters(parseFloat(userData.gallons));
-        const displayColdTemp = Math.round(fahrenheitToCelsius(actualColdTemp));
-        const displayHotTemp = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
-        const displayHighLimit = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
-        
-        let recommended, alternative, recommendedName, alternativeName, reason;
-        const inv1250 = parseInt(sys1250.inverters);
-        const inv1500 = parseInt(sys1500.inverters);
-        const panel1250 = parseInt(sys1250.panels);
-        const panel1500 = parseInt(sys1500.panels);
-        
-        if (inv1250 < inv1500) {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            if (panel1250 < panel1500) {
-                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-            } else {
-                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-            }
-        } else if (inv1500 < inv1250) {
-            recommended = sys1500;
-            alternative = sys1250;
-            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            if (panel1500 < panel1250) {
-                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-            } else {
-                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-            }
-        } else if (panel1250 < panel1500) {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-        } else if (panel1500 < panel1250) {
-            recommended = sys1500;
-            alternative = sys1250;
-            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-        } else {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            reason = "This system is the most cost-effective choice with a less expensive inverter.";
+        function specButtons() {
+            return `<a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
+            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a>`;
         }
-        
-        const recTankDisplay = calculateOptimalMetricTank(
-            parseFloat(userData.gallons),
-            parseFloat(userData.hotWaterTemp),
-            parseFloat(userData.highLimit),
-            actualColdTemp
-        );
-        const altTankDisplay = calculateOptimalMetricTank(
-            parseFloat(userData.gallons),
-            parseFloat(userData.hotWaterTemp),
-            parseFloat(userData.highLimit),
-            actualColdTemp
-        );
-        
-        // Only show optional tanks if smaller than daily usage
-        const showRecOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && recTankDisplay < displayGallons;
-        const showAltOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && altTankDisplay < displayGallons;
-        
-        let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
-            📍 <strong>Location:</strong> ${userData.location}<br>
-            💧 <strong>Daily Hot Water:</strong> ${displayGallons} liters<br>
-            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°C*<br>
-            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°C<br>
-            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-            📊 <strong>High Limit:</strong> ${displayHighLimit}°C<br><br>
-            
-            <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
-            
-            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-            
-            <strong>${recommendedName}</strong><br>
-            • Inverters: ${recommended.inverters}<br>
-            • Panels: ${recommended.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Element Size: ${recommended.element_size}W<br>
-            • Tank Size: ${displayGallons} liters<br>
-            • kWh/Day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
-            ${showRecOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recTankDisplay} liters (mixing valve required)<br>` : ''}<br>
-            
-            <em>${reason}</em><br><br>
-            
-            <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
-            
-            <strong>${alternativeName}</strong><br>
-            • Inverters: ${alternative.inverters}<br>
-            • Panels: ${alternative.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Element Size: ${alternative.element_size}W<br>
-            • Tank Size: ${displayGallons} liters<br>
-            • kWh/Day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
-            ${showAltOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>*Optional Tank Size: ${altTankDisplay} liters (mixing valve required)<br>` : ''}<br>
-            
-            ${getOptimalConditionsMessage(direction)}
-            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
-            
-            <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #E65100; font-size: 17px;">Click the video to learn more.</strong><br>
-                    <em style="color: #000000; font-size: 13px;">The best PV water heater is here!</em><br>
-                    <a href="https://youtu.be/TI5WKT8yeNU" target="_blank">
-                        <img src="/calc/NewPVThmb.jpeg" 
-                             alt="PV Water Heating Video" 
-                             style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
-                             onmouseover="this.style.transform='scale(1.02)'" 
-                             onmouseout="this.style.transform='scale(1)'">
-                    </a>
-                </div>
-            </div>`;
-            
-        addMessage(messageContent);
-         
-        setTimeout(() => {
-            const messages = chatMessages.querySelectorAll('.message');
-            const lastMessage = messages[messages.length - 1];
-            if (lastMessage) {
-                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }, 100);
-        
-    } else {
-        const displayGallons = Math.round(userData.gallons);
-        const displayColdTemp = Math.round(actualColdTemp);
-        const displayHotTemp = Math.round(userData.hotWaterTemp);
-        const displayHighLimit = Math.round(userData.highLimit);
-        
-        let recommended, alternative, recommendedName, alternativeName, reason;
-        const inv1250 = parseInt(sys1250.inverters);
-        const inv1500 = parseInt(sys1500.inverters);
-        const panel1250 = parseInt(sys1250.panels);
-        const panel1500 = parseInt(sys1500.panels);
-        
-        if (inv1250 < inv1500) {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            if (panel1250 < panel1500) {
-                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-            } else {
-                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-            }
-        } else if (inv1500 < inv1250) {
-            recommended = sys1500;
-            alternative = sys1250;
-            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            if (panel1500 < panel1250) {
-                reason = "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-            } else {
-                reason = "This system uses fewer inverters, making it more cost-effective and simpler to install.";
-            }
-        } else if (panel1250 < panel1500) {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-        } else if (panel1500 < panel1250) {
-            recommended = sys1500;
-            alternative = sys1250;
-            recommendedName = "Use the Off-Grid CIM 1500H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1200H Inverter";
-            reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
-        } else {
-            recommended = sys1250;
-            alternative = sys1500;
-            recommendedName = "Use the Off-Grid CIM 1200H Inverter";
-            alternativeName = "Use the Off-Grid CIM 1500H Inverter";
-            reason = "This system is the most cost-effective choice with a less expensive inverter.";
+
+        function scrollToBottom() {
+            setTimeout(() => {
+                const msgs = chatMessages.querySelectorAll('.message');
+                const last = msgs[msgs.length - 1];
+                if (last) last.scrollIntoView({ behavior:'smooth', block:'start' });
+            }, 100);
         }
-        
-        const recOptionalTank = calculateOptimalImperialTank(
-            parseFloat(userData.gallons),
-            parseFloat(userData.hotWaterTemp),
-            parseFloat(userData.highLimit),
-            actualColdTemp
-        );
-        const altOptionalTank = calculateOptimalImperialTank(
-            parseFloat(userData.gallons),
-            parseFloat(userData.hotWaterTemp),
-            parseFloat(userData.highLimit),
-            actualColdTemp
-        );
-        
-        // Only show optional tanks if smaller than daily usage
-        const showRecOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && recOptionalTank < displayGallons;
-        const showAltOptionalTank = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && altOptionalTank < displayGallons;
-        
-        let messageContent = `<strong style="font-size: 17px;"><span style="color: #00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
-            📍 <strong>Location:</strong> ${userData.location}<br>
-            💧 <strong>Daily Hot Water:</strong> ${displayGallons} gallons<br>
-            ☀️ <strong>Peak Sun Hours:</strong> ${actualPeakSun} hrs/day<br>
-            🌡️ <strong>Cold Water Temp:</strong> ${displayColdTemp}°F*<br>
-            🔥 <strong>Hot Water Temp:</strong> ${displayHotTemp}°F<br>
-            ⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
-            📊 <strong>High Limit:</strong> ${displayHighLimit}°F<br><br>
-            
-            <em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
-            
-            <strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
-            
-            <strong>${recommendedName}</strong><br>
-            • Inverters: ${recommended.inverters}<br>
-            • Panels: ${recommended.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Element Size: ${recommended.element_size}W<br>
-            • Tank Size: ${displayGallons} gallons<br>
-            • kWh/Day: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_day}</span><br>
-            ${showRecOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${recommended.kwh_max}</span><br>*Optional Tank Size: ${recOptionalTank} gallons (mixing valve required)<br>` : ''}<br>
-            
-            <em>${reason}</em><br><br>
-            
-            <strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
-            
-            <strong>${alternativeName}</strong><br>
-            • Inverters: ${alternative.inverters}<br>
-            • Panels: ${alternative.panels}<br>
-            • Panel Wattage: ${userData.panelWatts}W<br>
-            • Element Size: ${alternative.element_size}W<br>
-            • Tank Size: ${displayGallons} gallons<br>
-            • kWh/Day: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_day}</span><br>
-            ${showAltOptionalTank ? `• kWh/Day Max: <span style="color: #00E676; font-weight: 600;">${alternative.kwh_max}</span><br>*Optional Tank Size: ${altOptionalTank} gallons (mixing valve required)<br>` : ''}<br>
-            
-            ${getOptimalConditionsMessage(direction)}
-            <button class="gallon-btn" onclick="copyResults()" style="margin-right: 10px;">Copy Results</button>
-            <button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>
-            <a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1500H-Spec-Sheet-Rev-6.8-Jan-2025.pdf" target="_blank" class="spec-btn">1500H Spec Sheet</a><br><br>
-            
-            <div style="background: #FFFFFF; padding: 30px; margin-top: 20px; border-radius: 10px;">
-                <strong style="color: #E65100; font-size: 17px;">FOR SOLAR CONTRACTORS</strong><br>
-                <strong style="color: #000000; font-size: 16px;">No matter how strong your positioning is, is your whole-home PV offer now competing for a shrinking pool of 'perfect' PV candidates?</strong><br><br>
-                
-                <strong style="color: #000000; font-size: 16px;">Turn the hard 'No' into a 'Yes.'</strong><br>
-                <em style="color: #000000;">Win more projects with a mid tier PV hot water system — a $12–13k option for homeowners who won't commit to a $25–50k PV system.</em><br><br>
-                
-                <strong style="color: #000000;">Win more projects</strong><br>
-                <button class="gallon-btn" onclick="redirectToWaitlist(); return false;" style="margin-top: 10px; background: #00E676; color: #000000;">Continue</button><br>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <strong style="color: #E65100; font-size: 17px;">Click the video to learn more.</strong><br>
-                    <em style="color: #000000; font-size: 13px;">The best PV water heater is here!</em><br>
-                    <a href="https://youtu.be/TI5WKT8yeNU" target="_blank">
-                        <img src="/calc/NewPVThmb.jpeg" 
-                             alt="PV Water Heating Video" 
-                             style="max-width: 350px; width: 100%; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; transition: transform 0.2s; margin-top: 5px;" 
-                             onmouseover="this.style.transform='scale(1.02)'" 
-                             onmouseout="this.style.transform='scale(1)'">
-                    </a>
-                </div>
-            </div>`;
-        
-        addMessage(messageContent);
-         
-        setTimeout(() => {
-            const messages = chatMessages.querySelectorAll('.message');
-            const lastMessage = messages[messages.length - 1];
-            if (lastMessage) {
-                lastMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        /* ===================================
+           DISPLAY SINGLE SYSTEM
+           =================================== */
+        function displaySingleSystem(data, system, inverterModel) {
+            const aps = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+            const act = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
+            const lat = data.latitude_actual || 35;
+            const direction = lat < 0 ? 'north' : 'south';
+            lastAps = aps;
+
+            if (unitSystem === 'metric') {
+                const dg = gallonsToExactLiters(parseFloat(userData.gallons));
+                const dct = Math.round(fahrenheitToCelsius(act));
+                const dht = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
+                const dhl = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
+                const tank = calculateOptimalMetricTank(parseFloat(userData.gallons), parseFloat(userData.hotWaterTemp), parseFloat(userData.highLimit), act);
+                const showOpt = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && tank < dg;
+
+                addMessage(`<strong style="font-size:17px;"><span style="color:#00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
+📍 <strong>Location:</strong> ${userData.location}<br>
+💧 <strong>Daily Hot Water:</strong> ${dg} liters<br>
+☀️ <strong>Peak Sun Hours:</strong> ${aps} hrs/day<br>
+🌡️ <strong>Cold Water Temp:</strong> ${dct}°C*<br>
+🔥 <strong>Hot Water Temp:</strong> ${dht}°C<br>
+⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+📊 <strong>High Limit:</strong> ${dhl}°C<br><br>
+<em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+<strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+<strong>Use the Off-Grid CIM ${inverterModel} Inverter</strong><br>
+• Inverters: ${system.inverters}<br>
+• Panels: ${system.panels}<br>
+• Panel Wattage: ${userData.panelWatts}W<br>
+• Element Size: ${system.element_size}W<br>
+• Tank Size: ${dg} liters<br>
+• kWh/Day: <span style="color:#00E676;font-weight:600;">${system.kwh_day}</span><br>
+${showOpt ? `• kWh/Day Max: <span style="color:#00E676;font-weight:600;">${system.kwh_max}</span><br>• Optional Tank Size: ${tank} liters (mixing valve required)<br>` : ''}
+<button class="diagram-btn" onclick="openDiagram('CIM ${inverterModel}','${system.inverters}','${system.panels}','${userData.panelWatts}','${system.element_size}','${dg}','${system.kwh_day}','${system.kwh_max || system.kwh_day}')">⚡ How It All Connects</button><br>
+This system can meet your hot water requirements.<br><br>
+${getOptimalConditionsMessage(direction)}
+<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>
+<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+${specButtons()}<br><br>
+${marketingBlock()}`);
+                scrollToBottom();
+
+            } else {
+                // IMPERIAL
+                const dg = Math.round(userData.gallons);
+                const dct = Math.round(act);
+                const dht = Math.round(userData.hotWaterTemp);
+                const dhl = Math.round(userData.highLimit);
+                const tank = calculateOptimalImperialTank(parseFloat(userData.gallons), parseFloat(userData.hotWaterTemp), parseFloat(userData.highLimit), act);
+                const showOpt = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && tank < dg;
+
+                addMessage(`<strong style="font-size:17px;"><span style="color:#00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
+📍 <strong>Location:</strong> ${userData.location}<br>
+💧 <strong>Daily Hot Water:</strong> ${dg} gallons<br>
+☀️ <strong>Peak Sun Hours:</strong> ${aps} hrs/day<br>
+🌡️ <strong>Cold Water Temp:</strong> ${dct}°F*<br>
+🔥 <strong>Hot Water Temp:</strong> ${dht}°F<br>
+⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+📊 <strong>High Limit:</strong> ${dhl}°F<br><br>
+<em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+<strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+<strong>Use the Off-Grid CIM ${inverterModel} Inverter</strong><br>
+• Inverters: ${system.inverters}<br>
+• Panels: ${system.panels}<br>
+• Panel Wattage: ${userData.panelWatts}W<br>
+• Element Size: ${system.element_size}W<br>
+• Tank Size: ${dg} gallons<br>
+• kWh/Day: <span style="color:#00E676;font-weight:600;">${system.kwh_day}</span><br>
+${showOpt ? `• kWh/Day Max: <span style="color:#00E676;font-weight:600;">${system.kwh_max}</span><br>• Optional Tank Size: ${tank} gallons (mixing valve required)<br>` : ''}
+<button class="diagram-btn" onclick="openDiagram('CIM ${inverterModel}','${system.inverters}','${system.panels}','${userData.panelWatts}','${system.element_size}','${dg}','${system.kwh_day}','${system.kwh_max || system.kwh_day}')">⚡ How It All Connects</button><br>
+This system can meet your hot water requirements.<br><br>
+${getOptimalConditionsMessage(direction)}
+<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>
+<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+${specButtons()}<br><br>
+${marketingBlock()}`);
+                scrollToBottom();
             }
-        }, 100);
-    }
-}
+        }
+
+        /* ===================================
+           DISPLAY BOTH SYSTEMS
+           =================================== */
+        function displayBothSystems(data) {
+            const sys1250 = data.system_1250w, sys1500 = data.system_1500w;
+            const aps = data.peak_sun_hours_actual || userData.peakSunHours || estimatedAnnualSun;
+            const act = data.cold_water_temp_actual || userData.coldWaterTemp || estimatedAnnualColdWater;
+            const lat = data.latitude_actual || 35;
+            const direction = lat < 0 ? 'north' : 'south';
+            lastAps = aps;
+
+            let recommended, alternative, recommendedName, alternativeName, reason;
+            const i1250 = parseInt(sys1250.inverters), i1500 = parseInt(sys1500.inverters);
+            const p1250 = parseInt(sys1250.panels), p1500 = parseInt(sys1500.panels);
+
+            if (i1250 < i1500) {
+                recommended = sys1250; alternative = sys1500;
+                recommendedName = "Use the Off-Grid CIM 1200H Inverter"; alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                reason = p1250 < p1500 ? "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install." : "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+            } else if (i1500 < i1250) {
+                recommended = sys1500; alternative = sys1250;
+                recommendedName = "Use the Off-Grid CIM 1500H Inverter"; alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                reason = p1500 < p1250 ? "This system uses fewer inverters and panels, making it more cost-effective and requiring less roof area and is simpler to install." : "This system uses fewer inverters, making it more cost-effective and simpler to install.";
+            } else if (p1250 < p1500) {
+                recommended = sys1250; alternative = sys1500;
+                recommendedName = "Use the Off-Grid CIM 1200H Inverter"; alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+            } else if (p1500 < p1250) {
+                recommended = sys1500; alternative = sys1250;
+                recommendedName = "Use the Off-Grid CIM 1500H Inverter"; alternativeName = "Use the Off-Grid CIM 1200H Inverter";
+                reason = "This system uses fewer panels, making it more cost-effective and requiring less roof area and is simpler to install.";
+            } else {
+                recommended = sys1250; alternative = sys1500;
+                recommendedName = "Use the Off-Grid CIM 1200H Inverter"; alternativeName = "Use the Off-Grid CIM 1500H Inverter";
+                reason = "This system is the most cost-effective choice with a less expensive inverter.";
+            }
+
+            // Model strings for diagram URLs
+            const recModel = recommendedName.includes('1200H') ? 'CIM 1200H' : 'CIM 1500H';
+            const altModel = alternativeName.includes('1200H') ? 'CIM 1200H' : 'CIM 1500H';
+
+            if (unitSystem === 'metric') {
+                const dg = gallonsToExactLiters(parseFloat(userData.gallons));
+                const dct = Math.round(fahrenheitToCelsius(act));
+                const dht = Math.round(fahrenheitToCelsius(parseFloat(userData.hotWaterTemp)));
+                const dhl = Math.round(fahrenheitToCelsius(parseFloat(userData.highLimit)));
+                const recTank = calculateOptimalMetricTank(parseFloat(userData.gallons), parseFloat(userData.hotWaterTemp), parseFloat(userData.highLimit), act);
+                const altTank = calculateOptimalMetricTank(parseFloat(userData.gallons), parseFloat(userData.hotWaterTemp), parseFloat(userData.highLimit), act);
+                const showRecOpt = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && recTank < dg;
+                const showAltOpt = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && altTank < dg;
+
+                addMessage(`<strong style="font-size:17px;"><span style="color:#00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
+📍 <strong>Location:</strong> ${userData.location}<br>
+💧 <strong>Daily Hot Water:</strong> ${dg} liters<br>
+☀️ <strong>Peak Sun Hours:</strong> ${aps} hrs/day<br>
+🌡️ <strong>Cold Water Temp:</strong> ${dct}°C*<br>
+🔥 <strong>Hot Water Temp:</strong> ${dht}°C<br>
+⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+📊 <strong>High Limit:</strong> ${dhl}°C<br><br>
+<em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+<strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+<strong>${recommendedName}</strong><br>
+• Inverters: ${recommended.inverters}<br>
+• Panels: ${recommended.panels}<br>
+• Panel Wattage: ${userData.panelWatts}W<br>
+• Element Size: ${recommended.element_size}W<br>
+• Tank Size: ${dg} liters<br>
+• kWh/Day: <span style="color:#00E676;font-weight:600;">${recommended.kwh_day}</span><br>
+${showRecOpt ? `• kWh/Day Max: <span style="color:#00E676;font-weight:600;">${recommended.kwh_max}</span><br>• Optional Tank Size: ${recTank} liters (mixing valve required)<br>` : ''}
+<button class="diagram-btn" onclick="openDiagram('${recModel}','${recommended.inverters}','${recommended.panels}','${userData.panelWatts}','${recommended.element_size}','${dg}','${recommended.kwh_day}','${recommended.kwh_max || recommended.kwh_day}')">⚡ How It All Connects</button><br>
+<em>${reason}</em><br><br>
+<strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
+<strong>${alternativeName}</strong><br>
+• Inverters: ${alternative.inverters}<br>
+• Panels: ${alternative.panels}<br>
+• Panel Wattage: ${userData.panelWatts}W<br>
+• Element Size: ${alternative.element_size}W<br>
+• Tank Size: ${dg} liters<br>
+• kWh/Day: <span style="color:#00E676;font-weight:600;">${alternative.kwh_day}</span><br>
+${showAltOpt ? `• kWh/Day Max: <span style="color:#00E676;font-weight:600;">${alternative.kwh_max}</span><br>• Optional Tank Size: ${altTank} liters (mixing valve required)<br>` : ''}
+<button class="diagram-btn" onclick="openDiagram('${altModel}','${alternative.inverters}','${alternative.panels}','${userData.panelWatts}','${alternative.element_size}','${dg}','${alternative.kwh_day}','${alternative.kwh_max || alternative.kwh_day}')">⚡ How It All Connects</button><br><br>
+${getOptimalConditionsMessage(direction)}
+<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>
+<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+${specButtons()}<br><br>
+${marketingBlock()}`);
+                scrollToBottom();
+
+            } else {
+                // IMPERIAL
+                const dg = Math.round(userData.gallons);
+                const dct = Math.round(act);
+                const dht = Math.round(userData.hotWaterTemp);
+                const dhl = Math.round(userData.highLimit);
+                const recTank = calculateOptimalImperialTank(parseFloat(userData.gallons), parseFloat(userData.hotWaterTemp), parseFloat(userData.highLimit), act);
+                const altTank = calculateOptimalImperialTank(parseFloat(userData.gallons), parseFloat(userData.hotWaterTemp), parseFloat(userData.highLimit), act);
+                const showRecOpt = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && recTank < dg;
+                const showAltOpt = parseFloat(userData.highLimit) > parseFloat(userData.hotWaterTemp) && altTank < dg;
+
+                addMessage(`<strong style="font-size:17px;"><span style="color:#00E676;">✅</span> Your Solar Hot Water System Results!</strong><br><br>
+📍 <strong>Location:</strong> ${userData.location}<br>
+💧 <strong>Daily Hot Water:</strong> ${dg} gallons<br>
+☀️ <strong>Peak Sun Hours:</strong> ${aps} hrs/day<br>
+🌡️ <strong>Cold Water Temp:</strong> ${dct}°F*<br>
+🔥 <strong>Hot Water Temp:</strong> ${dht}°F<br>
+⚡ <strong>Panel Wattage:</strong> ${userData.panelWatts}W<br>
+📊 <strong>High Limit:</strong> ${dhl}°F<br><br>
+<em>*Cold water temperature has a large impact on sizing. If it seems low, measure the temperature at your cold tap, press Try Again, and enter it in Custom Seasonal Settings along with the Peak Sun Hours above.</em><br><br>
+<strong>🔷 RECOMMENDED SYSTEM</strong><br><br>
+<strong>${recommendedName}</strong><br>
+• Inverters: ${recommended.inverters}<br>
+• Panels: ${recommended.panels}<br>
+• Panel Wattage: ${userData.panelWatts}W<br>
+• Element Size: ${recommended.element_size}W<br>
+• Tank Size: ${dg} gallons<br>
+• kWh/Day: <span style="color:#00E676;font-weight:600;">${recommended.kwh_day}</span><br>
+${showRecOpt ? `• kWh/Day Max: <span style="color:#00E676;font-weight:600;">${recommended.kwh_max}</span><br>• Optional Tank Size: ${recTank} gallons (mixing valve required)<br>` : ''}
+<button class="diagram-btn" onclick="openDiagram('${recModel}','${recommended.inverters}','${recommended.panels}','${userData.panelWatts}','${recommended.element_size}','${dg}','${recommended.kwh_day}','${recommended.kwh_max || recommended.kwh_day}')">⚡ How It All Connects</button><br>
+<em>${reason}</em><br><br>
+<strong>⚙️ ALTERNATIVE OPTION</strong><br><br>
+<strong>${alternativeName}</strong><br>
+• Inverters: ${alternative.inverters}<br>
+• Panels: ${alternative.panels}<br>
+• Panel Wattage: ${userData.panelWatts}W<br>
+• Element Size: ${alternative.element_size}W<br>
+• Tank Size: ${dg} gallons<br>
+• kWh/Day: <span style="color:#00E676;font-weight:600;">${alternative.kwh_day}</span><br>
+${showAltOpt ? `• kWh/Day Max: <span style="color:#00E676;font-weight:600;">${alternative.kwh_max}</span><br>• Optional Tank Size: ${altTank} gallons (mixing valve required)<br>` : ''}
+<button class="diagram-btn" onclick="openDiagram('${altModel}','${alternative.inverters}','${alternative.panels}','${userData.panelWatts}','${alternative.element_size}','${dg}','${alternative.kwh_day}','${alternative.kwh_max || alternative.kwh_day}')">⚡ How It All Connects</button><br><br>
+${getOptimalConditionsMessage(direction)}
+<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>
+<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>
+${specButtons()}<br><br>
+${marketingBlock()}`);
+                scrollToBottom();
+            }
+        }
     </script>
 </body>
 </html>
