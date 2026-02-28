@@ -32,9 +32,6 @@
             z-index: 0;
         }
 
-        /* ===================================
-           CLOSE BUTTON
-           =================================== */
         .close-btn {
             position: fixed;
             top: 16px; right: 16px;
@@ -54,60 +51,25 @@
             border-color: #FFA500; transform: scale(1.1);
         }
 
-        /* ===================================
-           PAGE HEADER
-           =================================== */
         .page-header {
             text-align: center;
             margin-bottom: 24px;
             position: relative; z-index: 1;
         }
-        .logo-lockup {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        .logo-icon {
-            width: 36px; height: 36px;
-            background: radial-gradient(circle at 40% 40%, #FFE000, #FFA500);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 18px;
-            box-shadow: 0 0 14px rgba(255,165,0,0.5);
-            flex-shrink: 0;
-        }
-        .logo-text {
-            text-align: left;
-        }
-        .logo-text .logo-main {
-            font-size: 15px; font-weight: 700; color: #FFFFFF;
-            letter-spacing: 0.02em;
-            line-height: 1.2;
-        }
-        .logo-text .logo-main span {
-            color: #FFA500;
-        }
-        .logo-text .logo-sub {
-            font-size: 10px; font-weight: 500; color: #888;
-            letter-spacing: 0.08em; text-transform: uppercase;
-        }
-        .page-header h1 {
-            font-size: 21px; font-weight: 700; color: #FFFFFF;
-        }
+        .logo-lockup { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .logo-icon { width: 36px; height: 36px; background: radial-gradient(circle at 40% 40%, #FFE000, #FFA500); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 0 14px rgba(255,165,0,0.5); flex-shrink: 0; }
+        .logo-text { text-align: left; }
+        .logo-text .logo-main { font-size: 15px; font-weight: 700; color: #FFFFFF; letter-spacing: 0.02em; line-height: 1.2; }
+        .logo-text .logo-main span { color: #FFA500; }
+        .logo-text .logo-sub { font-size: 10px; font-weight: 500; color: #888; letter-spacing: 0.08em; text-transform: uppercase; }
+        .page-header h1 { font-size: 21px; font-weight: 700; color: #FFFFFF; }
 
-        /* ===================================
-           DIAGRAM WRAPPER
-           =================================== */
         .diagram-wrapper {
             max-width: 480px;
             margin: 0 auto;
             position: relative; z-index: 1;
         }
 
-        /* ===================================
-           FULL-WIDTH COMPONENT BOXES
-           =================================== */
         .component {
             background: #1A1A1A;
             border: 1.5px solid #2A2A2A;
@@ -121,12 +83,8 @@
             box-shadow: 0 8px 28px rgba(0,230,118,0.12);
             border-color: #00E676;
         }
-        .component-header {
-            display: flex; align-items: center; gap: 12px;
-        }
-        .component-header.centered {
-            justify-content: center; text-align: center;
-        }
+        .component-header { display: flex; align-items: center; gap: 12px; }
+        .component-header.centered { justify-content: center; text-align: center; }
         .component-icon { font-size: 24px; line-height: 1; flex-shrink: 0; }
         .component-title { font-size: 15px; font-weight: 700; color: #FFFFFF; }
         .component-meta { font-size: 12px; color: #888; margin-top: 2px; }
@@ -135,9 +93,20 @@
             border-top: 1px solid #2A2A2A;
             display: flex; flex-wrap: wrap; gap: 7px;
         }
-        .component-specs.centered {
+        .component-specs.centered { justify-content: center; }
+
+        /* ===================================
+           WATER HEATER LINE 2
+           Plain white text + pill, no border-top
+           =================================== */
+        .component-specs-line2 {
+            margin-top: 7px;
+            display: flex; flex-wrap: wrap; gap: 7px;
+            align-items: center;
             justify-content: center;
+            font-size: 12px; font-weight: 500; color: #FFFFFF;
         }
+
         .spec-pill {
             background: #0F0F0F; border: 1px solid #2A2A2A;
             border-radius: 20px; padding: 2px 7px;
@@ -147,11 +116,13 @@
         .spec-pill.orange { border-color: #FFA500; color: #FFA500; }
 
         /* ===================================
-           STRAIGHT VERTICAL CONNECTOR (used between disconnect and heater)
+           STRAIGHT VERTICAL CONNECTOR
+           SPACING CHANGE: height 50→64px, margin 8px top/bottom
            =================================== */
         .connector {
             display: flex; flex-direction: column; align-items: center;
-            height: 50px; position: relative;
+            height: 64px; position: relative;
+            margin: 8px 0;
         }
         .connector-line {
             width: 2px; flex: 1;
@@ -197,20 +168,24 @@
 
         /* ===================================
            SVG CONNECTOR WRAPPERS
+           SPACING CHANGE: margin 8px top/bottom
            =================================== */
         .svg-connector {
             width: 100%;
             display: block;
             overflow: visible;
+            margin: 8px 0;
         }
 
         /* ===================================
            PARALLEL SECTION
+           SPACING CHANGE: margin 8px top/bottom
            =================================== */
         .parallel-section {
             display: flex;
             gap: 10px;
             align-items: stretch;
+            margin: 8px 0;
         }
 
         .string-column {
@@ -220,68 +195,32 @@
             align-items: center;
         }
 
-        /* === 3-COLUMN: shrink pills, padding, hide panel icons === */
-        .cols-3 {
-            gap: 6px;
-        }
-        .cols-3 .spec-pill {
-            font-size: 9px;
-            padding: 2px 5px;
-            letter-spacing: 0;
-        }
-        .cols-3 .panel-group {
-            padding: 8px 6px;
-        }
-        .cols-3 .panel-group-label {
-            font-size: 10px;
-            margin-bottom: 4px;
-        }
-        .cols-3 .panel-group-sub {
-            font-size: 10px;
-        }
-        .cols-3 .inverter-box {
-            padding: 8px 6px;
-        }
-        .cols-3 .inverter-box-title {
-            font-size: 10px;
-        }
-        .cols-3 .inverter-box-sub {
-            font-size: 9px;
-        }
+        .cols-3 { gap: 6px; }
+        .cols-3 .spec-pill { font-size: 9px; padding: 2px 5px; letter-spacing: 0; }
+        .cols-3 .panel-group { padding: 8px 6px; }
+        .cols-3 .panel-group-label { font-size: 10px; margin-bottom: 4px; }
+        .cols-3 .panel-group-sub { font-size: 10px; }
+        .cols-3 .inverter-box { padding: 8px 6px; }
+        .cols-3 .inverter-box-title { font-size: 10px; }
+        .cols-3 .inverter-box-sub { font-size: 9px; }
 
-        /* === 4-COLUMN: shrink further === */
-        .cols-4 {
-            gap: 5px;
-        }
-        .cols-4 .spec-pill {
-            font-size: 8px;
-            padding: 1px 4px;
-            letter-spacing: 0;
-        }
-        .cols-4 .panel-group {
-            padding: 6px 4px;
-        }
-        .cols-4 .panel-group-label {
-            font-size: 9px;
-            margin-bottom: 3px;
-        }
-        .cols-4 .panel-group-sub {
-            font-size: 9px;
-        }
-        .cols-4 .inverter-box {
-            padding: 6px 4px;
-        }
-        .cols-4 .inverter-box-title {
-            font-size: 9px;
-        }
-        .cols-4 .inverter-box-sub {
-            font-size: 8px;
-        }
+        .cols-4 { gap: 5px; }
+        .cols-4 .spec-pill { font-size: 8px; padding: 1px 4px; letter-spacing: 0; }
+        .cols-4 .panel-group { padding: 6px 4px; }
+        .cols-4 .panel-group-label { font-size: 9px; margin-bottom: 3px; }
+        .cols-4 .panel-group-sub { font-size: 9px; }
+        .cols-4 .inverter-box { padding: 6px 4px; }
+        .cols-4 .inverter-box-title { font-size: 9px; }
+        .cols-4 .inverter-box-sub { font-size: 8px; }
 
-        /* Short connector within a column — with particles */
+        /* ===================================
+           COL CONNECTOR
+           SPACING CHANGE: height 36→48px, margin 4px top/bottom
+           =================================== */
         .col-connector {
             display: flex; flex-direction: column; align-items: center;
-            height: 36px; width: 100%; position: relative;
+            height: 48px; width: 100%; position: relative;
+            margin: 4px 0;
         }
         .col-connector-line {
             width: 2px; flex: 1;
@@ -315,9 +254,6 @@
         .col-particle:nth-child(2) { animation-delay: 0.5s; }
         .col-particle:nth-child(3) { animation-delay: 1s; }
 
-        /* ===================================
-           PANEL GROUP BOX
-           =================================== */
         .panel-group {
             background: #141414;
             border: 1.5px solid #2A2A2A;
@@ -327,23 +263,10 @@
             transition: border-color 0.2s;
         }
         .panel-group:hover { border-color: #00E676; }
-        .panel-group-label {
-            font-size: 11px; font-weight: 600; color: #888;
-            text-transform: uppercase; letter-spacing: 0.06em;
-            margin-bottom: 4px; text-align: center;
-        }
-        .panel-group-sub {
-            font-size: 12px; font-weight: 700; color: #FFA500;
-            text-align: center; margin-bottom: 8px;
-        }
-        .panels-row {
-            display: flex; justify-content: center;
-            gap: 6px; align-items: flex-end;
-        }
+        .panel-group-label { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; text-align: center; }
+        .panel-group-sub { font-size: 12px; font-weight: 700; color: #FFA500; text-align: center; margin-bottom: 8px; }
+        .panels-row { display: flex; justify-content: center; gap: 6px; align-items: flex-end; }
 
-        /* ===================================
-           INVERTER BOX (within column)
-           =================================== */
         .inverter-box {
             background: #1A1A1A;
             border: 1.5px solid #2A2A2A;
@@ -353,22 +276,11 @@
             text-align: center;
             transition: border-color 0.2s, transform 0.2s;
         }
-        .inverter-box:hover {
-            border-color: #FFA500;
-            transform: translateY(-2px);
-        }
+        .inverter-box:hover { border-color: #FFA500; transform: translateY(-2px); }
         .inverter-box-icon { font-size: 20px; margin-bottom: 4px; }
-        .inverter-box-title {
-            font-size: 12px; font-weight: 700; color: #FFA500;
-            line-height: 1.4;
-        }
-        .inverter-box-sub {
-            font-size: 10px; color: #666; margin-top: 2px;
-        }
+        .inverter-box-title { font-size: 12px; font-weight: 700; color: #FFA500; line-height: 1.4; }
+        .inverter-box-sub { font-size: 10px; color: #666; margin-top: 2px; }
 
-        /* ===================================
-           FOOTER
-           =================================== */
         .footer-note {
             text-align: center; margin-top: 26px;
             font-size: 11px; color: #444; line-height: 1.6;
@@ -412,13 +324,13 @@
     const tankSize       = p.get('tankSize')       || '80';
     const kwhDay         = p.get('kwhDay')         || '12.6';
     const kwhDayMax      = p.get('kwhDayMax')      || kwhDay;
+    const optionalTank   = p.get('optionalTank')   || null;   // NEW: optional tank size from bot
     const gridType       = p.get('gridType')       || 'off-grid';
     const userLocation   = p.get('userLocation')   || 'Your Location';
     const peakSunHours   = p.get('peakSunHours')   || null;
     const season         = p.get('season')         || '';
 
     // Derived
-    // CHANGE 1: Smart panel distribution — max 4 per inverter, spread remainder evenly
     const MAX_PER_INV = 4;
     const _base = Math.floor(panelCount / inverterCount);
     const _rem  = panelCount % inverterCount;
@@ -428,164 +340,74 @@
 
     const ratedPowerW  = panelCount * parseInt(panelWattage);
     const ratedPowerKw = (ratedPowerW / 1000).toFixed(2);
-    const tankUnit     = parseInt(tankSize) > 50 ? 'gallons' : 'liters';
+    const tankUnit     = parseInt(tankSize) >= 150 ? 'liters' : 'gallons';
     const seasonLabel  = (season && season !== '') ? season.charAt(0).toUpperCase() + season.slice(1) : 'Annual';
 
-    /* ===================================
-       COLUMN CENTER POSITIONS
-       viewBox 0-100, N columns with equal spacing
-       =================================== */
     function colCenters(n) {
         const g = 2.17;
         const colW = (100 - (n - 1) * g) / n;
         return Array.from({length: n}, (_, i) => i * (colW + g) + colW / 2);
     }
 
-    /* ===================================
-       FAN-OUT SVG
-       =================================== */
     function fanOutSVG(n) {
         if (n === 1) {
             return `<div class="connector">
                 <div class="connector-line">
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
+                    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
                     <div class="connector-label">DC Power</div>
                 </div>
                 <div class="connector-arrow"></div>
             </div>`;
         }
-        const cx = 50;
-        const stemH  = 20;
-        const dropH  = 18;
-        const totalH = stemH + dropH + 10;
+        const cx = 50, stemH = 20, dropH = 18, totalH = stemH + dropH + 10;
         const centers = colCenters(n);
-        const leftX  = centers[0];
-        const rightX = centers[n - 1];
-        const barY   = stemH;
-        const dropEndY = stemH + dropH;
-
-        const defs = `<filter id="fo-glow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="1.2" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>`;
-
-        let pathDefs = '';
-        centers.forEach((colX, i) => {
-            const pid = `fo-p${i}`;
-            const d = `M ${cx},0 L ${cx},${barY} L ${colX},${barY} L ${colX},${dropEndY}`;
-            pathDefs += `<path id="${pid}" d="${d}" fill="none" stroke="none"/>`;
-        });
-
+        const leftX = centers[0], rightX = centers[n-1];
+        const barY = stemH, dropEndY = stemH + dropH;
+        const defs = `<filter id="fo-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+        let pathDefs = ''; centers.forEach((colX,i) => { const pid=`fo-p${i}`,d=`M ${cx},0 L ${cx},${barY} L ${colX},${barY} L ${colX},${dropEndY}`; pathDefs+=`<path id="${pid}" d="${d}" fill="none" stroke="none"/>`; });
         let visuals = '';
         visuals += `<line x1="${cx}" y1="0" x2="${cx}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
         visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
-        centers.forEach(colX => {
-            visuals += `<line x1="${colX}" y1="${barY}" x2="${colX}" y2="${dropEndY}" stroke="#00E676" stroke-width="1"/>`;
-            visuals += `<polygon points="${colX},${dropEndY + 7} ${colX - 3},${dropEndY} ${colX + 3},${dropEndY}" fill="#FFA500"/>`;
-        });
-
-        let dots = '';
-        centers.forEach((colX, i) => {
-            const pid = `fo-p${i}`;
-            for (let d2 = 0; d2 < 3; d2++) {
-                const delay = (d2 * 0.67).toFixed(2);
-                dots += `<circle r="2.2" fill="#00E676" filter="url(#fo-glow)">
-                    <animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear">
-                        <mpath href="#${pid}" xlink:href="#${pid}"/>
-                    </animateMotion>
-                </circle>`;
-            }
-        });
-
-        return `<svg class="svg-connector" viewBox="0 0 100 ${totalH + 8}"
-            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            style="display:block;width:100%;height:${totalH + 8}px;overflow:visible;">
-            <defs>${defs}${pathDefs}</defs>
-            ${visuals}${dots}
-        </svg>`;
+        centers.forEach(colX => { visuals+=`<line x1="${colX}" y1="${barY}" x2="${colX}" y2="${dropEndY}" stroke="#00E676" stroke-width="1"/><polygon points="${colX},${dropEndY+7} ${colX-3},${dropEndY} ${colX+3},${dropEndY}" fill="#FFA500"/>`; });
+        let dots = ''; centers.forEach((colX,i) => { const pid=`fo-p${i}`; for(let d2=0;d2<3;d2++){const delay=(d2*0.67).toFixed(2); dots+=`<circle r="2.2" fill="#00E676" filter="url(#fo-glow)"><animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear"><mpath href="#${pid}" xlink:href="#${pid}"/></animateMotion></circle>`;} });
+        return `<svg class="svg-connector" viewBox="0 0 100 ${totalH+8}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:block;width:100%;height:${totalH+8}px;overflow:visible;"><defs>${defs}${pathDefs}</defs>${visuals}${dots}</svg>`;
     }
 
     function mergeInSVG(n) {
         if (n === 1) {
             return `<div class="connector">
                 <div class="connector-line">
-                    <div class="particle"></div>
-                    <div class="particle"></div>
-                    <div class="particle"></div>
+                    <div class="particle"></div><div class="particle"></div><div class="particle"></div>
                     <div class="connector-label">AC Power</div>
                 </div>
                 <div class="connector-arrow"></div>
             </div>`;
         }
-        const cx = 50;
-        const riseH  = 18;
-        const stemH  = 20;
-        const totalH = riseH + stemH + 10;
+        const cx = 50, riseH = 18, stemH = 20, totalH = riseH + stemH + 10;
         const centers = colCenters(n);
-        const leftX  = centers[0];
-        const rightX = centers[n - 1];
-        const barY   = riseH;
-        const stemEndY = riseH + stemH;
-
-        const defs = `<filter id="mi-glow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur stdDeviation="1.2" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>`;
-
-        let pathDefs = '';
-        centers.forEach((colX, i) => {
-            const pid = `mi-p${i}`;
-            const d = `M ${colX},0 L ${colX},${barY} L ${cx},${barY} L ${cx},${stemEndY}`;
-            pathDefs += `<path id="${pid}" d="${d}" fill="none" stroke="none"/>`;
-        });
-
+        const leftX = centers[0], rightX = centers[n-1];
+        const barY = riseH, stemEndY = riseH + stemH;
+        const defs = `<filter id="mi-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+        let pathDefs = ''; centers.forEach((colX,i) => { const pid=`mi-p${i}`,d=`M ${colX},0 L ${colX},${barY} L ${cx},${barY} L ${cx},${stemEndY}`; pathDefs+=`<path id="${pid}" d="${d}" fill="none" stroke="none"/>`; });
         let visuals = '';
-        centers.forEach(colX => {
-            visuals += `<line x1="${colX}" y1="0" x2="${colX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
-        });
+        centers.forEach(colX => { visuals+=`<line x1="${colX}" y1="0" x2="${colX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`; });
         visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
         visuals += `<line x1="${cx}" y1="${barY}" x2="${cx}" y2="${stemEndY}" stroke="#FFA500" stroke-width="1"/>`;
-        visuals += `<polygon points="${cx},${stemEndY + 8} ${cx - 3},${stemEndY} ${cx + 3},${stemEndY}" fill="#FFA500"/>`;
-
-        let dots = '';
-        centers.forEach((colX, i) => {
-            const pid = `mi-p${i}`;
-            for (let d2 = 0; d2 < 3; d2++) {
-                const delay = (d2 * 0.67).toFixed(2);
-                dots += `<circle r="2.2" fill="#00E676" filter="url(#mi-glow)">
-                    <animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear">
-                        <mpath href="#${pid}" xlink:href="#${pid}"/>
-                    </animateMotion>
-                </circle>`;
-            }
-        });
-
-        return `<svg class="svg-connector" viewBox="0 0 100 ${totalH + 8}"
-            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            style="display:block;width:100%;height:${totalH + 8}px;overflow:visible;">
-            <defs>${defs}${pathDefs}</defs>
-            ${visuals}${dots}
-        </svg>`;
+        visuals += `<polygon points="${cx},${stemEndY+8} ${cx-3},${stemEndY} ${cx+3},${stemEndY}" fill="#FFA500"/>`;
+        let dots = ''; centers.forEach((colX,i) => { const pid=`mi-p${i}`; for(let d2=0;d2<3;d2++){const delay=(d2*0.67).toFixed(2); dots+=`<circle r="2.2" fill="#00E676" filter="url(#mi-glow)"><animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear"><mpath href="#${pid}" xlink:href="#${pid}"/></animateMotion></circle>`;} });
+        return `<svg class="svg-connector" viewBox="0 0 100 ${totalH+8}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:block;width:100%;height:${totalH+8}px;overflow:visible;"><defs>${defs}${pathDefs}</defs>${visuals}${dots}</svg>`;
     }
 
     function straightConnector(label) {
         return `<div class="connector">
             <div class="connector-line">
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
+                <div class="particle"></div><div class="particle"></div><div class="particle"></div>
                 ${label ? `<div class="connector-label">${label}</div>` : ''}
             </div>
             <div class="connector-arrow"></div>
         </div>`;
     }
 
-    /* ===================================
-       SVG SOLAR PANEL
-       Portrait, 3 cols × 2 rows of cells
-       =================================== */
     function makePanelSVG() {
         return `<svg width="50" height="74" viewBox="0 0 50 74" xmlns="http://www.w3.org/2000/svg">
             <rect x="0" y="0" width="50" height="74" rx="2.5" fill="#7a8e9e"/>
@@ -595,18 +417,18 @@
             <line x1="17.7" y1="3" x2="17.7" y2="71" stroke="#162d50" stroke-width="1.2"/>
             <line x1="32.3" y1="3" x2="32.3" y2="71" stroke="#162d50" stroke-width="1.2"/>
             <line x1="3" y1="37" x2="47" y2="37" stroke="#162d50" stroke-width="1.2"/>
-            <line x1="4"  y1="14" x2="17" y2="14" stroke="#1e3d6a" stroke-width="0.7"/>
-            <line x1="4"  y1="22" x2="17" y2="22" stroke="#1e3d6a" stroke-width="0.7"/>
-            <line x1="4"  y1="30" x2="17" y2="30" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4" y1="14" x2="17" y2="14" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4" y1="22" x2="17" y2="22" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4" y1="30" x2="17" y2="30" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="19" y1="14" x2="31" y2="14" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="19" y1="22" x2="31" y2="22" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="19" y1="30" x2="31" y2="30" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="33" y1="14" x2="46" y2="14" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="33" y1="22" x2="46" y2="22" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="33" y1="30" x2="46" y2="30" stroke="#1e3d6a" stroke-width="0.7"/>
-            <line x1="4"  y1="49" x2="17" y2="49" stroke="#1e3d6a" stroke-width="0.7"/>
-            <line x1="4"  y1="57" x2="17" y2="57" stroke="#1e3d6a" stroke-width="0.7"/>
-            <line x1="4"  y1="65" x2="17" y2="65" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4" y1="49" x2="17" y2="49" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4" y1="57" x2="17" y2="57" stroke="#1e3d6a" stroke-width="0.7"/>
+            <line x1="4" y1="65" x2="17" y2="65" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="19" y1="49" x2="31" y2="49" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="19" y1="57" x2="31" y2="57" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="19" y1="65" x2="31" y2="65" stroke="#1e3d6a" stroke-width="0.7"/>
@@ -619,15 +441,8 @@
         </svg>`;
     }
 
-    /* ===================================
-       ASSEMBLE DIAGRAM - two-pass:
-       1. Render columns into DOM
-       2. Measure real pixel centers
-       3. Draw SVG connectors exactly
-       =================================== */
     const wrapper = document.getElementById('diagramWrapper');
 
-    // --- PEAK SUN HOURS PILL (always show, placeholder if missing) ---
     const peakPillVal = peakSunHours ? `${peakSunHours} Peak Sun Hrs/Day` : '— Peak Sun Hrs/Day';
     const peakPillClass = peakSunHours ? 'spec-pill green' : 'spec-pill';
 
@@ -642,35 +457,26 @@
         <div class="component-specs centered">
             <span class="spec-pill orange">📍 ${userLocation}</span>
             <span class="${peakPillClass}">${peakPillVal}</span>
-            <span class="spec-pill" style="border-color:#ffffff;">${seasonLabel} Performance</span>        
-            </div>
-        </div>`;
+            <span class="spec-pill" style="border-color:#ffffff;">${seasonLabel} Performance</span>
+        </div>
+    </div>`;
 
-    // Placeholder for fan-out SVG
     html += `<div id="fanoutPlaceholder" style="width:100%;"></div>`;
 
-    // --- PARALLEL SECTION: panel groups + inverters ---
-    // CHANGE 2: use panelDist[i] per column; hide panel icons for 3+ inverters;
-    //           add "Panels" subtitle in orange; add cols-N class to parallel-section
+    // --- PARALLEL SECTION ---
     let columns = '';
     for (let i = 0; i < inverterCount; i++) {
         const panelsThisInv = panelDist[i];
         const pgLabel = `${panelsThisInv} &times; ${panelWattage}W`;
-
-        // Only render panel SVG icons for 1-2 inverter layouts
         let panelsRowHtml = '';
         if (inverterCount <= 2) {
             let panelSVGs = '';
-            for (let j = 0; j < panelsThisInv; j++) {
-                panelSVGs += makePanelSVG();
-            }
+            for (let j = 0; j < panelsThisInv; j++) panelSVGs += makePanelSVG();
             panelsRowHtml = `<div class="panels-row">${panelSVGs}</div>`;
         }
-
         const invTitle = inverterCount > 1
             ? `${inverterModel}<br><span style="font-size:10px;color:#888;font-weight:400;">Unit ${i + 1}</span>`
             : inverterModel;
-
         columns += `<div class="string-column" id="col${i}">
             <div class="panel-group" id="panelGroup${i}">
                 <div class="panel-group-label">${pgLabel}</div>
@@ -679,9 +485,7 @@
             </div>
             <div class="col-connector">
                 <div class="col-connector-line">
-                    <div class="col-particle"></div>
-                    <div class="col-particle"></div>
-                    <div class="col-particle"></div>
+                    <div class="col-particle"></div><div class="col-particle"></div><div class="col-particle"></div>
                     <div class="col-connector-label">DC</div>
                 </div>
                 <div class="col-connector-arrow"></div>
@@ -695,8 +499,6 @@
     }
 
     html += `<div class="parallel-section cols-${inverterCount}" id="parallelSection">${columns}</div>`;
-
-    // Placeholder for merge SVG
     html += `<div id="mergePlaceholder" style="width:100%;"></div>`;
 
     // --- AC DISCONNECT ---
@@ -713,10 +515,18 @@
         </div>
     </div>`;
 
-    // --- CONNECTOR: 240V AC ---
     html += straightConnector('240V AC');
 
     // --- WATER HEATER ---
+    // Line 1 (always): Tank · Element · kWh/Day on one row
+    // Line 2 (only when optionalTank present): plain white "Opt: X gal · mix valve" + kWh/Day Max pill
+    const line2 = optionalTank
+        ? `<div class="component-specs-line2">
+            Opt: ${optionalTank} ${tankUnit} &middot; mix valve
+            <span class="spec-pill" style="border-color:#ffffff;">${kwhDayMax} kWh/Day Max</span>
+        </div>`
+        : '';
+
     html += `<div class="component">
         <div class="component-header centered">
             <div>
@@ -727,11 +537,10 @@
             <span class="spec-pill orange">${tankSize} ${tankUnit.charAt(0).toUpperCase()+tankUnit.slice(1)}</span>
             <span class="spec-pill green">${parseInt(elementSize).toLocaleString()}W Elements</span>
             <span class="spec-pill" style="border-color:#ffffff;">${kwhDay} kWh/Day</span>
-            ${kwhDayMax !== kwhDay ? `<span class="spec-pill" style="border-color:#ffffff;">${kwhDayMax} kWh/Day Max</span>` : ''}
         </div>
+        ${line2}
     </div>`;
 
-    // Render everything into DOM
     wrapper.innerHTML = html;
 
     /* ===================================
@@ -741,8 +550,7 @@
         const wrapperRect = wrapper.getBoundingClientRect();
         const wW = wrapperRect.width;
 
-        const panelCenters = [];
-        const invCenters   = [];
+        const panelCenters = [], invCenters = [];
         for (let i = 0; i < inverterCount; i++) {
             const pg = document.getElementById(`panelGroup${i}`).getBoundingClientRect();
             const ib = document.getElementById(`invBox${i}`).getBoundingClientRect();
@@ -755,54 +563,19 @@
         if (inverterCount === 1) {
             foEl.outerHTML = straightConnector('DC Power');
         } else {
-            const stemH = 20;
-            const dropH = 20;
-            const svgH  = stemH + dropH + 12;
-            const cx    = wW / 2;
-            const barY  = stemH;
-            const dropEndY = stemH + dropH;
-            const leftX  = panelCenters[0];
-            const rightX = panelCenters[panelCenters.length - 1];
-
+            const stemH = 20, dropH = 20, svgH = stemH + dropH + 12;
+            const cx = wW / 2, barY = stemH, dropEndY = stemH + dropH;
+            const leftX = panelCenters[0], rightX = panelCenters[panelCenters.length - 1];
             let pathDefs = '';
-            panelCenters.forEach((colX, i) => {
-                const pid = `fo-p${i}`;
-                const d = `M ${cx},0 L ${cx},${barY} L ${colX},${barY} L ${colX},${dropEndY}`;
-                pathDefs += `<path id="${pid}" d="${d}" fill="none" stroke="none"/>`;
-            });
-
+            panelCenters.forEach((colX, i) => { const pid=`fo-p${i}`,d=`M ${cx},0 L ${cx},${barY} L ${colX},${barY} L ${colX},${dropEndY}`; pathDefs+=`<path id="${pid}" d="${d}" fill="none" stroke="none"/>`; });
             let visuals = '';
             visuals += `<line x1="${cx}" y1="0" x2="${cx}" y2="${barY}" stroke="#FFE000" stroke-width="1.5"/>`;
             visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#FFE000" stroke-width="1.5"/>`;
-            panelCenters.forEach(colX => {
-                visuals += `<line x1="${colX}" y1="${barY}" x2="${colX}" y2="${dropEndY}" stroke="#FFE000" stroke-width="1.5"/>`;
-                visuals += `<polygon points="${colX},${dropEndY + 9} ${colX - 4},${dropEndY} ${colX + 4},${dropEndY}" fill="#FFA500"/>`;
-            });
-
-            const defs = `<filter id="fo-glow" x="-100%" y="-100%" width="300%" height="300%">
-                <feGaussianBlur stdDeviation="1.5" result="b"/>
-                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>`;
-
+            panelCenters.forEach(colX => { visuals+=`<line x1="${colX}" y1="${barY}" x2="${colX}" y2="${dropEndY}" stroke="#FFE000" stroke-width="1.5"/><polygon points="${colX},${dropEndY+9} ${colX-4},${dropEndY} ${colX+4},${dropEndY}" fill="#FFA500"/>`; });
+            const defs = `<filter id="fo-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
             let dots = '';
-            panelCenters.forEach((colX, i) => {
-                const pid = `fo-p${i}`;
-                for (let d = 0; d < 3; d++) {
-                    const delay = (d * 0.67).toFixed(2);
-                    dots += `<circle r="3" fill="#FFE000" filter="url(#fo-glow)">
-                        <animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear">
-                            <mpath href="#${pid}" xlink:href="#${pid}"/>
-                        </animateMotion>
-                    </circle>`;
-                }
-            });
-
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                style="display:block;width:100%;height:${svgH}px;overflow:visible;" viewBox="0 0 ${wW} ${svgH}">
-                <defs>${defs}${pathDefs}</defs>
-                ${visuals}${dots}
-            </svg>`;
-            foEl.outerHTML = svg;
+            panelCenters.forEach((colX,i) => { const pid=`fo-p${i}`; for(let d=0;d<3;d++){const delay=(d*0.67).toFixed(2); dots+=`<circle r="3" fill="#FFE000" filter="url(#fo-glow)"><animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear"><mpath href="#${pid}" xlink:href="#${pid}"/></animateMotion></circle>`;} });
+            foEl.outerHTML = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:block;width:100%;height:${svgH}px;overflow:visible;margin:8px 0;" viewBox="0 0 ${wW} ${svgH}"><defs>${defs}${pathDefs}</defs>${visuals}${dots}</svg>`;
         }
 
         // --- DRAW MERGE ---
@@ -810,59 +583,24 @@
         if (inverterCount === 1) {
             miEl.outerHTML = straightConnector('AC Power');
         } else {
-            const riseH = 20;
-            const stemH = 20;
-            const svgH  = riseH + stemH + 12;
-            const cx    = wW / 2;
-            const barY  = riseH;
-            const stemEndY = riseH + stemH;
-            const leftX  = invCenters[0];
-            const rightX = invCenters[invCenters.length - 1];
-
+            const riseH = 20, stemH = 20, svgH = riseH + stemH + 12;
+            const cx = wW / 2, barY = riseH, stemEndY = riseH + stemH;
+            const leftX = invCenters[0], rightX = invCenters[invCenters.length - 1];
             let pathDefs = '';
-            invCenters.forEach((colX, i) => {
-                const pid = `mi-p${i}`;
-                const d = `M ${colX},0 L ${colX},${barY} L ${cx},${barY} L ${cx},${stemEndY}`;
-                pathDefs += `<path id="${pid}" d="${d}" fill="none" stroke="none"/>`;
-            });
-
+            invCenters.forEach((colX,i) => { const pid=`mi-p${i}`,d=`M ${colX},0 L ${colX},${barY} L ${cx},${barY} L ${cx},${stemEndY}`; pathDefs+=`<path id="${pid}" d="${d}" fill="none" stroke="none"/>`; });
             let visuals = '';
-            invCenters.forEach(colX => {
-                visuals += `<line x1="${colX}" y1="0" x2="${colX}" y2="${barY}" stroke="#00E676" stroke-width="1.5"/>`;
-            });
+            invCenters.forEach(colX => { visuals+=`<line x1="${colX}" y1="0" x2="${colX}" y2="${barY}" stroke="#00E676" stroke-width="1.5"/>`; });
             visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#00E676" stroke-width="1.5"/>`;
             visuals += `<line x1="${cx}" y1="${barY}" x2="${cx}" y2="${stemEndY}" stroke="#FFA500" stroke-width="1.5"/>`;
-            visuals += `<polygon points="${cx},${stemEndY + 9} ${cx - 4},${stemEndY} ${cx + 4},${stemEndY}" fill="#FFA500"/>`;
-            visuals += `<text x="${cx + 5}" y="${barY + (stemEndY - barY) / 2 + 4}" font-family="Inter, sans-serif" font-size="9" font-weight="600" fill="#888" letter-spacing="0.06em">AC</text>`;
-
-            const defs = `<filter id="mi-glow" x="-100%" y="-100%" width="300%" height="300%">
-                <feGaussianBlur stdDeviation="1.5" result="b"/>
-                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>`;
-
+            visuals += `<polygon points="${cx},${stemEndY+9} ${cx-4},${stemEndY} ${cx+4},${stemEndY}" fill="#FFA500"/>`;
+            visuals += `<text x="${cx+5}" y="${barY+(stemEndY-barY)/2+4}" font-family="Inter, sans-serif" font-size="9" font-weight="600" fill="#888" letter-spacing="0.06em">AC</text>`;
+            const defs = `<filter id="mi-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
             let dots = '';
-            invCenters.forEach((colX, i) => {
-                const pid = `mi-p${i}`;
-                for (let d = 0; d < 3; d++) {
-                    const delay = (d * 0.67).toFixed(2);
-                    dots += `<circle r="3" fill="#00E676" filter="url(#mi-glow)">
-                        <animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear">
-                            <mpath href="#${pid}" xlink:href="#${pid}"/>
-                        </animateMotion>
-                    </circle>`;
-                }
-            });
-
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                style="display:block;width:100%;height:${svgH}px;overflow:visible;" viewBox="0 0 ${wW} ${svgH}">
-                <defs>${defs}${pathDefs}</defs>
-                ${visuals}${dots}
-            </svg>`;
-            miEl.outerHTML = svg;
+            invCenters.forEach((colX,i) => { const pid=`mi-p${i}`; for(let d=0;d<3;d++){const delay=(d*0.67).toFixed(2); dots+=`<circle r="3" fill="#00E676" filter="url(#mi-glow)"><animateMotion dur="1.6s" repeatCount="indefinite" begin="${delay}s" calcMode="linear"><mpath href="#${pid}" xlink:href="#${pid}"/></animateMotion></circle>`;} });
+            miEl.outerHTML = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:block;width:100%;height:${svgH}px;overflow:visible;margin:8px 0;" viewBox="0 0 ${wW} ${svgH}"><defs>${defs}${pathDefs}</defs>${visuals}${dots}</svg>`;
         }
     }
 
-    // Wait for layout to settle, then measure and draw
     requestAnimationFrame(() => requestAnimationFrame(drawConnectors));
 </script>
 
