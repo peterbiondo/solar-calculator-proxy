@@ -472,7 +472,7 @@
             </div>
         </div>
         <div class="component-specs centered">
-            <span class="spec-pill orange">📍 ${userLocation}</span>
+            <span class="spec-pill orange"> ${userLocation}</span>
             <span class="${peakPillClass}">${peakPillVal}</span>
             <span class="spec-pill" style="border-color:#ffffff;">${seasonLabel} Performance</span>
         </div>
@@ -536,10 +536,10 @@
 
     // --- WATER HEATER ---
     // Line 1 (always): Tank · Element · kWh/Day on one row
-    // Line 2 (only when optionalTank present): plain white "Opt: X gal · mix valve" + kWh/Day Max pill
+    // Line 2 (only when optionalTank present): plain white "Optional: X gal with mix valve" + kWh/Day Max pill
     const line2 = optionalTank
         ? `<div class="component-specs-line2">
-            Opt: ${optionalTank} ${tankUnit} &middot; mix valve
+            Optional: ${optionalTank} ${tankUnit} with mix valve
             <span class="spec-pill" style="border-color:#ffffff;">${kwhDayMax} kWh/Day Max</span>
         </div>`
         : '';
@@ -547,7 +547,7 @@
     html += `<div class="component">
         <div class="component-header centered">
             <div>
-                <div class="component-title">Electric Water Heater</div>
+                <div class="component-title">Dedicated PV Electric Water Heater</div>
             </div>
         </div>
         <div class="component-specs centered">
