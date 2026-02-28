@@ -671,8 +671,8 @@
         <div class="component-specs centered">
             <span class="spec-pill orange">${tankSize} ${tankUnit.charAt(0).toUpperCase()+tankUnit.slice(1)}</span>
             <span class="spec-pill green">${parseInt(elementSize).toLocaleString()}W Elements</span>
-            <span class="spec-pill">${kwhDay} kWh/Day</span>
-            ${kwhDayMax !== kwhDay ? `<span class="spec-pill">${kwhDayMax} kWh/Day Max</span>` : ''}
+            <span class="spec-pill" style="border-color:#ffffff;">${kwhDay} kWh/Day</span>
+            ${kwhDayMax !== kwhDay ? `<span class="spec-pill" style="border-color:#ffffff;">${kwhDayMax} kWh/Day Max</span>` : ''}
         </div>
     </div>`;
 
