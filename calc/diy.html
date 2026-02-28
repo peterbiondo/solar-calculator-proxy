@@ -230,7 +230,7 @@
         const WEBHOOK_URL = 'https://solar-calculator-proxy.vercel.app/api/webhook-proxy';
 
         // ── ADDITION 1: openDiagram function ──────────────────────────────────
-        function openDiagram(inverterModel, inverterCount, panelCount, panelWattage, elementSize, tankSize, kwhDay, kwhDayMax) {
+        function openDiagram(inverterModel, inverterCount, panelCount, panelWattage, elementSize, tankSize, kwhDay, kwhDayMax, optionalTank) {
             const params = new URLSearchParams({
                 inverterModel: inverterModel,
                 inverterCount: inverterCount,
@@ -240,6 +240,7 @@
                 tankSize: tankSize,
                 kwhDay: kwhDay,
                 kwhDayMax: kwhDayMax || kwhDay,
+                optionalTank: optionalTank || '',
                 gridType: 'off-grid',
                 userLocation: userData.location || '',
                 peakSunHours: lastAps || '',
@@ -801,7 +802,7 @@
                     (showOpt ? '• kWh/Day Max: <span style="color:#00E676;font-weight:600;">' + system.kwh_max + '</span><br>*Optional Tank Size: ' + td + ' liters (mixing valve required)<br>' : '') +
                     '<br>This system can meet your hot water requirements.<br><br>' +
                     // ── ADDITION 4a: diagram button (metric single) ───────────
-                    '<button class="diagram-btn" onclick="openDiagram(\'CIM ' + inverterModel + '\',\'' + system.inverters + '\',\'' + system.panels + '\',\'' + userData.panelWatts + '\',\'' + system.element_size + '\',\'' + dg + '\',\'' + system.kwh_day + '\',\'' + (system.kwh_max || system.kwh_day) + '\')">⚡ How It All Connects</button><br>' +
+                    '<button class="diagram-btn" onclick="openDiagram(\'CIM ' + inverterModel + '\',\'' + system.inverters + '\',\'' + system.panels + '\',\'' + userData.panelWatts + '\',\'' + system.element_size + '\',\'' + dg + '\',\'' + system.kwh_day + '\',\'' + (system.kwh_max || system.kwh_day) + '\',\'' + (showOpt ? td : '') + '\')">⚡ How It All Connects</button><br>' +
                     getOptimalConditionsMessage(dir) +
                     '<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>' +
                     '<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>' +
@@ -837,7 +838,7 @@
                     (showOpt ? '• kWh/Day Max: <span style="color:#00E676;font-weight:600;">' + system.kwh_max + '</span><br>*Optional Tank Size: ' + otd + ' gallons (mixing valve required)<br>' : '') +
                     '<br>This system can meet your hot water requirements.<br><br>' +
                     // ── ADDITION 4b: diagram button (imperial single) ─────────
-                    '<button class="diagram-btn" onclick="openDiagram(\'CIM ' + inverterModel + '\',\'' + system.inverters + '\',\'' + system.panels + '\',\'' + userData.panelWatts + '\',\'' + system.element_size + '\',\'' + dg + '\',\'' + system.kwh_day + '\',\'' + (system.kwh_max || system.kwh_day) + '\')">⚡ How It All Connects</button><br>' +
+                    '<button class="diagram-btn" onclick="openDiagram(\'CIM ' + inverterModel + '\',\'' + system.inverters + '\',\'' + system.panels + '\',\'' + userData.panelWatts + '\',\'' + system.element_size + '\',\'' + dg + '\',\'' + system.kwh_day + '\',\'' + (system.kwh_max || system.kwh_day) + '\',\'' + (showOpt ? otd : '') + '\')">⚡ How It All Connects</button><br>' +
                     getOptimalConditionsMessage(dir) +
                     '<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>' +
                     '<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>' +
@@ -910,7 +911,7 @@
                     (showROpt ? '• kWh/Day Max: <span style="color:#00E676;font-weight:600;">' + rec.kwh_max + '</span><br>*Optional Tank Size: ' + rtd + ' liters (mixing valve required)<br>' : '') +
                     '<br><em>' + reason + '</em><br><br>' +
                     // ── ADDITION 4c: diagram button (metric recommended) ──────
-                    '<button class="diagram-btn" onclick="openDiagram(\'' + recModel + '\',\'' + rec.inverters + '\',\'' + rec.panels + '\',\'' + userData.panelWatts + '\',\'' + rec.element_size + '\',\'' + dg + '\',\'' + rec.kwh_day + '\',\'' + (rec.kwh_max || rec.kwh_day) + '\')">⚡ How It All Connects</button><br>' +
+                    '<button class="diagram-btn" onclick="openDiagram(\'' + recModel + '\',\'' + rec.inverters + '\',\'' + rec.panels + '\',\'' + userData.panelWatts + '\',\'' + rec.element_size + '\',\'' + dg + '\',\'' + rec.kwh_day + '\',\'' + (rec.kwh_max || rec.kwh_day) + '\',\'' + (showROpt ? rtd : '') + '\')">⚡ How It All Connects</button><br>' +
                     '<strong>⚙️ ALTERNATIVE OPTION</strong><br><br>' +
                     '<strong>' + altName + '</strong><br>' +
                     '• Inverters: ' + alt.inverters + '<br>• Panels: ' + alt.panels + '<br>• Panel Wattage: ' + userData.panelWatts + 'W<br>• Element Size: ' + alt.element_size + 'W<br>• Tank Size: ' + dg + ' liters<br>' +
@@ -918,7 +919,7 @@
                     (showAOpt ? '• kWh/Day Max: <span style="color:#00E676;font-weight:600;">' + alt.kwh_max + '</span><br>*Optional Tank Size: ' + atd + ' liters (mixing valve required)<br>' : '') +
                     '<br>' +
                     // ── ADDITION 4d: diagram button (metric alternative) ──────
-                    '<button class="diagram-btn" onclick="openDiagram(\'' + altModel + '\',\'' + alt.inverters + '\',\'' + alt.panels + '\',\'' + userData.panelWatts + '\',\'' + alt.element_size + '\',\'' + dg + '\',\'' + alt.kwh_day + '\',\'' + (alt.kwh_max || alt.kwh_day) + '\')">⚡ How It All Connects</button><br>' +
+                    '<button class="diagram-btn" onclick="openDiagram(\'' + altModel + '\',\'' + alt.inverters + '\',\'' + alt.panels + '\',\'' + userData.panelWatts + '\',\'' + alt.element_size + '\',\'' + dg + '\',\'' + alt.kwh_day + '\',\'' + (alt.kwh_max || alt.kwh_day) + '\',\'' + (showAOpt ? atd : '') + '\')">⚡ How It All Connects</button><br>' +
                     getOptimalConditionsMessage(dir) +
                     '<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>' +
                     '<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>' +
@@ -952,7 +953,7 @@
                     (showROpt ? '• kWh/Day Max: <span style="color:#00E676;font-weight:600;">' + rec.kwh_max + '</span><br>*Optional Tank Size: ' + rot + ' gallons (mixing valve required)<br>' : '') +
                     '<br><em>' + reason + '</em><br><br>' +
                     // ── ADDITION 4e: diagram button (imperial recommended) ────
-                    '<button class="diagram-btn" onclick="openDiagram(\'' + recModel + '\',\'' + rec.inverters + '\',\'' + rec.panels + '\',\'' + userData.panelWatts + '\',\'' + rec.element_size + '\',\'' + dg + '\',\'' + rec.kwh_day + '\',\'' + (rec.kwh_max || rec.kwh_day) + '\')">⚡ How It All Connects</button><br>' +
+                    '<button class="diagram-btn" onclick="openDiagram(\'' + recModel + '\',\'' + rec.inverters + '\',\'' + rec.panels + '\',\'' + userData.panelWatts + '\',\'' + rec.element_size + '\',\'' + dg + '\',\'' + rec.kwh_day + '\',\'' + (rec.kwh_max || rec.kwh_day) + '\',\'' + (showROpt ? rot : '') + '\')">⚡ How It All Connects</button><br>' +
                     '<strong>⚙️ ALTERNATIVE OPTION</strong><br><br>' +
                     '<strong>' + altName + '</strong><br>' +
                     '• Inverters: ' + alt.inverters + '<br>• Panels: ' + alt.panels + '<br>• Panel Wattage: ' + userData.panelWatts + 'W<br>• Element Size: ' + alt.element_size + 'W<br>• Tank Size: ' + dg + ' gallons<br>' +
@@ -960,7 +961,7 @@
                     (showAOpt ? '• kWh/Day Max: <span style="color:#00E676;font-weight:600;">' + alt.kwh_max + '</span><br>*Optional Tank Size: ' + aot + ' gallons (mixing valve required)<br>' : '') +
                     '<br>' +
                     // ── ADDITION 4f: diagram button (imperial alternative) ────
-                    '<button class="diagram-btn" onclick="openDiagram(\'' + altModel + '\',\'' + alt.inverters + '\',\'' + alt.panels + '\',\'' + userData.panelWatts + '\',\'' + alt.element_size + '\',\'' + dg + '\',\'' + alt.kwh_day + '\',\'' + (alt.kwh_max || alt.kwh_day) + '\')">⚡ How It All Connects</button><br>' +
+                    '<button class="diagram-btn" onclick="openDiagram(\'' + altModel + '\',\'' + alt.inverters + '\',\'' + alt.panels + '\',\'' + userData.panelWatts + '\',\'' + alt.element_size + '\',\'' + dg + '\',\'' + alt.kwh_day + '\',\'' + (alt.kwh_max || alt.kwh_day) + '\',\'' + (showAOpt ? aot : '') + '\')">⚡ How It All Connects</button><br>' +
                     getOptimalConditionsMessage(dir) +
                     '<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>' +
                     '<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>' +
