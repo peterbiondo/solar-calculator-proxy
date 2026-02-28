@@ -220,6 +220,64 @@
             align-items: center;
         }
 
+        /* === 3-COLUMN: shrink pills, padding, hide panel icons === */
+        .cols-3 {
+            gap: 6px;
+        }
+        .cols-3 .spec-pill {
+            font-size: 9px;
+            padding: 2px 5px;
+            letter-spacing: 0;
+        }
+        .cols-3 .panel-group {
+            padding: 8px 6px;
+        }
+        .cols-3 .panel-group-label {
+            font-size: 10px;
+            margin-bottom: 4px;
+        }
+        .cols-3 .panel-group-sub {
+            font-size: 10px;
+        }
+        .cols-3 .inverter-box {
+            padding: 8px 6px;
+        }
+        .cols-3 .inverter-box-title {
+            font-size: 10px;
+        }
+        .cols-3 .inverter-box-sub {
+            font-size: 9px;
+        }
+
+        /* === 4-COLUMN: shrink further === */
+        .cols-4 {
+            gap: 5px;
+        }
+        .cols-4 .spec-pill {
+            font-size: 8px;
+            padding: 1px 4px;
+            letter-spacing: 0;
+        }
+        .cols-4 .panel-group {
+            padding: 6px 4px;
+        }
+        .cols-4 .panel-group-label {
+            font-size: 9px;
+            margin-bottom: 3px;
+        }
+        .cols-4 .panel-group-sub {
+            font-size: 9px;
+        }
+        .cols-4 .inverter-box {
+            padding: 6px 4px;
+        }
+        .cols-4 .inverter-box-title {
+            font-size: 9px;
+        }
+        .cols-4 .inverter-box-sub {
+            font-size: 8px;
+        }
+
         /* Short connector within a column — with particles */
         .col-connector {
             display: flex; flex-direction: column; align-items: center;
@@ -272,7 +330,11 @@
         .panel-group-label {
             font-size: 11px; font-weight: 600; color: #888;
             text-transform: uppercase; letter-spacing: 0.06em;
-            margin-bottom: 10px; text-align: center;
+            margin-bottom: 4px; text-align: center;
+        }
+        .panel-group-sub {
+            font-size: 12px; font-weight: 700; color: #FFA500;
+            text-align: center; margin-bottom: 8px;
         }
         .panels-row {
             display: flex; justify-content: center;
@@ -356,7 +418,14 @@
     const season         = p.get('season')         || '';
 
     // Derived
-    const panelsPerInverter = Math.round(panelCount / inverterCount);
+    // CHANGE 1: Smart panel distribution — max 4 per inverter, spread remainder evenly
+    const MAX_PER_INV = 4;
+    const _base = Math.floor(panelCount / inverterCount);
+    const _rem  = panelCount % inverterCount;
+    const panelDist = Array.from({length: inverterCount}, (_, i) =>
+        Math.min(_base + (i < _rem ? 1 : 0), MAX_PER_INV)
+    );
+
     const ratedPowerW  = panelCount * parseInt(panelWattage);
     const ratedPowerKw = (ratedPowerW / 1000).toFixed(2);
     const tankUnit     = parseInt(tankSize) > 50 ? 'gallons' : 'liters';
@@ -367,9 +436,6 @@
        viewBox 0-100, N columns with equal spacing
        =================================== */
     function colCenters(n) {
-        // The parallel-section uses flex with gap:10px on a ~460px container.
-        // In viewBox units (0-100), the gap is approx 10/460*100 = 2.17 units.
-        // This ensures the lines land on the true center of each column box.
         const g = 2.17;
         const colW = (100 - (n - 1) * g) / n;
         return Array.from({length: n}, (_, i) => i * (colW + g) + colW / 2);
@@ -377,9 +443,6 @@
 
     /* ===================================
        FAN-OUT SVG
-       Single stem down from center, then
-       diagonal branches to each column bottom.
-       Animated green dots travel each branch.
        =================================== */
     function fanOutSVG(n) {
         if (n === 1) {
@@ -393,7 +456,6 @@
                 <div class="connector-arrow"></div>
             </div>`;
         }
-        // T-shape: vertical stem down, horizontal bar, short drops + arrows
         const cx = 50;
         const stemH  = 20;
         const dropH  = 18;
@@ -417,11 +479,8 @@
         });
 
         let visuals = '';
-        // Stem
         visuals += `<line x1="${cx}" y1="0" x2="${cx}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
-        // Bar
         visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
-        // Drops + arrows
         centers.forEach(colX => {
             visuals += `<line x1="${colX}" y1="${barY}" x2="${colX}" y2="${dropEndY}" stroke="#00E676" stroke-width="1"/>`;
             visuals += `<polygon points="${colX},${dropEndY + 7} ${colX - 3},${dropEndY} ${colX + 3},${dropEndY}" fill="#FFA500"/>`;
@@ -460,7 +519,6 @@
                 <div class="connector-arrow"></div>
             </div>`;
         }
-        // Upside-down T: short rises from each inverter, horizontal bar, stem down to arrow
         const cx = 50;
         const riseH  = 18;
         const stemH  = 20;
@@ -484,15 +542,11 @@
         });
 
         let visuals = '';
-        // Rises
         centers.forEach(colX => {
             visuals += `<line x1="${colX}" y1="0" x2="${colX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
         });
-        // Bar
         visuals += `<line x1="${leftX}" y1="${barY}" x2="${rightX}" y2="${barY}" stroke="#00E676" stroke-width="1"/>`;
-        // Stem down
         visuals += `<line x1="${cx}" y1="${barY}" x2="${cx}" y2="${stemEndY}" stroke="#FFA500" stroke-width="1"/>`;
-        // Arrow
         visuals += `<polygon points="${cx},${stemEndY + 8} ${cx - 3},${stemEndY} ${cx + 3},${stemEndY}" fill="#FFA500"/>`;
 
         let dots = '';
@@ -516,7 +570,7 @@
         </svg>`;
     }
 
-        function straightConnector(label) {
+    function straightConnector(label) {
         return `<div class="connector">
             <div class="connector-line">
                 <div class="particle"></div>
@@ -531,22 +585,16 @@
     /* ===================================
        SVG SOLAR PANEL
        Portrait, 3 cols × 2 rows of cells
-       Navy body, aluminum frame, busbars
        =================================== */
     function makePanelSVG() {
         return `<svg width="50" height="74" viewBox="0 0 50 74" xmlns="http://www.w3.org/2000/svg">
-            <!-- Aluminum frame -->
             <rect x="0" y="0" width="50" height="74" rx="2.5" fill="#7a8e9e"/>
             <rect x="0.5" y="0.5" width="49" height="73" rx="2" fill="none" stroke="#9aaebc" stroke-width="0.8"/>
-            <!-- Panel body -->
             <rect x="3" y="3" width="44" height="68" rx="1" fill="#0b1a2e"/>
-            <!-- Gloss sheen -->
             <polygon points="3,3 26,3 3,18" fill="rgba(255,255,255,0.03)"/>
-            <!-- Cell grid: 3 cols, 2 rows -->
             <line x1="17.7" y1="3" x2="17.7" y2="71" stroke="#162d50" stroke-width="1.2"/>
             <line x1="32.3" y1="3" x2="32.3" y2="71" stroke="#162d50" stroke-width="1.2"/>
             <line x1="3" y1="37" x2="47" y2="37" stroke="#162d50" stroke-width="1.2"/>
-            <!-- Busbars top row -->
             <line x1="4"  y1="14" x2="17" y2="14" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="4"  y1="22" x2="17" y2="22" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="4"  y1="30" x2="17" y2="30" stroke="#1e3d6a" stroke-width="0.7"/>
@@ -556,7 +604,6 @@
             <line x1="33" y1="14" x2="46" y2="14" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="33" y1="22" x2="46" y2="22" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="33" y1="30" x2="46" y2="30" stroke="#1e3d6a" stroke-width="0.7"/>
-            <!-- Busbars bottom row -->
             <line x1="4"  y1="49" x2="17" y2="49" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="4"  y1="57" x2="17" y2="57" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="4"  y1="65" x2="17" y2="65" stroke="#1e3d6a" stroke-width="0.7"/>
@@ -566,7 +613,6 @@
             <line x1="33" y1="49" x2="46" y2="49" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="33" y1="57" x2="46" y2="57" stroke="#1e3d6a" stroke-width="0.7"/>
             <line x1="33" y1="65" x2="46" y2="65" stroke="#1e3d6a" stroke-width="0.7"/>
-            <!-- Junction box -->
             <rect x="19" y="69" width="12" height="4" rx="1" fill="#5a6a7a"/>
             <rect x="21" y="70" width="3" height="2" rx="0.5" fill="#3a4a5a"/>
             <rect x="26" y="70" width="3" height="2" rx="0.5" fill="#3a4a5a"/>
@@ -604,13 +650,23 @@
     html += `<div id="fanoutPlaceholder" style="width:100%;"></div>`;
 
     // --- PARALLEL SECTION: panel groups + inverters ---
+    // CHANGE 2: use panelDist[i] per column; hide panel icons for 3+ inverters;
+    //           add "Panels" subtitle in orange; add cols-N class to parallel-section
     let columns = '';
     for (let i = 0; i < inverterCount; i++) {
-        const pgLabel = `${panelsPerInverter} &times; ${panelWattage}W`;
-        let panelSVGs = '';
-        for (let j = 0; j < panelsPerInverter; j++) {
-            panelSVGs += makePanelSVG();
+        const panelsThisInv = panelDist[i];
+        const pgLabel = `${panelsThisInv} &times; ${panelWattage}W`;
+
+        // Only render panel SVG icons for 1-2 inverter layouts
+        let panelsRowHtml = '';
+        if (inverterCount <= 2) {
+            let panelSVGs = '';
+            for (let j = 0; j < panelsThisInv; j++) {
+                panelSVGs += makePanelSVG();
+            }
+            panelsRowHtml = `<div class="panels-row">${panelSVGs}</div>`;
         }
+
         const invTitle = inverterCount > 1
             ? `${inverterModel}<br><span style="font-size:10px;color:#888;font-weight:400;">Unit ${i + 1}</span>`
             : inverterModel;
@@ -618,7 +674,8 @@
         columns += `<div class="string-column" id="col${i}">
             <div class="panel-group" id="panelGroup${i}">
                 <div class="panel-group-label">${pgLabel}</div>
-                <div class="panels-row">${panelSVGs}</div>
+                <div class="panel-group-sub">Panels</div>
+                ${panelsRowHtml}
             </div>
             <div class="col-connector">
                 <div class="col-connector-line">
@@ -637,7 +694,7 @@
         </div>`;
     }
 
-    html += `<div class="parallel-section" id="parallelSection">${columns}</div>`;
+    html += `<div class="parallel-section cols-${inverterCount}" id="parallelSection">${columns}</div>`;
 
     // Placeholder for merge SVG
     html += `<div id="mergePlaceholder" style="width:100%;"></div>`;
@@ -686,7 +743,6 @@
         const wrapperRect = wrapper.getBoundingClientRect();
         const wW = wrapperRect.width;
 
-        // Get center X of each panel group and inverter box, relative to wrapper
         const panelCenters = [];
         const invCenters   = [];
         for (let i = 0; i < inverterCount; i++) {
