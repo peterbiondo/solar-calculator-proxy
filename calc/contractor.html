@@ -280,7 +280,7 @@
                 gridType: 'off-grid',
                 userLocation: userData.location || '',
                 peakSunHours: lastAps || '',
-                season: userData.season || 'annual'
+                season: userData.season || (userData.useAIClimate ? 'annual' : 'custom')
             });
             window.open('/diagram/installation.html?' + params.toString(), '_blank');
         }
