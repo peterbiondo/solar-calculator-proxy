@@ -140,7 +140,7 @@
         }
         .spec-pill {
             background: #0F0F0F; border: 1px solid #2A2A2A;
-            border-radius: 20px; padding: 2px 7px;
+            border-radius: 20px; padding: 3px 10px;
             font-size: 12px; font-weight: 500; color: #E8E8E8;
         }
         .spec-pill.green { border-color: #00E676; color: #00E676; }
@@ -220,6 +220,58 @@
             align-items: center;
         }
 
+        /* 3-column layout: shrink pills and padding slightly */
+        .cols-3 .spec-pill {
+            font-size: 9px;
+            padding: 2px 5px;
+            letter-spacing: 0;
+        }
+        .cols-3 .panel-group {
+            padding: 8px 6px;
+        }
+        .cols-3 .panel-group-label {
+            font-size: 10px;
+            margin-bottom: 0;
+        }
+        .cols-3 .inverter-box {
+            padding: 8px 6px;
+        }
+        .cols-3 .inverter-box-title {
+            font-size: 10px;
+        }
+        .cols-3 .inverter-box-sub {
+            font-size: 9px;
+        }
+        .cols-3 .parallel-section {
+            gap: 6px;
+        }
+
+        /* 4-column layout: shrink further */
+        .cols-4 .spec-pill {
+            font-size: 8px;
+            padding: 1px 4px;
+            letter-spacing: 0;
+        }
+        .cols-4 .panel-group {
+            padding: 6px 4px;
+        }
+        .cols-4 .panel-group-label {
+            font-size: 9px;
+            margin-bottom: 0;
+        }
+        .cols-4 .inverter-box {
+            padding: 6px 4px;
+        }
+        .cols-4 .inverter-box-title {
+            font-size: 9px;
+        }
+        .cols-4 .inverter-box-sub {
+            font-size: 8px;
+        }
+        .cols-4.parallel-section {
+            gap: 6px;
+        }
+
         /* Short connector within a column — with particles */
         .col-connector {
             display: flex; flex-direction: column; align-items: center;
@@ -272,7 +324,19 @@
         .panel-group-label {
             font-size: 11px; font-weight: 600; color: #888;
             text-transform: uppercase; letter-spacing: 0.06em;
-            margin-bottom: 10px; text-align: center;
+            margin-bottom: 4px; text-align: center;
+        }
+        .panel-group-sub {
+            font-size: 12px; font-weight: 700; color: #FFA500;
+            text-align: center; margin-bottom: 8px;
+        }
+        .cols-3 .panel-group-sub {
+            font-size: 10px;
+            margin-bottom: 0;
+        }
+        .cols-4 .panel-group-sub {
+            font-size: 9px;
+            margin-bottom: 0;
         }
         .panels-row {
             display: flex; justify-content: center;
@@ -356,7 +420,17 @@
     const season         = p.get('season')         || '';
 
     // Derived
-    const panelsPerInverter = Math.round(panelCount / inverterCount);
+    // Distribute panels across inverters: max 4 per inverter, spread remainder evenly
+    (function() {
+        const MAX_PER_INV = 4;
+        const base = Math.floor(panelCount / inverterCount);
+        const remainder = panelCount % inverterCount;
+        window._panelDist = Array.from({length: inverterCount}, (_, i) => {
+            const count = base + (i < remainder ? 1 : 0);
+            return Math.min(count, MAX_PER_INV);
+        });
+    })();
+    const panelDist = window._panelDist;
     const ratedPowerW  = panelCount * parseInt(panelWattage);
     const ratedPowerKw = (ratedPowerW / 1000).toFixed(2);
     const tankUnit     = parseInt(tankSize) > 50 ? 'gallons' : 'liters';
@@ -596,9 +670,9 @@
         <div class="component-specs centered">
             <span class="spec-pill orange">📍 ${userLocation}</span>
             <span class="${peakPillClass}">${peakPillVal}</span>
-            <span class="spec-pill" style="border-color:#ffffff;">${seasonLabel} Performance</span>        
-            </div>
-        </div>`;
+            <span class="spec-pill">${seasonLabel} Performance</span>
+        </div>
+    </div>`;
 
     // Placeholder for fan-out SVG
     html += `<div id="fanoutPlaceholder" style="width:100%;"></div>`;
@@ -606,11 +680,18 @@
     // --- PARALLEL SECTION: panel groups + inverters ---
     let columns = '';
     for (let i = 0; i < inverterCount; i++) {
-        const pgLabel = `${panelsPerInverter} &times; ${panelWattage}W`;
+        const panelsThisInv = panelDist[i];
+        const pgLabel = `${panelsThisInv} &times; ${panelWattage}W`;
+        const pgSubLabel = `<div class="panel-group-sub">Panels</div>`;
         let panelSVGs = '';
-        for (let j = 0; j < panelsPerInverter; j++) {
-            panelSVGs += makePanelSVG();
+        if (inverterCount <= 2) {
+            for (let j = 0; j < panelsThisInv; j++) {
+                panelSVGs += makePanelSVG();
+            }
         }
+        const panelsRowHtml = inverterCount <= 2
+            ? `<div class="panels-row">${panelSVGs}</div>`
+            : '';
         const invTitle = inverterCount > 1
             ? `${inverterModel}<br><span style="font-size:10px;color:#888;font-weight:400;">Unit ${i + 1}</span>`
             : inverterModel;
@@ -618,7 +699,8 @@
         columns += `<div class="string-column" id="col${i}">
             <div class="panel-group" id="panelGroup${i}">
                 <div class="panel-group-label">${pgLabel}</div>
-                <div class="panels-row">${panelSVGs}</div>
+                <div class="panel-group-sub">Panels</div>
+                ${panelsRowHtml}
             </div>
             <div class="col-connector">
                 <div class="col-connector-line">
@@ -637,7 +719,7 @@
         </div>`;
     }
 
-    html += `<div class="parallel-section" id="parallelSection">${columns}</div>`;
+    html += `<div class="parallel-section cols-${inverterCount}" id="parallelSection">${columns}</div>`;
 
     // Placeholder for merge SVG
     html += `<div id="mergePlaceholder" style="width:100%;"></div>`;
@@ -666,13 +748,14 @@
             <div class="component-icon">🚿</div>
             <div>
                 <div class="component-title">Electric Water Heater</div>
+                <div class="component-meta">${tankSize} ${tankUnit} &nbsp;·&nbsp; ${parseInt(elementSize).toLocaleString()}W elements</div>
             </div>
         </div>
         <div class="component-specs centered">
             <span class="spec-pill orange">${tankSize} ${tankUnit.charAt(0).toUpperCase()+tankUnit.slice(1)}</span>
             <span class="spec-pill green">${parseInt(elementSize).toLocaleString()}W Elements</span>
-            <span class="spec-pill" style="border-color:#ffffff;">${kwhDay} kWh/Day</span>
-            ${kwhDayMax !== kwhDay ? `<span class="spec-pill" style="border-color:#ffffff;">${kwhDayMax} kWh/Day Max</span>` : ''}
+            <span class="spec-pill">${kwhDay} kWh/Day</span>
+            ${kwhDayMax !== kwhDay ? `<span class="spec-pill">${kwhDayMax} kWh/Day Max</span>` : ''}
         </div>
     </div>`;
 
@@ -814,4 +897,3 @@
 
 </body>
 </html>
-
