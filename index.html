@@ -170,35 +170,195 @@ header {
     object-fit: cover;
 }
 
+/* ================= ROTATING TEXT ================= */
+.rotating-text-container {
+    max-width: 1200px;
+    margin: 0 auto 30px;
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #FFFFFF;
+    text-align: center;
+    white-space: nowrap;
+    padding: 0 20px;
+}
+
+.rotating-phrase {
+    color: #FFA500;
+    font-weight: 700;
+    display: inline-block;
+    position: relative;
+    height: 1.4em;
+    overflow: hidden;
+    min-width: 560px;
+    vertical-align: bottom;
+}
+
+.rotating-phrase span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    white-space: nowrap;
+    text-align: left;
+}
+
+/* First set - starts visible, no initial slide */
+.rotating-phrase span:nth-child(1) {
+    opacity: 1;
+    transform: translateX(0);
+    animation: slideSet1 30s ease-in-out infinite;
+}
+
+/* Second set */
+.rotating-phrase span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet2 30s ease-in-out infinite;
+}
+
+/* Third set */
+.rotating-phrase span:nth-child(3) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet3 30s ease-in-out infinite;
+}
+
+/* Fourth set */
+.rotating-phrase span:nth-child(4) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet4 30s ease-in-out infinite;
+}
+
+/* Fifth set */
+.rotating-phrase span:nth-child(5) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet5 30s ease-in-out infinite;
+}
+
+/* Set 1 animation - starts visible */
+@keyframes slideSet1 {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    17% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    20% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    97% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Set 2 animation */
+@keyframes slideSet2 {
+    0%, 20% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    23% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    37% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    40% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* Set 3 animation */
+@keyframes slideSet3 {
+    0%, 40% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    43% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    57% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    60% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* Set 4 animation */
+@keyframes slideSet4 {
+    0%, 60% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    63% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    77% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    80% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* Set 5 animation */
+@keyframes slideSet5 {
+    0%, 80% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    83% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    97% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
 /* ================= CTA ================= */
 .cta-section {
     grid-column: 1 / -1;
     text-align: center;
     padding: 0 160px 45px;
-}
-
-.hero-intro {
-    max-width: 760px;
-    margin: 0 auto 30px;
-    font-size: 17px;
-    color: rgba(255,255,255,0.85);
-}
-
-/* 👋 WAVE */
-.wave {
-    display: inline-block;
-    font-size: 1.5em;
-    animation: wave-animation 8s infinite;
-    transform-origin: 70% 70%;
-    filter: brightness(1.2);
-}
-
-@keyframes wave-animation {
-    0% { transform: rotate(0deg); }
-    5%, 12.5% { transform: rotate(14deg); }
-    8.5%, 16.7% { transform: rotate(-8deg); }
-    20.8% { transform: rotate(0deg); }
-    100% { transform: rotate(0deg); }
 }
 
 .cta-heading {
@@ -211,9 +371,9 @@ header {
 /* ================= AVATARS ================= */
 .avatar-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* CHANGED: 2 columns now */
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    max-width: 520px; /* CHANGED: slightly narrower for 2 cards */
+    max-width: 520px;
     margin: 0 auto;
 }
 
@@ -304,6 +464,16 @@ footer {
 }
 
 /* ================= MOBILE ================= */
+@media (max-width: 1200px) {
+    .rotating-text-container {
+        font-size: 19px;
+    }
+    
+    .rotating-phrase {
+        min-width: 480px;
+    }
+}
+
 @media (max-width: 768px) {
     header {
         padding: 0 20px;
@@ -334,6 +504,20 @@ footer {
         gap: 16px;
         padding: 24px 20px;
         text-align: center;
+    }
+    
+    .rotating-text-container {
+        font-size: 18px;
+        white-space: normal;
+        text-align: center;
+    }
+    
+    .rotating-phrase {
+        display: block;
+        min-width: 0;
+        width: 100%;
+        font-size: 20px;
+        margin-top: 4px;
     }
 }
 </style>
@@ -378,15 +562,16 @@ footer {
     </div>
 
     <div class="cta-section">
-        <p class="hero-intro">
-            <strong>Hey, I'm Peter Biondo!</strong>
-            <span class="wave">👋</span>
-            With over four decades in solar thermal, I combine coaching, live sessions,
-            courses, and AI-powered learning tools to help you
-            <strong>move forward faster!</strong>
-            <br>
-            <a href="https://isolarhotwater.mykajabi.com/about" target="_blank" rel="noopener" style="color:#FFA500; text-decoration:none; font-weight:600; font-size:15px;">Learn more about Peter →</a>
-        </p>
+        <div class="rotating-text-container">
+            Finally, a Solar Water Heater without 
+            <span class="rotating-phrase">
+                <span>the fuss, the mess, thermal fluids</span>
+                <span>roof plumbing, complexity, high cost</span>
+                <span>freeze protection and overheating</span>
+                <span>pumps, heat exchangers, costly upkeep</span>
+                <span>batteries or grid interconnection</span>
+            </span>
+        </div>
 
         <h2 class="cta-heading">Who are you? Click one to continue</h2>
 
@@ -460,7 +645,7 @@ if (localStorage.getItem('opted_in') === 'true') {
     }
 }
 </script>
-    <script>
+<script>
 // Force check on page show (catches back button)
 window.addEventListener('pageshow', function(event) {
     if (event.persisted || performance.navigation.type === 2) {
