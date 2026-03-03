@@ -556,45 +556,56 @@ footer {
 </footer>
 
 <script>
-if (localStorage.getItem('opted_in') === 'true') {
-    const avatarGrid = document.querySelector('.avatar-grid');
-    const ctaHeading = document.querySelector('.cta-heading');
-    const avatar = localStorage.getItem('selected_avatar');
-    const calcUrl = avatar === 'contractor' ? '/calc/contractor.html' : '/calc/diy.html';
+(function () {
+  const optedIn = localStorage.getItem('opted_in') === 'true';
+  const synced = localStorage.getItem('kajabi_synced') === 'true';
+  const avatar = localStorage.getItem('selected_avatar'); // 'contractor' | 'diy'
 
-    if (avatarGrid) avatarGrid.style.display = 'none';
-    if (ctaHeading) {
-        ctaHeading.textContent = 'Welcome back!';
-        ctaHeading.insertAdjacentHTML('afterend', `
-            <p style="color:rgba(255,255,255,0.7); font-size:16px; margin-bottom:24px;">
-                Click below to jump back into the PV Designer.
-            </p>
-            <a href="${calcUrl}" style="display:inline-block; padding:14px 28px; border-radius:10px; background:#FFA500; color:#0F0F0F; font-size:17px; font-weight:700; font-family:Poppins,sans-serif; text-decoration:none;">
-                Take Me to the FREE PV Designer →
-            </a>
-        `);
-    }
-}
+  if (!(optedIn && synced && (avatar === 'contractor' || avatar === 'diy'))) return;
+
+  const avatarGrid = document.querySelector('.avatar-grid');
+  const ctaHeading = document.querySelector('.cta-heading');
+  const calcUrl = avatar === 'contractor' ? '/calc/contractor.html' : '/calc/diy.html';
+
+  if (avatarGrid) avatarGrid.style.display = 'none';
+
+  if (ctaHeading) {
+    ctaHeading.textContent = 'Welcome back!';
+    ctaHeading.insertAdjacentHTML('afterend', `
+      <p style="color:rgba(255,255,255,0.7); font-size:16px; margin-bottom:24px;">
+        Click below to jump back into the PV Designer.
+      </p>
+      <a href="${calcUrl}" style="display:inline-block; padding:14px 28px; border-radius:10px; background:#FFA500; color:#0F0F0F; font-size:17px; font-weight:700; font-family:Poppins,sans-serif; text-decoration:none;">
+        Take Me to the FREE PV Designer →
+      </a>
+    `);
+  }
+})();
 </script>
+
 <script>
-// Fix header CTA button for returning users
-if (localStorage.getItem('opted_in') === 'true') {
-    const headerCta = document.querySelector('.header-cta');
-    const avatar = localStorage.getItem('selected_avatar');
-    const calcUrl = avatar === 'contractor' ? '/calc/contractor.html' : '/calc/diy.html';
-    
-    if (headerCta) {
-        headerCta.href = calcUrl;
-    }
-}
+(function () {
+  const optedIn = localStorage.getItem('opted_in') === 'true';
+  const synced = localStorage.getItem('kajabi_synced') === 'true';
+  const avatar = localStorage.getItem('selected_avatar');
+
+  if (!(optedIn && synced && (avatar === 'contractor' || avatar === 'diy'))) return;
+
+  const headerCta = document.querySelector('.header-cta');
+  const calcUrl = avatar === 'contractor' ? '/calc/contractor.html' : '/calc/diy.html';
+
+  if (headerCta) headerCta.href = calcUrl;
+})();
 </script>
+
 <script>
-// Force check on page show (catches back button)
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted || performance.navigation.type === 2) {
-        // Page was restored from cache (back button used)
-        location.reload();
-    }
+window.addEventListener('pageshow', function (event) {
+  const navEntries = performance.getEntriesByType && performance.getEntriesByType('navigation');
+  const navType = navEntries && navEntries[0] && navEntries[0].type; // 'back_forward'
+
+  if (event.persisted || navType === 'back_forward') {
+    location.reload();
+  }
 });
 </script>
 </body>
