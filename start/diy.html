@@ -31,8 +31,8 @@ body {
 body::before {
     content: '';
     position: fixed;
-    width: 500px;          /* ← Even smaller (was 650px) */
-    height: 500px;         /* ← Even smaller (was 650px) */
+    width: 500px;
+    height: 500px;
     background: radial-gradient(
         circle at 30% 50%, 
         rgba(0, 230, 118, 0.18) 0%,
@@ -40,8 +40,8 @@ body::before {
         rgba(118, 75, 162, 0.08) 60%,
         transparent 80%
     );
-    top: 8%;               /* ← Higher up (was 12%) */
-    right: 5%;             /* ← More to right (was 8%) */
+    top: 8%;
+    right: 5%;
     pointer-events: none;
     z-index: 0;
     filter: blur(60px);
@@ -51,8 +51,8 @@ body::before {
 body::after {
     content: '';
     position: fixed;
-    width: 350px;          /* ← Even smaller (was 450px) */
-    height: 350px;         /* ← Even smaller (was 450px) */
+    width: 350px;
+    height: 350px;
     background: radial-gradient(
         circle at 70% 30%, 
         rgba(0, 230, 118, 0.08) 0%,
@@ -60,12 +60,13 @@ body::after {
         rgba(118, 75, 162, 0.03) 70%,
         transparent 85%
     );
-    top: 12%;              /* ← Higher up (was 18%) */
-    right: 2%;             /* ← Very close to edge (was 5%) */
+    top: 12%;
+    right: 2%;
     pointer-events: none;
     z-index: 0;
     filter: blur(50px);
 }
+
 /* ================= HEADER ================= */
 header {
     position: fixed;
@@ -126,14 +127,13 @@ header {
     margin-bottom: 30px;
 }
 
-
-
 .hero-title-sub {
     display: block;
-    margin-top: 16px;   /* distinct padding space above */
-    font-size: 44px;    /* one step down from 54px */
+    margin-top: 16px;
+    font-size: 44px;
     font-weight: 700;
 }
+
 .highlight-blue {
     background: linear-gradient(to top, rgba(70,150,255,0.7) 55%, transparent 55%);
     padding: 0 4px;
@@ -181,29 +181,6 @@ header {
     grid-column: 1 / -1;
     text-align: center;
     padding: 0 160px 45px;
-}
-
-.hero-intro {
-    max-width: 760px;
-    margin: 0 auto 30px;
-    font-size: 17px;
-    color: rgba(255,255,255,0.85);
-}
-
-.wave {
-    display: inline-block;
-    font-size: 1.5em;
-    animation: wave-animation 8s infinite;
-    transform-origin: 70% 70%;
-    filter: brightness(1.2);
-}
-
-@keyframes wave-animation {
-    0% { transform: rotate(0deg); }
-    5%, 12.5% { transform: rotate(14deg); }
-    8.5%, 16.7% { transform: rotate(-8deg); }
-    20.8% { transform: rotate(0deg); }
-    100% { transform: rotate(0deg); }
 }
 
 .optin-heading {
@@ -350,12 +327,12 @@ footer {
         font-size: 38px;
     }
 
-    
     .hero-title-sub {
         font-size: 30px;
         margin-top: 12px;
     }
-footer {
+
+    footer {
         flex-direction: column;
         gap: 16px;
         padding: 24px 20px;
@@ -374,7 +351,6 @@ footer {
                 <img src="../Logo.svg" alt="iSolar Hot Water Academy">
             </a>
         </div>
-
     </div>
 </header>
 
@@ -399,14 +375,6 @@ footer {
     </div>
 
     <div class="optin-section">
-        <p class="hero-intro">
-            <strong>Hey, I'm Peter Biondo!</strong>
-            <span class="wave">👋</span><br>
-            The PV Hot Water Design Calculator delivers quick results and is easy to use.
-            <br>
-            <a href="https://isolarhotwater.mykajabi.com/about" target="_blank" rel="noopener" style="color:#FFA500; text-decoration:none; font-weight:600; font-size:15px;">Learn more about Peter →</a>
-        </p>
-
         <h2 class="optin-heading">Design your PV water heater here!</h2>
         <p class="optin-subheading">Instant access. No waiting.</p>
 
