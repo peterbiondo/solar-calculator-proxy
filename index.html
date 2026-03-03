@@ -206,93 +206,93 @@ header {
 .rotating-phrase span:nth-child(1) {
     opacity: 1;
     transform: translateX(0);
-    animation: slideSet1 36s ease-in-out infinite;
+    animation: slideSet1 42s ease-in-out infinite;
 }
 
 /* Set 2 */
 .rotating-phrase span:nth-child(2) {
     opacity: 0;
     transform: translateX(-100%);
-    animation: slideSet2 36s ease-in-out infinite;
+    animation: slideSet2 42s ease-in-out infinite;
 }
 
 /* Set 3 */
 .rotating-phrase span:nth-child(3) {
     opacity: 0;
     transform: translateX(-100%);
-    animation: slideSet3 36s ease-in-out infinite;
+    animation: slideSet3 42s ease-in-out infinite;
 }
 
 /* Set 4 */
 .rotating-phrase span:nth-child(4) {
     opacity: 0;
     transform: translateX(-100%);
-    animation: slideSet4 36s ease-in-out infinite;
+    animation: slideSet4 42s ease-in-out infinite;
 }
 
 /* Set 5 */
 .rotating-phrase span:nth-child(5) {
     opacity: 0;
     transform: translateX(-100%);
-    animation: slideSet5 36s ease-in-out infinite;
+    animation: slideSet5 42s ease-in-out infinite;
 }
 
 /* Set 6 */
 .rotating-phrase span:nth-child(6) {
     opacity: 0;
     transform: translateX(-100%);
-    animation: slideSet6 36s ease-in-out infinite;
+    animation: slideSet6 42s ease-in-out infinite;
 }
 
-/* Set 1 - visible 0-12%, exits 12-15%, re-enters 97-100% */
+/* Set 1 - visible 0-14%, exits 14-17%, re-enters 97-100% */
 @keyframes slideSet1 {
     0%   { opacity: 1; transform: translateX(0); }
-    12%  { opacity: 1; transform: translateX(0); }
-    15%  { opacity: 0; transform: translateX(100%); }
+    14%  { opacity: 1; transform: translateX(0); }
+    17%  { opacity: 0; transform: translateX(100%); }
     97%  { opacity: 0; transform: translateX(-100%); }
     100% { opacity: 1; transform: translateX(0); }
 }
 
-/* Set 2 - enters 15-18%, visible 18-30%, exits 30-33% */
+/* Set 2 - enters 14-17%, visible 17-31%, exits 31-34% */
 @keyframes slideSet2 {
-    0%, 15%  { opacity: 0; transform: translateX(-100%); }
-    18%      { opacity: 1; transform: translateX(0); }
-    30%      { opacity: 1; transform: translateX(0); }
-    33%      { opacity: 0; transform: translateX(100%); }
+    0%, 14%  { opacity: 0; transform: translateX(-100%); }
+    17%      { opacity: 1; transform: translateX(0); }
+    31%      { opacity: 1; transform: translateX(0); }
+    34%      { opacity: 0; transform: translateX(100%); }
     100%     { opacity: 0; transform: translateX(100%); }
 }
 
-/* Set 3 - enters 33-36%, visible 36-48%, exits 48-51% */
+/* Set 3 - enters 31-34%, visible 34-48%, exits 48-51% */
 @keyframes slideSet3 {
-    0%, 33%  { opacity: 0; transform: translateX(-100%); }
-    36%      { opacity: 1; transform: translateX(0); }
+    0%, 31%  { opacity: 0; transform: translateX(-100%); }
+    34%      { opacity: 1; transform: translateX(0); }
     48%      { opacity: 1; transform: translateX(0); }
     51%      { opacity: 0; transform: translateX(100%); }
     100%     { opacity: 0; transform: translateX(100%); }
 }
 
-/* Set 4 - enters 51-54%, visible 54-66%, exits 66-69% */
+/* Set 4 - enters 48-51%, visible 51-65%, exits 65-68% */
 @keyframes slideSet4 {
-    0%, 51%  { opacity: 0; transform: translateX(-100%); }
-    54%      { opacity: 1; transform: translateX(0); }
-    66%      { opacity: 1; transform: translateX(0); }
-    69%      { opacity: 0; transform: translateX(100%); }
+    0%, 48%  { opacity: 0; transform: translateX(-100%); }
+    51%      { opacity: 1; transform: translateX(0); }
+    65%      { opacity: 1; transform: translateX(0); }
+    68%      { opacity: 0; transform: translateX(100%); }
     100%     { opacity: 0; transform: translateX(100%); }
 }
 
-/* Set 5 - enters 69-72%, visible 72-84%, exits 84-87% */
+/* Set 5 - enters 65-68%, visible 68-82%, exits 82-85% */
 @keyframes slideSet5 {
-    0%, 69%  { opacity: 0; transform: translateX(-100%); }
-    72%      { opacity: 1; transform: translateX(0); }
-    84%      { opacity: 1; transform: translateX(0); }
-    87%      { opacity: 0; transform: translateX(100%); }
+    0%, 65%  { opacity: 0; transform: translateX(-100%); }
+    68%      { opacity: 1; transform: translateX(0); }
+    82%      { opacity: 1; transform: translateX(0); }
+    85%      { opacity: 0; transform: translateX(100%); }
     100%     { opacity: 0; transform: translateX(100%); }
 }
 
-/* Set 6 - enters 87-90%, visible 90-97%, exits 97-100% */
+/* Set 6 - enters 82-85%, visible 85-97%, exits 97-100% */
 @keyframes slideSet6 {
-    0%, 87%  { opacity: 0; transform: translateX(-100%); }
-    90%      { opacity: 1; transform: translateX(0); }
+    0%, 82%  { opacity: 0; transform: translateX(-100%); }
+    85%      { opacity: 1; transform: translateX(0); }
     97%      { opacity: 1; transform: translateX(0); }
     100%     { opacity: 0; transform: translateX(100%); }
 }
@@ -500,7 +500,7 @@ footer {
         <div class="rotating-text-container">
             Finally, a Solar Water Heater without 
             <span class="rotating-phrase">
-                <span>the fuss and mess of thermal fluids</span>
+                <span>the fuss, the mess of thermal fluids</span>
                 <span>roof plumbing, complexity, high cost</span>
                 <span>freeze protection and overheating</span>
                 <span>pumps, heat exchangers, costly upkeep</span>
