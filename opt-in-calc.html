@@ -95,26 +95,27 @@
         .logo { text-align: center; margin-bottom: 10px; }
        
         .logo-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-}
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
 
-.logo-img {
-    height: 42px;
-    width: auto;
-    display: block;
-    margin: 0 auto 10px auto;
-}
+        .logo-img {
+            height: 42px;
+            width: auto;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
 
-/* Slightly smaller logo on small phones */
-@media (max-width: 600px) {
-    .logo-img {
-        height: 30px;
-        margin-bottom: 8px;
-    }
-}
+        /* Slightly smaller logo on small phones */
+        @media (max-width: 600px) {
+            .logo-img {
+                height: 30px;
+                margin-bottom: 8px;
+            }
+        }
+
         h1 {
             color: #0F0F0F;
             font-size: 24px;
@@ -301,7 +302,7 @@
             <a href="https://pv-hotwater.com" class="logo-link">
                 <img src="Logo.svg" alt="iSolar Hot Water Academy" class="logo-img">
             </a>
-    </div>
+        </div>
         
         <h1>Get Free Access to the PV Hot Water Designer</h1>
         <p class="subtitle">
@@ -345,18 +346,23 @@
 
         // You locked this in:
         const CONTRACTOR_BOT_URL = "https://pv-hotwater.com/calc/contractor.html";
-        const DIY_BOT_URL = "https://pv-hotwater.com/calc/diy.html"; // <-- change if your homeowner calculator file name differs
-        
+        const DIY_BOT_URL = "https://pv-hotwater.com/calc/diy.html";
+
+        // Kajabi endpoint (absolute to avoid origin issues)
+        const KAJABI_API_URL = "https://pv-hotwater.com/api/kajabi-tag";
+
         // OPTIONAL: if someone already opted in, skip this page entirely
+        // NOTE: only skip if we have a saved avatar too
         if (localStorage.getItem("opted_in") === "true") {
             const savedAvatar = localStorage.getItem("avatar");
 
             if (savedAvatar === "contractor") {
                 window.location.replace(CONTRACTOR_BOT_URL);
             } else if (savedAvatar === "diy") {
-            window.location.replace(DIY_BOT_URL);
+                window.location.replace(DIY_BOT_URL);
             }
         }
+
         function selectAvatar(avatar) {
             selectedAvatar = avatar;
 
@@ -379,57 +385,74 @@
             document.getElementById('errorMessage').classList.remove('show');
         }
 
-        document.getElementById('optinForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+        document.getElementById('optinForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-    if (!selectedAvatar) {
-        showError('Please select who you are before continuing.');
-        return;
-    }
+            if (!selectedAvatar) {
+                showError('Please select who you are before continuing.');
+                return;
+            }
 
-    const email = document.getElementById('email').value;
-    if (!email || !email.includes('@')) {
-        showError('Please enter a valid email address.');
-        return;
-    }
+            const email = (document.getElementById('email').value || '').trim();
+            if (!email || !email.includes('@')) {
+                showError('Please enter a valid email address.');
+                return;
+            }
 
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Processing...';
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
 
-    // Persist state for downstream pages
-    localStorage.setItem("avatar", selectedAvatar);
-    localStorage.setItem("selected_avatar", selectedAvatar);
-    localStorage.setItem("opted_in", "true");
-    localStorage.setItem("user_email", email);
-    // Send to Kajabi
-    fetch('/api/kajabi-tag', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, tag: selectedAvatar })
-    });       
-    // Route by avatar
-    if (selectedAvatar === "contractor") {
-        window.location.href =
-            "https://pv-hotwater.com/calc/contractor.html" +
-            "?email=" + encodeURIComponent(email) +
-            "&avatar=contractor";
-        return;
-    }
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Opening the Designer…';
 
-    if (selectedAvatar === "diy") {
-        window.location.href =
-            "https://pv-hotwater.com/calc/diy.html" +
-            "?email=" + encodeURIComponent(email) +
-            "&avatar=diy";
-        return;
-    }
+            try {
+                // Send to Kajabi (await + verify ok)
+                const resp = await fetch(KAJABI_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, tag: selectedAvatar }),
+                    cache: 'no-store',
+                    keepalive: true
+                });
 
-    // Safety fallback
-    showError("Please select PV Contractor or DIY Homeowner.");
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Get Access + Join for Design Tips →';
-});
+                const data = await resp.json().catch(() => ({}));
+                if (!resp.ok || data.ok !== true) {
+                    throw new Error(data.error || `HTTP ${resp.status}`);
+                }
+
+                // Persist state ONLY after Kajabi success
+                localStorage.setItem("avatar", selectedAvatar);
+                localStorage.setItem("selected_avatar", selectedAvatar);
+                localStorage.setItem("opted_in", "true");
+                localStorage.setItem("user_email", email);
+                localStorage.setItem("kajabi_synced", "true");
+
+                // Route by avatar (unchanged)
+                if (selectedAvatar === "contractor") {
+                    window.location.href =
+                        CONTRACTOR_BOT_URL +
+                        "?email=" + encodeURIComponent(email) +
+                        "&avatar=contractor";
+                    return;
+                }
+
+                if (selectedAvatar === "diy") {
+                    window.location.href =
+                        DIY_BOT_URL +
+                        "?email=" + encodeURIComponent(email) +
+                        "&avatar=diy";
+                    return;
+                }
+
+                // Safety fallback
+                throw new Error("Please select PV Contractor or DIY Homeowner.");
+            } catch (err) {
+                console.error('Kajabi opt-in failed:', err);
+                showError('Could not save your email right now. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
 
         // Keyboard accessibility
         document.addEventListener('keydown', function(e) {
