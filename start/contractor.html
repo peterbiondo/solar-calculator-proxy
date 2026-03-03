@@ -159,6 +159,25 @@ header {
     font-style: italic;
 }
 
+/* ================= EMPHASIS WORDS ================= */
+.emphasis-word {
+    color: #FFFFFF;
+    font-size: 1.1em;
+    font-weight: 700;
+    display: inline-block;
+    animation: soft-pulse 3s ease-in-out infinite;
+    vertical-align: middle;
+}
+
+@keyframes soft-pulse {
+    0%, 100% {
+        text-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
+    }
+    50% {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+}
+
 /* ================= IMAGE ================= */
 .hero-image {
     display: flex;
@@ -382,7 +401,7 @@ footer {
         <p class="hero-tagline">no batteries, no utility interconnection, fewer delays</p>
 
         <p class="hero-body">
-            Helps homeowners cut a major energy cost - with an <strong>easier yes</strong>.
+            Helps homeowners cut a major energy cost - with an <span class="emphasis-word">easier</span> <span class="emphasis-word">yes</span>.
         </p>
 
         
