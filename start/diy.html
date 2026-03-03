@@ -126,6 +126,14 @@ header {
     margin-bottom: 30px;
 }
 
+
+
+.hero-title-sub {
+    display: block;
+    margin-top: 16px;   /* distinct padding space above */
+    font-size: 44px;    /* one step down from 54px */
+    font-weight: 700;
+}
 .highlight-blue {
     background: linear-gradient(to top, rgba(70,150,255,0.7) 55%, transparent 55%);
     padding: 0 4px;
@@ -342,7 +350,12 @@ footer {
         font-size: 38px;
     }
 
-    footer {
+    
+    .hero-title-sub {
+        font-size: 30px;
+        margin-top: 12px;
+    }
+footer {
         flex-direction: column;
         gap: 16px;
         padding: 24px 20px;
@@ -370,14 +383,12 @@ footer {
     <div class="hero-content">
         <h1 class="hero-title">
             PV Water Heating is<br>
-            <span class="highlight-blue">simpler than you think.</span>
+            <span class="highlight-blue">simpler than you think</span><br>
+            <span class="hero-title-sub">to cut a major energy bill</span>
         </h1>
 
-        <p class="hero-tagline">A better way to reduce one of your biggest energy bills.</p>
-
         <p class="hero-body">
-        <strong>Use the PV hot water calculator.</strong>
-        Answer a few simple questions and see what a system looks like for your home.
+        Answer a few questions to see what a system looks like for your home.
         </p>
 
         <p class="hero-tagline-alt">See if this fits your home and what your next move could look like.</p>
