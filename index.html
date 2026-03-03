@@ -202,155 +202,99 @@ header {
     text-align: left;
 }
 
-/* First set - starts visible, no initial slide */
+/* Set 1 - starts visible */
 .rotating-phrase span:nth-child(1) {
     opacity: 1;
     transform: translateX(0);
-    animation: slideSet1 30s ease-in-out infinite;
+    animation: slideSet1 36s ease-in-out infinite;
 }
 
-/* Second set */
+/* Set 2 */
 .rotating-phrase span:nth-child(2) {
     opacity: 0;
     transform: translateX(-100%);
-    animation: slideSet2 30s ease-in-out infinite;
+    animation: slideSet2 36s ease-in-out infinite;
 }
 
-/* Third set */
+/* Set 3 */
 .rotating-phrase span:nth-child(3) {
     opacity: 0;
     transform: translateX(-100%);
-    animation: slideSet3 30s ease-in-out infinite;
+    animation: slideSet3 36s ease-in-out infinite;
 }
 
-/* Fourth set */
+/* Set 4 */
 .rotating-phrase span:nth-child(4) {
     opacity: 0;
     transform: translateX(-100%);
-    animation: slideSet4 30s ease-in-out infinite;
+    animation: slideSet4 36s ease-in-out infinite;
 }
 
-/* Fifth set */
+/* Set 5 */
 .rotating-phrase span:nth-child(5) {
     opacity: 0;
     transform: translateX(-100%);
-    animation: slideSet5 30s ease-in-out infinite;
+    animation: slideSet5 36s ease-in-out infinite;
 }
 
-/* Set 1 animation - starts visible */
+/* Set 6 */
+.rotating-phrase span:nth-child(6) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet6 36s ease-in-out infinite;
+}
+
+/* Set 1 - visible 0-12%, exits 12-15%, re-enters 97-100% */
 @keyframes slideSet1 {
-    0% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    17% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    20% {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-    97% {
-        opacity: 0;
-        transform: translateX(-100%);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    0%   { opacity: 1; transform: translateX(0); }
+    12%  { opacity: 1; transform: translateX(0); }
+    15%  { opacity: 0; transform: translateX(100%); }
+    97%  { opacity: 0; transform: translateX(-100%); }
+    100% { opacity: 1; transform: translateX(0); }
 }
 
-/* Set 2 animation */
+/* Set 2 - enters 15-18%, visible 18-30%, exits 30-33% */
 @keyframes slideSet2 {
-    0%, 20% {
-        opacity: 0;
-        transform: translateX(-100%);
-    }
-    23% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    37% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    40% {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-    100% {
-        opacity: 0;
-        transform: translateX(100%);
-    }
+    0%, 15%  { opacity: 0; transform: translateX(-100%); }
+    18%      { opacity: 1; transform: translateX(0); }
+    30%      { opacity: 1; transform: translateX(0); }
+    33%      { opacity: 0; transform: translateX(100%); }
+    100%     { opacity: 0; transform: translateX(100%); }
 }
 
-/* Set 3 animation */
+/* Set 3 - enters 33-36%, visible 36-48%, exits 48-51% */
 @keyframes slideSet3 {
-    0%, 40% {
-        opacity: 0;
-        transform: translateX(-100%);
-    }
-    43% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    57% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    60% {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-    100% {
-        opacity: 0;
-        transform: translateX(100%);
-    }
+    0%, 33%  { opacity: 0; transform: translateX(-100%); }
+    36%      { opacity: 1; transform: translateX(0); }
+    48%      { opacity: 1; transform: translateX(0); }
+    51%      { opacity: 0; transform: translateX(100%); }
+    100%     { opacity: 0; transform: translateX(100%); }
 }
 
-/* Set 4 animation */
+/* Set 4 - enters 51-54%, visible 54-66%, exits 66-69% */
 @keyframes slideSet4 {
-    0%, 60% {
-        opacity: 0;
-        transform: translateX(-100%);
-    }
-    63% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    77% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    80% {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-    100% {
-        opacity: 0;
-        transform: translateX(100%);
-    }
+    0%, 51%  { opacity: 0; transform: translateX(-100%); }
+    54%      { opacity: 1; transform: translateX(0); }
+    66%      { opacity: 1; transform: translateX(0); }
+    69%      { opacity: 0; transform: translateX(100%); }
+    100%     { opacity: 0; transform: translateX(100%); }
 }
 
-/* Set 5 animation */
+/* Set 5 - enters 69-72%, visible 72-84%, exits 84-87% */
 @keyframes slideSet5 {
-    0%, 80% {
-        opacity: 0;
-        transform: translateX(-100%);
-    }
-    83% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    97% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateX(100%);
-    }
+    0%, 69%  { opacity: 0; transform: translateX(-100%); }
+    72%      { opacity: 1; transform: translateX(0); }
+    84%      { opacity: 1; transform: translateX(0); }
+    87%      { opacity: 0; transform: translateX(100%); }
+    100%     { opacity: 0; transform: translateX(100%); }
+}
+
+/* Set 6 - enters 87-90%, visible 90-97%, exits 97-100% */
+@keyframes slideSet6 {
+    0%, 87%  { opacity: 0; transform: translateX(-100%); }
+    90%      { opacity: 1; transform: translateX(0); }
+    97%      { opacity: 1; transform: translateX(0); }
+    100%     { opacity: 0; transform: translateX(100%); }
 }
 
 /* ================= CTA ================= */
@@ -560,6 +504,7 @@ footer {
                 <span>roof plumbing, complexity, high cost</span>
                 <span>freeze protection and overheating</span>
                 <span>pumps, heat exchangers, costly upkeep</span>
+                <span>expensive, special, hard to get tanks</span>
                 <span>batteries or grid interconnection</span>
             </span>
         </div>
