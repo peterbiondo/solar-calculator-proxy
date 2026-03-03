@@ -420,7 +420,6 @@ footer {
   const emailInput = document.getElementById('emailInput');
   const submitBtn = document.getElementById('submitBtn');
 
-  // Absolute URL so it works even if this HTML is tested from another origin.
   const API_URL = 'https://pv-hotwater.com/api/kajabi-tag';
   const TAG = 'diy';
   const REDIRECT_TO = '/calc/diy.html';
@@ -444,8 +443,12 @@ footer {
     if (optinSection) optinSection.appendChild(btn);
   }
 
-  // Show Welcome Back UI if they've opted in already
-  if (localStorage.getItem('opted_in') === 'true') {
+  // ✅ Only show Welcome Back when Kajabi sync is confirmed AND avatar matches DIY
+  if (
+    localStorage.getItem('opted_in') === 'true' &&
+    localStorage.getItem('kajabi_synced') === 'true' &&
+    localStorage.getItem('selected_avatar') === TAG
+  ) {
     showWelcomeBack();
   }
 
@@ -480,7 +483,6 @@ footer {
         throw new Error(data.error || `HTTP ${resp.status}`);
       }
 
-      // Only store "opted_in" after a confirmed success
       localStorage.setItem('opted_in', 'true');
       localStorage.setItem('selected_avatar', TAG);
       localStorage.setItem('user_email', email);
@@ -489,7 +491,7 @@ footer {
       window.location.assign(REDIRECT_TO);
     } catch (err) {
       console.error('Kajabi opt-in failed:', err);
-      alert('Could not save your email right now. Please try again.');
+      alert('Please double-check your email and try again.');
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = originalText || 'Submit';
