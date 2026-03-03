@@ -485,10 +485,8 @@ if (!resp.ok || data.ok !== true) {
       window.location.assign(REDIRECT_TO);
     } catch (err) {
       console.error('Kajabi opt-in failed:', err);
-      alert(err?.message
-        ? `Hmm — that email didn’t go through. ${err.message}`
-        : 'Hmm — that email didn’t go through. Please double-check it and try again.'
-      );
+      alert('Please double-check your email and try again.');
+      
       if (submitBtn) {
         submitBtn.disabled = false;
         submitBtn.textContent = originalText || 'Submit';
