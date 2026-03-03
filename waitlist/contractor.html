@@ -462,132 +462,149 @@
     </div>
 
     <script>
-        /* ═══════════════════════════════════════════════════════════════ */
-        /* CONTENT CONFIGURATION - Easy to change all text here */
-        /* ═══════════════════════════════════════════════════════════════ */
-        const CONTENT = {
-            headline: "Join the Waitlist",
-            subheadline: "This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close.",
-            checkboxLabel: "Notify me when the webinar opens",
-            successMessage: "✓ You're on the waitlist!",
-            privacyNote: "We respect your privacy. Unsubscribe anytime."
-        };
+  /* ═══════════════════════════════════════════════════════════════ */
+  /* CONTENT CONFIGURATION - Easy to change all text here */
+  /* ═══════════════════════════════════════════════════════════════ */
+  const CONTENT = {
+    headline: "Join the Waitlist",
+    subheadline:
+      "This 50-minute webinar shows how PV water heaters keep deals alive when a full system doesn't close.",
+    checkboxLabel: "Notify me when the webinar opens",
+    successMessage: "✓ You're on the waitlist!",
+    privacyNote: "We respect your privacy. Unsubscribe anytime."
+  };
 
-        /* ═══════════════════════════════════════════════════════════════ */
-        /* KAJABI CONFIGURATION - Replace with your actual form URL */
-        /* ═══════════════════════════════════════════════════════════════ */
-        const KAJABI_FORM_URL = '/api/kajabi-tag';
-        // Example: 'https://yoursite.kajabi.com/forms/abc123/submit'
+  /* ═══════════════════════════════════════════════════════════════ */
+  /* KAJABI CONFIGURATION */
+  /* ═══════════════════════════════════════════════════════════════ */
+  // Use ABSOLUTE URL so this works no matter where the page is served from.
+  const KAJABI_FORM_URL = "https://pv-hotwater.com/api/kajabi-tag";
 
-        /* ═══════════════════════════════════════════════════════════════ */
-        /* GET EMAIL FROM URL PARAMETERS */
-        /* ═══════════════════════════════════════════════════════════════ */
-        function getEmailFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const email = localStorage.getItem('user_email');
-            
-            if (!email) {
-                console.warn('⚠️ No email found in URL parameters');
-                return null;
-            }
-            
-            console.log('✅ Email loaded from URL:', email);
-            return email;
-        }
+  /* ═══════════════════════════════════════════════════════════════ */
+  /* GET EMAIL FROM URL PARAMETERS (or localStorage fallback) */
+  /* ═══════════════════════════════════════════════════════════════ */
+  function getEmailFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
 
-        /* ═══════════════════════════════════════════════════════════════ */
-        /* SUBMIT TO KAJABI FORM */
-        /* ═══════════════════════════════════════════════════════════════ */
-        async function submitToKajabi(email) {
-            console.log('📤 Submitting to Kajabi...', { email, tags: ['waitlist'] });
+    // Prefer URL param if present, fall back to localStorage
+    const emailFromUrl = (urlParams.get("email") || "").trim();
+    const emailFromStorage = (localStorage.getItem("user_email") || "").trim();
 
-            // Check if Kajabi URL is configured
-            if (KAJABI_FORM_URL === 'YOUR_KAJABI_FORM_URL_HERE') {
-                console.log('⏸️ Kajabi URL not configured yet - showing demo mode');
-                console.log('✅ [DEMO MODE] Would submit:', { email, tags: ['waitlist'] });
-                return { success: true, demo: true };
-            }
+    const email = emailFromUrl || emailFromStorage;
 
-            try {
-                const response = await fetch(KAJABI_FORM_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        tag: 'waitlist'
-                    })
-                });
+    if (!email) {
+      console.warn("⚠️ No email found in URL or localStorage");
+      return null;
+    }
 
-                if (response.ok) {
-                    console.log('✅ Successfully submitted to Kajabi');
-                    return { success: true };
-                } else {
-                    console.error('❌ Kajabi submission failed:', response.status);
-                    return { success: false, error: response.status };
-                }
-            } catch (error) {
-                console.error('❌ Error submitting to Kajabi:', error);
-                return { success: false, error: error.message };
-            }
-        }
+    console.log(
+      "✅ Email loaded:",
+      emailFromUrl ? "(from URL)" : "(from localStorage)",
+      email
+    );
+    return email;
+  }
 
-                /* ═══════════════════════════════════════════════════════════════ */
-        /* INITIALIZE PAGE */
-        /* ═══════════════════════════════════════════════════════════════ */
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('🚀 Waitlist page loaded');
+  /* ═══════════════════════════════════════════════════════════════ */
+  /* SUBMIT TO KAJABI (confirm { ok:true }) */
+  /* ═══════════════════════════════════════════════════════════════ */
+  async function submitToKajabi(email) {
+    console.log("📤 Submitting waitlist tag to Kajabi...", { email, tag: "waitlist" });
 
-            /* Get email from URL */
-            const userEmail = getEmailFromURL();
+    try {
+      const response = await fetch(KAJABI_FORM_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email, tag: "waitlist" }),
+        cache: "no-store",
+        keepalive: true
+      });
 
-            /* DOM elements */
-            const waitlistCheckbox = document.getElementById('waitlistCheckbox');
-            const accordion = document.getElementById('accordion');
-            const successMessage = document.getElementById('successMessage');
+      const data = await response.json().catch(() => ({}));
 
-            /* ─────────────────────────────────────────────────────────── */
-            /* WAITLIST CHECKBOX HANDLER */
-            /* ─────────────────────────────────────────────────────────── */
-            waitlistCheckbox.addEventListener('change', async function () {
-                if (!this.checked) {
-                    accordion.classList.remove('open');
-                    successMessage.classList.remove('show');
-                    return;
-                }
+      if (response.ok && data.ok === true) {
+        console.log("✅ Kajabi waitlist tag applied");
+        localStorage.setItem("kajabi_waitlist_synced", "true");
+        return { success: true };
+      }
 
-                console.log('✅ Waitlist checkbox checked');
+      console.error("❌ Kajabi submission failed:", response.status, data);
+      return { success: false, error: data.error || `HTTP ${response.status}` };
+    } catch (error) {
+      console.error("❌ Error submitting to Kajabi:", error);
+      return { success: false, error: error.message || String(error) };
+    }
+  }
 
-                /* Open accordion immediately */
-                accordion.classList.add('open');
+  /* ═══════════════════════════════════════════════════════════════ */
+  /* INITIALIZE PAGE */
+  /* ═══════════════════════════════════════════════════════════════ */
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Waitlist page loaded");
 
-                /* No email — still show confirmation visually */
-                if (!userEmail) {
-                    console.warn('⚠️ No email found — skipping submission');
-                    successMessage.classList.add('show');
-                    return;
-                }
+    // Get email (URL param preferred, localStorage fallback)
+    const userEmail = getEmailFromURL();
 
-                /* Submit to Kajabi */
-                const result = await submitToKajabi(userEmail);
+    // DOM elements
+    const waitlistCheckbox = document.getElementById("waitlistCheckbox");
+    const accordion = document.getElementById("accordion");
+    const successMessage = document.getElementById("successMessage");
 
-                if (result.success) {
-                    successMessage.classList.add('show');
-                    waitlistCheckbox.disabled = true;
-                    console.log('✅ Waitlist confirmed');
-                } else {
-                    console.error('❌ Waitlist submission failed');
-                }
-            });
+    if (!waitlistCheckbox) {
+      console.error("❌ Missing #waitlistCheckbox element");
+      return;
+    }
 
-            /* ─────────────────────────────────────────────────────────── */
-            /* READY STATE LOG */
-            /* ─────────────────────────────────────────────────────────── */
-            console.log('✅ Page ready');
-            console.log('📧 User email:', userEmail || 'Not provided');
-            console.log('🔗 Kajabi URL:', KAJABI_FORM_URL);
-        });
-    </script>
+    /* WAITLIST CHECKBOX HANDLER */
+    waitlistCheckbox.addEventListener("change", async function () {
+      if (!this.checked) {
+        if (accordion) accordion.classList.remove("open");
+        if (successMessage) successMessage.classList.remove("show");
+        return;
+      }
+
+      console.log("✅ Waitlist checkbox checked");
+
+      // Open accordion immediately (if present)
+      if (accordion) accordion.classList.add("open");
+
+      // No email found: do NOT pretend success.
+      if (!userEmail) {
+        console.warn("⚠️ No email found — cannot add to waitlist");
+        this.checked = false;
+        if (accordion) accordion.classList.remove("open");
+        alert("We couldn’t find your email. Please go back and enter it again.");
+        return;
+      }
+
+      // Prevent double-click toggles while submitting
+      waitlistCheckbox.disabled = true;
+
+      // Submit to Kajabi
+      const result = await submitToKajabi(userEmail);
+
+      if (result.success) {
+        if (successMessage) successMessage.classList.add("show");
+        console.log("✅ Waitlist confirmed");
+        // Keep disabled: it’s done.
+        waitlistCheckbox.disabled = true;
+      } else {
+        console.error("❌ Waitlist submission failed:", result.error);
+
+        // Re-enable and undo check so UI matches reality
+        waitlistCheckbox.disabled = false;
+        waitlistCheckbox.checked = false;
+        if (accordion) accordion.classList.remove("open");
+        if (successMessage) successMessage.classList.remove("show");
+
+        alert("Sorry — we could not add you to the waitlist. Please try again.");
+      }
+    });
+
+    console.log("✅ Page ready");
+    console.log("📧 User email:", userEmail || "Not provided");
+    console.log("🔗 Kajabi URL:", KAJABI_FORM_URL);
+  });
+</script>
 </body>
 </html>
