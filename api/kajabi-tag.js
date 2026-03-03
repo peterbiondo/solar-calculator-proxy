@@ -60,6 +60,7 @@ async function findContactByEmail(token, email, requestId) {
 
   const data = await res.json();
   const arr = Array.isArray(data.data) ? data.data : [];
+
   return (
     arr.find((c) => (c.attributes?.email || '').toLowerCase() === email.toLowerCase()) || null
   );
@@ -128,12 +129,18 @@ async function addTagToContact(token, contactId, tagId, requestId) {
     }),
   });
 
-  // Treat "already exists" as success (common when re-testing)
   if (!res.ok) {
-    if (res.status === 409 || res.status === 422) {
+    const t = await fetchTextSafe(res);
+
+    // Treat common "already tagged" responses as success
+    if (
+      res.status === 409 ||
+      res.status === 422 ||
+      (res.status === 400 && /already|exists|taken/i.test(t))
+    ) {
       return { ok: true, alreadyTagged: true };
     }
-    const t = await fetchTextSafe(res);
+
     throw new Error(`[${requestId}] Add tag failed (HTTP ${res.status}): ${t}`);
   }
 
@@ -180,7 +187,11 @@ module.exports = async (req, res) => {
     const blockedDomains = new Set(['example.com', 'example.net', 'example.org']);
     const domain = emailClean.split('@')[1] || '';
     if (blockedDomains.has(domain)) {
-      return res.status(400).json({ ok: false, error: 'Please use a real email address (not example.com).', requestId });
+      return res.status(400).json({
+        ok: false,
+        error: 'Please use a real email address (not example.com).',
+        requestId
+      });
     }
 
     // Overwrite with cleaned values for the rest of the function
