@@ -353,14 +353,13 @@
 
         // OPTIONAL: if someone already opted in, skip this page entirely
         // NOTE: only skip if we have a saved avatar too
-        if (localStorage.getItem("opted_in") === "true") {
-            const savedAvatar = localStorage.getItem("avatar");
+        if (localStorage.getItem("opted_in") === "true" &&
+          localStorage.getItem("kajabi_synced") === "true"
+        ) {
+          const savedAvatar = localStorage.getItem("avatar");
 
-            if (savedAvatar === "contractor") {
-                window.location.replace(CONTRACTOR_BOT_URL);
-            } else if (savedAvatar === "diy") {
-                window.location.replace(DIY_BOT_URL);
-            }
+          if (savedAvatar === "contractor") window.location.replace(CONTRACTOR_BOT_URL);
+          else if (savedAvatar === "diy") window.location.replace(DIY_BOT_URL);
         }
 
         function selectAvatar(avatar) {
