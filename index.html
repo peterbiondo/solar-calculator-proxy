@@ -172,16 +172,14 @@ header {
 
 /* ================= ROTATING TEXT ================= */
 .rotating-text-container {
-    max-width: 1200px;
-    margin: 0 auto 30px;
+    margin: 0 0 30px 0;
     font-family: 'Inter', sans-serif;
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1.6;
     color: #FFFFFF;
-    text-align: center;
+    text-align: left;
     white-space: nowrap;
-    padding: 0 20px;
 }
 
 .rotating-phrase {
@@ -189,9 +187,9 @@ header {
     font-weight: 700;
     display: inline-block;
     position: relative;
-    height: 1.4em;
+    height: 1.6em;
     overflow: hidden;
-    min-width: 560px;
+    min-width: 22em;
     vertical-align: bottom;
 }
 
@@ -466,11 +464,7 @@ footer {
 /* ================= MOBILE ================= */
 @media (max-width: 1200px) {
     .rotating-text-container {
-        font-size: 19px;
-    }
-    
-    .rotating-phrase {
-        min-width: 480px;
+        font-size: 22px;
     }
 }
 
@@ -507,17 +501,15 @@ footer {
     }
     
     .rotating-text-container {
-        font-size: 18px;
+        font-size: 20px;
         white-space: normal;
-        text-align: center;
     }
     
     .rotating-phrase {
         display: block;
         min-width: 0;
         width: 100%;
-        font-size: 20px;
-        margin-top: 4px;
+        height: 1.6em;
     }
 }
 </style>
@@ -555,13 +547,7 @@ footer {
         </p>
 
         <p class="hero-tagline-alt">No fluff. No hype.</p>
-    </div>
 
-    <div class="hero-image">
-        <img src="hero-image.jpg" alt="Peter Biondo installing solar panels">
-    </div>
-
-    <div class="cta-section">
         <div class="rotating-text-container">
             Finally, a Solar Water Heater without 
             <span class="rotating-phrase">
@@ -573,6 +559,13 @@ footer {
             </span>
         </div>
 
+    </div>
+
+    <div class="hero-image">
+        <img src="hero-image.jpg" alt="Peter Biondo installing solar panels">
+    </div>
+
+    <div class="cta-section">
         <h2 class="cta-heading">Who are you? Click one to continue</h2>
 
         <div class="avatar-grid">
