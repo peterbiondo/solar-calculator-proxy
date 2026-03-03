@@ -430,9 +430,12 @@ footer {
   }
 
   // Show Welcome Back UI if they've opted in already
-  if (localStorage.getItem('opted_in') === 'true') {
-    showWelcomeBack();
-  }
+  if (
+  localStorage.getItem('opted_in') === 'true' &&
+  localStorage.getItem('kajabi_synced') === 'true'
+) {
+  showWelcomeBack();
+}
 
   if (!form) return;
 
@@ -460,10 +463,18 @@ footer {
         keepalive: true
       });
 
-      const data = await resp.json().catch(() => ({}));
-      if (!resp.ok || data.ok !== true) {
-        throw new Error(data.error || `HTTP ${resp.status}`);
-      }
+      const raw = await resp.text();
+let data = {};
+try { data = raw ? JSON.parse(raw) : {}; } catch {}
+
+if (!resp.ok || data.ok !== true) {
+  console.error('kajabi-tag failed', {
+    status: resp.status,
+    contentType: resp.headers.get('content-type'),
+    raw
+  });
+  throw new Error(data.error || `HTTP ${resp.status}`);
+}
 
       // Only store "opted_in" after a confirmed success
       localStorage.setItem('opted_in', 'true');
