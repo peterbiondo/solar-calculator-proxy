@@ -246,6 +246,13 @@ header {
     box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
 }
 
+.email-form button:disabled {
+    opacity: 0.85;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 .privacy-note {
     font-size: 13px;
     color: rgba(255,255,255,0.4);
@@ -378,9 +385,9 @@ footer {
         <h2 class="optin-heading">Design your PV water heater here!</h2>
         <p class="optin-subheading">Instant free access. No waiting.</p>
 
-        <form class="email-form" id="optinForm">
-            <input type="email" id="emailInput" placeholder="your@email.com" required>
-            <button type="submit">Get Free Access + Join for Home Tips →</button>
+        <form class="email-form" id="optinForm" novalidate>
+            <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
+            <button type="submit" id="submitBtn">Get Free Access + Join for Home Tips →</button>
             <p class="privacy-note">🔒 No spam. Unsubscribe anytime.</p>
         </form>
     </div>
@@ -408,43 +415,100 @@ footer {
 </footer>
 
 <script>
-if (localStorage.getItem('opted_in') === 'true') {
-    document.getElementById('optinForm').style.display = 'none';
-    document.querySelector('.optin-heading').textContent = 'Welcome back!';
-    document.querySelector('.optin-subheading').textContent = 'Click below to jump back into the PV Designer.';
+(function () {
+  const form = document.getElementById('optinForm');
+  const emailInput = document.getElementById('emailInput');
+  const submitBtn = document.getElementById('submitBtn');
+
+  // Absolute URL so it works even if this HTML is tested from another origin.
+  const API_URL = 'https://pv-hotwater.com/api/kajabi-tag';
+  const TAG = 'diy';
+  const REDIRECT_TO = '/calc/diy.html';
+
+  function showWelcomeBack() {
+    if (!form) return;
+
+    form.style.display = 'none';
+    const heading = document.querySelector('.optin-heading');
+    const subheading = document.querySelector('.optin-subheading');
+    if (heading) heading.textContent = 'Welcome back!';
+    if (subheading) subheading.textContent = 'Click below to jump back into the PV Designer.';
+
     const btn = document.createElement('a');
-    btn.href = '/calc/diy.html';
+    btn.href = REDIRECT_TO;
     btn.className = 'email-form';
     btn.style.cssText = 'display:block; max-width:460px; margin:0 auto; padding:14px 20px; border-radius:10px; background:#FFA500; color:#0F0F0F; font-size:17px; font-weight:700; font-family:Poppins,sans-serif; text-align:center; text-decoration:none;';
     btn.textContent = 'Take Me to the PV Sizing Calculator →';
-    document.querySelector('.optin-section').appendChild(btn);
-}
 
-document.getElementById('optinForm').addEventListener('submit', function(e) {
+    const optinSection = document.querySelector('.optin-section');
+    if (optinSection) optinSection.appendChild(btn);
+  }
+
+  // Show Welcome Back UI if they've opted in already
+  if (localStorage.getItem('opted_in') === 'true') {
+    showWelcomeBack();
+  }
+
+  if (!form) return;
+
+  form.addEventListener('submit', async function (e) {
     e.preventDefault();
-    const email = document.getElementById('emailInput').value;
-    localStorage.setItem('opted_in', 'true');
-    localStorage.setItem('selected_avatar', 'diy');
-    localStorage.setItem('user_email', email);
-    
-    const KAJABI_FORM_URL = '/api/kajabi-tag';
 
-    fetch(KAJABI_FORM_URL, {
+    const email = (emailInput?.value || '').trim();
+    if (!email) {
+      alert('Please enter your email.');
+      return;
+    }
+
+    const originalText = submitBtn ? submitBtn.textContent : '';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Opening the Designer…';
+    }
+
+    try {
+      const resp = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, tag: 'diy' })
-    }).finally(() => {
-        window.location.href = '/calc/diy.html';
-    });
+        body: JSON.stringify({ email, tag: TAG }),
+        cache: 'no-store',
+        keepalive: true
+      });
+
+      const data = await resp.json().catch(() => ({}));
+      if (!resp.ok || data.ok !== true) {
+        throw new Error(data.error || `HTTP ${resp.status}`);
+      }
+
+      // Only store "opted_in" after a confirmed success
+      localStorage.setItem('opted_in', 'true');
+      localStorage.setItem('selected_avatar', TAG);
+      localStorage.setItem('user_email', email);
+      localStorage.setItem('kajabi_synced', 'true');
+
+      window.location.assign(REDIRECT_TO);
+    } catch (err) {
+      console.error('Kajabi opt-in failed:', err);
+      alert('Could not save your email right now. Please try again.');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText || 'Submit';
+      }
+    }
+  });
+})();
+</script>
+
+<script>
+// Force check on page show (catches back button) — modern, safer approach
+window.addEventListener('pageshow', function (event) {
+  const navEntries = performance.getEntriesByType && performance.getEntriesByType('navigation');
+  const navType = navEntries && navEntries[0] && navEntries[0].type; // 'back_forward'
+  if (event.persisted || navType === 'back_forward') {
+    location.reload();
+  }
 });
 </script>
-<script>
-// Force check on page show (catches back button)
-window.addEventListener('pageshow', function(event) {
-    if (event.persisted || performance.navigation.type === 2) {
-        location.reload();
-    }
-});
-</script>    
+
 </body>
 </html>
