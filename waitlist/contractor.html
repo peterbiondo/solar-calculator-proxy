@@ -1,421 +1,499 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Join the Waitlist | iSolar Hot Water Academy</title>
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PV Contractor – iSolar Hot Water Academy</title>
+<link rel="icon" type="image/png" href="/favicon.png">
 
-  <style>
-    :root {
-      --isolar-black: #0F0F0F;
-      --solar-orange: #E65100;
-      --deep-orange: #BF360C;
-      --energy-green: #00E676;
-      --soft-gray: #E8E8E8;
-      --dark-gray: #424242;
-      --pure-white: #FFFFFF;
-    }
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--isolar-black);
-      color: var(--isolar-black);
-      line-height: 1.6;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-      position: relative;
-      overflow-x: hidden;
-    }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0F0F0F;
+  color: #FFFFFF;
+  overflow-x: hidden;
+}
 
-    body::before {
-      content: '';
-      position: absolute;
-      width: 900px;
-      height: 900px;
-      background: radial-gradient(
-        circle at 30% 50%,
-        rgba(0, 230, 118, 0.12) 0%,
-        rgba(0, 217, 255, 0.08) 30%,
-        rgba(118, 75, 162, 0.06) 60%,
-        transparent 80%
-      );
-      top: 50%;
-      left: 50%;
-      transform: translate(-60%, -50%);
-      pointer-events: none;
-      z-index: 1;
-      filter: blur(60px);
-    }
+/* ================= DUAL-GLOW BACKGROUND - UPPER RIGHT ================= */
+body::before {
+  content: '';
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(0, 230, 118, 0.18) 0%,
+    rgba(0, 217, 255, 0.12) 30%,
+    rgba(118, 75, 162, 0.08) 60%,
+    transparent 80%
+  );
+  top: 8%;
+  right: 5%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
+}
 
-    body::after {
-      content: '';
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(
-        circle at 70% 30%,
-        rgba(0, 230, 118, 0.05) 0%,
-        rgba(0, 217, 255, 0.03) 40%,
-        rgba(118, 75, 162, 0.02) 70%,
-        transparent 85%
-      );
-      top: 20%;
-      right: 10%;
-      pointer-events: none;
-      z-index: 1;
-      filter: blur(50px);
-    }
+body::after {
+  content: '';
+  position: fixed;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(
+    circle at 70% 30%,
+    rgba(0, 230, 118, 0.08) 0%,
+    rgba(0, 217, 255, 0.05) 40%,
+    rgba(118, 75, 162, 0.03) 70%,
+    transparent 85%
+  );
+  top: 12%;
+  right: 2%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(50px);
+}
 
-    .container {
-      width: 100%;
-      max-width: 650px;
-      margin: 20px;
-      position: relative;
-      z-index: 1;
-    }
+/* ================= HEADER ================= */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 72px;
+  padding: 0 30px 0 160px;
+  display: flex;
+  align-items: center;
+  background: #0F0F0F;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  z-index: 100;
+}
 
-    .card {
-      background: #1A1A1A;
-      border: 1px solid #2A2A2A;
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    }
+.header-inner {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    .logo { text-align: center; margin-bottom: 24px; }
+.logo { display: flex; align-items: center; }
 
-    .logo-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-    }
+.logo img {
+  height: 36px;
+  width: auto;
+  display: block;
+}
 
-    .logo-img {
-      height: 34px;
-      width: auto;
-      display: block;
-    }
+@media (max-width: 600px) {
+  .logo img { height: 32px; }
+}
 
-    @media (max-width: 600px) {
-      .logo-img { height: 32px; }
-    }
+/* ================= HERO ================= */
+.hero {
+  position: relative;
+  z-index: 10;
+  padding: 100px 0 40px 160px;
+  display: grid;
+  grid-template-columns: 55% 45%;
+  gap: 20px;
+  align-items: start;
+}
 
-    .headline {
-      font-size: 32px;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 12px;
-      text-align: center;
-      line-height: 1.2;
-    }
+.hero-content { max-width: 650px; }
 
-    .subheadline {
-      font-size: 16px;
-      font-weight: 400;
-      color: #E0E0E0;
-      margin-bottom: 32px;
-      text-align: center;
-      line-height: 1.5;
-    }
+.hero-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 54px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 30px;
+}
 
-    .section-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #FFFFFF;
-      margin-bottom: 16px;
-      text-align: center;
-      line-height: 1.2;
-    }
+.highlight-blue {
+  background: linear-gradient(to top, rgba(70,150,255,0.7) 55%, transparent 55%);
+  padding: 0 4px;
+  border-radius: 2px;
+}
 
-    .checkbox-container { margin-bottom: 8px; }
+.hero-tagline {
+  font-size: 22px;
+  font-weight: 600;
+  color: #00E676;
+  margin-bottom: 25px;
+}
 
-    .checkbox-wrapper {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      cursor: pointer;
-      padding: 16px;
-      border-radius: 8px;
-      transition: background-color 0.2s ease;
-    }
+.hero-body {
+  font-size: 17px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 25px;
+}
 
-    .checkbox-wrapper:hover { background: rgba(230, 81, 0, 0.05); }
+.hero-tagline-alt {
+  font-size: 19px;
+  font-weight: 600;
+  color: #00E676;
+  margin-bottom: 0px;
+}
 
-    input[type="checkbox"] {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 24px;
-      height: 24px;
-      min-width: 24px;
-      border: 2px solid #FFFFFF;
-      border-radius: 4px;
-      cursor: pointer;
-      position: relative;
-      transition: all 0.2s ease;
-      margin-top: 2px;
-      background: transparent;
-    }
+.footnote {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 20px;
+  font-style: italic;
+}
 
-    input[type="checkbox"]:hover { border-color: var(--solar-orange); }
+/* ================= EMPHASIS WORDS ================= */
+.emphasis-word {
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 700;
+  display: inline;
+  animation: soft-pulse 3s ease-in-out infinite;
+  vertical-align: middle;
+}
 
-    input[type="checkbox"]:checked {
-      background: var(--solar-orange);
-      border-color: var(--solar-orange);
-    }
+@keyframes soft-pulse {
+  0%, 100% { text-shadow: 0 0 4px rgba(255, 255, 255, 0.2); }
+  50% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+}
 
-    input[type="checkbox"]:checked::after {
-      content: '✓';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
-    }
+/* ================= IMAGE ================= */
+.hero-image {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-right: 160px;
+  padding-left: 35px;
+}
 
-    input[type="checkbox"]:disabled { opacity: 0.6; cursor: not-allowed; }
+.hero-image img {
+  width: 95%;
+  max-height: 55vh;
+  object-fit: cover;
+}
 
-    .checkbox-label {
-      font-size: 16px;
-      font-weight: 500;
-      color: #FFFFFF;
-      cursor: pointer;
-      line-height: 1.5;
-      user-select: none;
-    }
+/* ================= OPT-IN SECTION ================= */
+.optin-section {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 0 160px 45px;
+}
 
-    .accordion {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-      opacity: 0;
-    }
+.hero-intro {
+  max-width: 760px;
+  margin: 0 auto 30px;
+  font-size: 17px;
+  color: rgba(255,255,255,0.85);
+}
 
-    .accordion.open {
-      max-height: 500px;
-      opacity: 1;
-      transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
-    }
+.optin-heading {
+  font-size: 28px;
+  font-weight: 600;
+  color: #FFA500;
+  margin-bottom: 8px;
+}
 
-    .accordion-content {
-      padding: 0 20px 20px 20px;
-      background: rgba(230, 81, 0, 0.05);
-      border-radius: 8px;
-      border-left: 4px solid var(--solar-orange);
-    }
+.optin-subheading {
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 24px;
+}
 
-    .success-message {
-      display: none;
-      padding: 16px 16px;
-      background: rgba(0, 230, 118, 0.1);
-      border-radius: 8px;
-      border-left: 3px solid var(--energy-green);
-      margin-top: 12px;
-      margin-bottom: 0;
-    }
+/* ================= EMAIL FORM ================= */
+.email-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 460px;
+  margin: 0 auto;
+}
 
-    .success-message.show { display: block; }
+.email-form input[type="email"] {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.06);
+  color: #FFFFFF;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
 
-    .success-text {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--energy-green);
-      margin: 0;
-    }
+.email-form input[type="email"]::placeholder { color: rgba(255,255,255,0.4); }
 
-    .footer { margin-top: 32px; text-align: center; }
+.email-form input[type="email"]:focus { border-color: #FFA500; }
 
-    .privacy-note {
-      font-size: 12px;
-      color: #AAAAAA;
-      line-height: 1.5;
-    }
+.email-form button {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: none;
+  background: #FFA500;
+  color: #0F0F0F;
+  font-size: 17px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
-    @media (max-width: 600px) {
-      .container { margin: 16px; }
-      .card { padding: 32px 24px; }
-      .headline { font-size: 28px; }
-      .subheadline { font-size: 15px; }
-      .checkbox-wrapper { min-height: 48px; padding: 12px; }
-      input[type="checkbox"] { width: 28px; height: 28px; min-width: 28px; }
-      input[type="checkbox"]:checked::after { font-size: 18px; }
-    }
+.email-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
+}
 
-    @media (max-width: 400px) {
-      .card { padding: 24px 20px; }
-      .headline { font-size: 24px; }
-    }
-  </style>
+.email-form button:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.privacy-note {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+}
+
+/* ================= FOOTER ================= */
+footer {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 20px 160px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0F0F0F;
+}
+
+.footer-left { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+.footer-center { display: flex; gap: 24px; }
+
+.footer-center a {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-center a:hover { color: #FFA500; }
+
+.footer-right a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.footer-right a:hover { color: #FFA500; }
+
+.footer-right svg { width: 26px; height: 26px; }
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  header { padding: 0 20px; height: 64px; }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 80px 20px 60px;
+  }
+
+  .hero-image { padding-right: 0; margin-bottom: 0px; }
+
+  .optin-section { padding: 6px 20px 40px; }
+
+  .hero-title { font-size: 38px; }
+
+  footer {
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 20px;
+    text-align: center;
+  }
+}
+</style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="card">
 
-      <div class="logo">
-        <a href="https://pv-hotwater.com" class="logo-link">
-          <img src="/Logo.svg" alt="iSolar Hot Water Academy" class="logo-img">
-        </a>
-      </div>
-
-      <h2 class="section-title" style="margin-bottom: 10px; color: #FFA500;">
-        How PV Water Heating Keeps Deals Moving
-      </h2>
-
-      <p class="subheadline" style="margin-bottom: 32px; font-weight: 700;">
-        See how PV water heaters keep deals alive<br>when a full system doesn't close.
-      </p>
-
-      <p class="subheadline" style="margin-bottom: 8px; font-weight: 600; text-align: left;">
-        You'll see:
-      </p>
-
-      <ul style="list-style: none; padding-left: 0; margin-bottom: 40px; text-align: left;">
-        <li style="margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
-          <span style="position: absolute; left: 0;">•</span>
-          how the systems are built and sized
-        </li>
-        <li style="margin-bottom: 8px; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
-          <span style="position: absolute; left: 0;">•</span>
-          what role they play in making systems more affordable
-        </li>
-        <li style="margin-bottom: 0; padding-left: 20px; position: relative; font-size: 16px; color: #E0E0E0; line-height: 1.5;">
-          <span style="position: absolute; left: 0;">•</span>
-          when they make strong financial sense for homeowners
-        </li>
-      </ul>
-
-      <h1 class="headline" id="headline" style="margin-bottom: 22px; color: #FFA500; text-align: center; font-size: 26px;">
-        ☀️ Join the Waitlist
-      </h1>
-
-      <!-- Checkbox Section -->
-      <div class="checkbox-container">
-        <label class="checkbox-wrapper" for="waitlistCheckbox">
-          <input type="checkbox" id="waitlistCheckbox">
-          <span class="checkbox-label" id="checkboxLabel">Notify me when the webinar opens</span>
-        </label>
-      </div>
-
-      <!-- Accordion (Hidden by Default) -->
-      <div class="accordion" id="accordion">
-        <div class="accordion-content">
-          <!-- Single, unique successMessage (BUG FIXED) -->
-          <div class="success-message" id="successMessage">
-            <p class="success-text">✓ You're on the waitlist!</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="footer">
-        <p class="privacy-note">We respect your privacy. Unsubscribe anytime.</p>
-      </div>
-
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <a href="https://pv-hotwater.com">
+        <img src="../Logo.svg" alt="iSolar Hot Water Academy">
+      </a>
     </div>
   </div>
+</header>
 
-  <script>
-    const KAJABI_FORM_URL = "https://pv-hotwater.com/api/kajabi-tag";
+<section class="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">
+      <span class="highlight-blue">Create fast</span><br>
+      <span style="font-size: 38px;">$2,500+ net profit days</span><sup style="font-size: 14px;">1</sup>
+    </h1>
 
-    function getEmailFromURL() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const emailFromUrl = (urlParams.get("email") || "").trim();
-      const emailFromStorage = (localStorage.getItem("user_email") || "").trim();
-      const email = emailFromUrl || emailFromStorage;
+    <p class="hero-tagline">no batteries, no utility interconnection, fewer delays</p>
 
-      if (!email) {
-        console.warn("⚠️ No email found in URL or localStorage");
-        return null;
-      }
+    <p class="hero-body">
+      Helps homeowners cut a major energy cost - with an <strong style="font-size: 19px;">easier yes</strong>.
+    </p>
+  </div>
 
-      console.log("✅ Email loaded:", emailFromUrl ? "(from URL)" : "(from localStorage)", email);
-      return email;
+  <div class="hero-image">
+    <img src="6-panel-contr.png" alt="PV contractor solar installation">
+  </div>
+
+  <div class="optin-section">
+    <h2 class="optin-heading">Design a PV water heater in minutes</h2>
+    <p class="optin-subheading">The <strong>free PV Solar Hot Water Designer</strong> builds panel count, inverter selection, tank size and daily KWh storage.</p>
+
+    <form class="email-form" id="optinForm" novalidate>
+      <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
+      <button type="submit" id="submitBtn">Get Free Access + Join for Pro Intel →</button>
+      <p class="privacy-note">🔒 No spam. Unsubscribe anytime.</p>
+    </form>
+
+    <p id="bottomFootnote" style="font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 16px; font-style: italic; text-align: center;">
+      <sup>1</sup> $13K install, 4-man crew, one-day job, includes 20% admin, permitting, and sales commission.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    © <script>document.write(new Date().getFullYear())</script> iSolar Hot Water Academy
+  </div>
+  <div class="footer-center">
+    <a href="https://isolarhotwater.mykajabi.com/about">About</a>
+    <a href="https://isolarhotwater.mykajabi.com/contact-us">Contact Us</a>
+    <a href="/privacy.html" target="_blank" rel="noopener">Privacy</a>
+    <a href="/terms.html" target="_blank" rel="noopener">Terms</a>
+  </div>
+  <div class="footer-right">
+    <a href="https://www.youtube.com/@isolar_hotwater" target="_blank" rel="noopener" aria-label="YouTube">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+      </svg>
+      <span>YouTube</span>
+    </a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const form = document.getElementById('optinForm');
+  const emailInput = document.getElementById('emailInput');
+  const submitBtn = document.getElementById('submitBtn');
+
+  // Keep this absolute so testing from another origin still posts to the live Vercel function.
+  const API_URL = 'https://pv-hotwater.com/api/kajabi-tag';
+  const TAG = 'contractor';
+  const REDIRECT_TO = '/calc/contractor.html';
+
+  function showWelcomeBack() {
+    if (!form) return;
+
+    form.style.display = 'none';
+    const heading = document.querySelector('.optin-heading');
+    const subheading = document.querySelector('.optin-subheading');
+    if (heading) heading.textContent = 'Welcome back!';
+    if (subheading) subheading.textContent = 'Click below to jump back into the PV hot water calculator.';
+
+    const btn = document.createElement('a');
+    btn.href = REDIRECT_TO;
+    btn.className = 'email-form';
+    btn.style.cssText =
+      'display:block; max-width:460px; margin:0 auto; padding:14px 20px; border-radius:10px; background:#FFA500; color:#0F0F0F; font-size:17px; font-weight:700; font-family:Poppins,sans-serif; text-align:center; text-decoration:none;';
+    btn.textContent = 'Take Me to the PV Sizing Calculator';
+
+    const optinSection = document.querySelector('.optin-section');
+    const footnote = document.getElementById('bottomFootnote');
+    if (optinSection) {
+      if (footnote) optinSection.insertBefore(btn, footnote);
+      else optinSection.appendChild(btn);
+    }
+  }
+
+  // Show Welcome Back UI if they've opted in already
+  if (localStorage.getItem('opted_in') === 'true') {
+    showWelcomeBack();
+  }
+
+  if (!form) return;
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const email = (emailInput?.value || '').trim();
+    if (!email) {
+      alert('Please enter your email.');
+      return;
     }
 
-    async function submitToKajabi(email) {
-      console.log("📤 Submitting waitlist tag to Kajabi...", { email, tag: "waitlist" });
-
-      try {
-        const response = await fetch(KAJABI_FORM_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email, tag: "waitlist" }),
-          cache: "no-store",
-          keepalive: true
-        });
-
-        const data = await response.json().catch(() => ({}));
-
-        if (response.ok && data.ok === true) {
-          console.log("✅ Kajabi waitlist tag applied");
-          localStorage.setItem("kajabi_waitlist_synced", "true");
-          return { success: true };
-        }
-
-        console.error("❌ Kajabi submission failed:", response.status, data);
-        return { success: false, error: data.error || `HTTP ${response.status}` };
-      } catch (error) {
-        console.error("❌ Error submitting to Kajabi:", error);
-        return { success: false, error: error.message || String(error) };
-      }
+    const originalText = submitBtn ? submitBtn.textContent : '';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Opening the Designer…';
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-      const userEmail = getEmailFromURL();
-      const waitlistCheckbox = document.getElementById("waitlistCheckbox");
-      const accordion = document.getElementById("accordion");
-      const successMessage = document.getElementById("successMessage");
-
-      if (!waitlistCheckbox) {
-        console.error("❌ Missing #waitlistCheckbox element");
-        return;
-      }
-
-      waitlistCheckbox.addEventListener("change", async function () {
-        if (!this.checked) {
-          if (accordion) accordion.classList.remove("open");
-          if (successMessage) successMessage.classList.remove("show");
-          return;
-        }
-
-        if (accordion) accordion.classList.add("open");
-
-        if (!userEmail) {
-          this.checked = false;
-          if (accordion) accordion.classList.remove("open");
-          alert("We couldn’t find your email. Please go back and enter it again.");
-          return;
-        }
-
-        waitlistCheckbox.disabled = true;
-
-        const result = await submitToKajabi(userEmail);
-
-        if (result.success) {
-          if (successMessage) successMessage.classList.add("show");
-          waitlistCheckbox.disabled = true;
-        } else {
-          waitlistCheckbox.disabled = false;
-          waitlistCheckbox.checked = false;
-          if (accordion) accordion.classList.remove("open");
-          if (successMessage) successMessage.classList.remove("show");
-          alert("Sorry — we could not add you to the waitlist. Please try again.");
-        }
+    try {
+      const resp = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, tag: TAG }),
+        cache: 'no-store',
+        keepalive: true
       });
-    });
-  </script>
+
+      const data = await resp.json().catch(() => ({}));
+      if (!resp.ok || data.ok !== true) {
+        throw new Error(data.error || `HTTP ${resp.status}`);
+      }
+
+      // Only store "opted_in" after a confirmed success
+      localStorage.setItem('opted_in', 'true');
+      localStorage.setItem('selected_avatar', TAG);
+      localStorage.setItem('user_email', email);
+      localStorage.setItem('kajabi_synced', 'true');
+
+      window.location.assign(REDIRECT_TO);
+    } catch (err) {
+      console.error('Kajabi opt-in failed:', err);
+      alert('Could not save your email right now. Please try again.');
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText || 'Submit';
+      }
+    }
+  });
+})();
+</script>
+
+<script>
+// Force check on page show (catches back button) — modern, safer approach
+window.addEventListener('pageshow', function (event) {
+  const navEntries = performance.getEntriesByType && performance.getEntriesByType('navigation');
+  const navType = navEntries && navEntries[0] && navEntries[0].type; // 'back_forward'
+  if (event.persisted || navType === 'back_forward') {
+    location.reload();
+  }
+});
+</script>
+
 </body>
 </html>
