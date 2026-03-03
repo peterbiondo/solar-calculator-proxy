@@ -1,16 +1,20 @@
 const fetch = require('node-fetch');
 
-// Cache the access token so we don't request a new one every time
 let cachedToken = null;
 let tokenExpiresAt = 0;
 
-async function getAccessToken() {
-  // If we have a valid cached token, use it
-  if (cachedToken && Date.now() < tokenExpiresAt) {
-    return cachedToken;
-  }
+function makeRequestId() {
+  return Math.random().toString(36).slice(2, 10);
+}
 
-  const response = await fetch('https://api.kajabi.com/v1/oauth/token', {
+async function fetchTextSafe(res) {
+  try { return await res.text(); } catch { return ''; }
+}
+
+async function getAccessToken(requestId) {
+  if (cachedToken && Date.now() < tokenExpiresAt) return cachedToken;
+
+  const res = await fetch('https://api.kajabi.com/v1/oauth/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
@@ -20,47 +24,45 @@ async function getAccessToken() {
     }),
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to get Kajabi access token');
+  if (!res.ok) {
+    const t = await fetchTextSafe(res);
+    throw new Error(`[${requestId}] OAuth token failed (HTTP ${res.status}): ${t}`);
   }
 
-  const data = await response.json();
+  const data = await res.json();
   cachedToken = data.access_token;
-  // Expire 5 minutes early to be safe
   tokenExpiresAt = Date.now() + (data.expires_in - 300) * 1000;
   return cachedToken;
 }
 
-async function findContactByEmail(token, email) {
+async function findContactByEmail(token, email, requestId) {
   const url =
     'https://api.kajabi.com/v1/contacts?filter%5Bsite_id%5D=' +
     process.env.KAJABI_SITE_ID +
     '&filter%5Bsearch%5D=' +
     encodeURIComponent(email);
 
-  const response = await fetch(url, {
+  const res = await fetch(url, {
     headers: {
       Authorization: 'Bearer ' + token,
       'Content-Type': 'application/vnd.api+json',
     },
   });
 
-  if (!response.ok) {
-    throw new Error('Failed to search contacts');
+  if (!res.ok) {
+    const t = await fetchTextSafe(res);
+    throw new Error(`[${requestId}] Contact search failed (HTTP ${res.status}): ${t}`);
   }
 
-  const data = await response.json();
-
-  // Kajabi search is fuzzy, so we must exact-match the email ourselves
-  const match = data.data.find(
-    (contact) => contact.attributes.email.toLowerCase() === email.toLowerCase()
+  const data = await res.json();
+  const arr = Array.isArray(data.data) ? data.data : [];
+  return (
+    arr.find((c) => (c.attributes?.email || '').toLowerCase() === email.toLowerCase()) || null
   );
-
-  return match || null;
 }
 
-async function createContact(token, email) {
-  const response = await fetch('https://api.kajabi.com/v1/contacts', {
+async function createContact(token, email, requestId) {
+  const res = await fetch('https://api.kajabi.com/v1/contacts', {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + token,
@@ -69,83 +71,91 @@ async function createContact(token, email) {
     body: JSON.stringify({
       data: {
         type: 'contacts',
-        attributes: {
-          email: email,
-          subscribed: true,
-        },
+        attributes: { email, subscribed: true },
         relationships: {
-          site: {
-            data: {
-              type: 'sites',
-              id: process.env.KAJABI_SITE_ID,
-            },
-          },
+          site: { data: { type: 'sites', id: process.env.KAJABI_SITE_ID } },
         },
       },
     }),
   });
 
-  if (!response.ok) {
-    const errorBody = await response.text();
-    throw new Error('Failed to create contact: ' + errorBody);
+  if (!res.ok) {
+    const t = await fetchTextSafe(res);
+    throw new Error(`[${requestId}] Create contact failed (HTTP ${res.status}): ${t}`);
   }
 
-  return await response.json();
+  return await res.json();
 }
 
-async function addTagToContact(token, contactId, tagId) {
-  const url =
-    'https://api.kajabi.com/v1/contacts/' + contactId + '/relationships/tags';
+// Optional but recommended: ensure existing contacts become subscribed
+async function ensureSubscribed(token, contactId, requestId) {
+  const res = await fetch(`https://api.kajabi.com/v1/contacts/${contactId}`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/vnd.api+json',
+    },
+    body: JSON.stringify({
+      data: {
+        type: 'contacts',
+        id: String(contactId),
+        attributes: { subscribed: true },
+      },
+    }),
+  });
 
-  const response = await fetch(url, {
+  // If Kajabi doesn't allow updating subscribed this way, you’ll see the reason in the error.
+  if (!res.ok) {
+    const t = await fetchTextSafe(res);
+    throw new Error(`[${requestId}] Ensure subscribed failed (HTTP ${res.status}): ${t}`);
+  }
+}
+
+async function addTagToContact(token, contactId, tagId, requestId) {
+  const url = `https://api.kajabi.com/v1/contacts/${contactId}/relationships/tags`;
+
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + token,
       'Content-Type': 'application/vnd.api+json',
     },
     body: JSON.stringify({
-      data: [
-        {
-          type: 'contact_tags',
-          id: tagId,
-        },
-      ],
+      data: [{ type: 'contact_tags', id: String(tagId) }],
     }),
   });
 
-  if (!response.ok) {
-    const errorBody = await response.text();
-    throw new Error('Failed to add tag: ' + errorBody);
+  // Treat "already exists" as success (common when re-testing)
+  if (!res.ok) {
+    if (res.status === 409 || res.status === 422) {
+      return { ok: true, alreadyTagged: true };
+    }
+    const t = await fetchTextSafe(res);
+    throw new Error(`[${requestId}] Add tag failed (HTTP ${res.status}): ${t}`);
   }
 
-  return await response.json();
+  return await res.json();
 }
 
-module.exports = async function handler(req, res) {
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ ok: false, error: 'Method not allowed' });
-  }
+module.exports = async (req, res) => {
+  const requestId = makeRequestId();
 
-  // Allow requests from your site
+  // CORS + no caching
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
 
-  // Handle preflight OPTIONS request
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed', requestId });
 
   try {
-    const { email, tag } = req.body;
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const email = (body?.email || '').trim();
+    const tag = (body?.tag || '').trim();
 
-    // Validate email
-    if (!email || !email.includes('@')) {
-      return res.status(400).json({ ok: false, error: 'Valid email required' });
-    }
+    if (!email || !tag) return res.status(400).json({ ok: false, error: 'Missing email or tag', requestId });
 
-    // Map tag name to the tag ID stored in environment variables
     const tagMap = {
       contractor: process.env.KAJABI_TAG_ID_CONTRACTOR,
       diy: process.env.KAJABI_TAG_ID_DIY,
@@ -153,28 +163,39 @@ module.exports = async function handler(req, res) {
     };
 
     const tagId = tagMap[tag];
-    if (!tagId) {
-      return res.status(400).json({ ok: false, error: 'Invalid tag. Must be: contractor, diy, or waitlist' });
+    if (!tagId) return res.status(400).json({ ok: false, error: 'Invalid tag', requestId });
+
+    let token = await getAccessToken(requestId);
+
+    // Try once; if token is stale, clear cache and retry once.
+    let contact = null;
+    try {
+      contact = await findContactByEmail(token, email, requestId);
+    } catch (e) {
+      if (String(e.message || '').includes('HTTP 401')) {
+        cachedToken = null;
+        tokenExpiresAt = 0;
+        token = await getAccessToken(requestId);
+        contact = await findContactByEmail(token, email, requestId);
+      } else {
+        throw e;
+      }
     }
 
-    // Step 1: Get access token
-    const token = await getAccessToken();
-
-    // Step 2: Find existing contact by email
-    let contact = await findContactByEmail(token, email);
-
-    // Step 3: Create contact if not found
     if (!contact) {
-      const created = await createContact(token, email);
+      const created = await createContact(token, email, requestId);
       contact = created.data;
+    } else {
+      // Optional but recommended
+      await ensureSubscribed(token, contact.id, requestId);
     }
 
-    // Step 4: Add the tag
-    await addTagToContact(token, contact.id, tagId);
+    await addTagToContact(token, contact.id, tagId, requestId);
 
-    return res.status(200).json({ ok: true });
-  } catch (error) {
-    console.error('Kajabi API error:', error.message);
-    return res.status(500).json({ ok: false, error: 'Server error' });
+    return res.status(200).json({ ok: true, requestId });
+  } catch (err) {
+    console.error('Kajabi tag error:', err);
+    // IMPORTANT: return the real reason during debugging
+    return res.status(500).json({ ok: false, error: String(err.message || err), requestId });
   }
 };
