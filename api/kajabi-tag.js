@@ -8,7 +8,11 @@ function makeRequestId() {
 }
 
 async function fetchTextSafe(res) {
-  try { return await res.text(); } catch { return ''; }
+  try {
+    return await res.text();
+  } catch {
+    return '';
+  }
 }
 
 async function getAccessToken(requestId) {
@@ -31,7 +35,7 @@ async function getAccessToken(requestId) {
 
   const data = await res.json();
   cachedToken = data.access_token;
-  tokenExpiresAt = Date.now() + (data.expires_in - 300) * 1000;
+  tokenExpiresAt = Date.now() + (data.expires_in - 300) * 1000; // expire 5 min early
   return cachedToken;
 }
 
@@ -104,7 +108,6 @@ async function ensureSubscribed(token, contactId, requestId) {
     }),
   });
 
-  // If Kajabi doesn't allow updating subscribed this way, you’ll see the reason in the error.
   if (!res.ok) {
     const t = await fetchTextSafe(res);
     throw new Error(`[${requestId}] Ensure subscribed failed (HTTP ${res.status}): ${t}`);
@@ -147,14 +150,43 @@ module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Method not allowed', requestId });
+  if (req.method !== 'POST') {
+    return res.status(405).json({ ok: false, error: 'Method not allowed', requestId });
+  }
 
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const email = (body?.email || '').trim();
-    const tag = (body?.tag || '').trim();
 
-    if (!email || !tag) return res.status(400).json({ ok: false, error: 'Missing email or tag', requestId });
+    // NOTE: must be "let" because we overwrite with cleaned values
+    let email = (body?.email || '').trim();
+    let tag = (body?.tag || '').trim();
+
+    // --- EMAIL GATEKEEPER (blocks junk before Kajabi sees it) ---
+    const emailClean = String(email || '').trim().toLowerCase();
+    const tagClean = String(tag || '').trim().toLowerCase();
+
+    // 1) Require both
+    if (!emailClean || !tagClean) {
+      return res.status(400).json({ ok: false, error: 'Missing email or tag', requestId });
+    }
+
+    // 2) Strong “looks like an email” check (blocks obvious junk)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(emailClean)) {
+      return res.status(400).json({ ok: false, error: 'Please enter a valid email address.', requestId });
+    }
+
+    // 3) Block test/reserved domains (Kajabi may reject anyway)
+    const blockedDomains = new Set(['example.com', 'example.net', 'example.org']);
+    const domain = emailClean.split('@')[1] || '';
+    if (blockedDomains.has(domain)) {
+      return res.status(400).json({ ok: false, error: 'Please use a real email address (not example.com).', requestId });
+    }
+
+    // Overwrite with cleaned values for the rest of the function
+    email = emailClean;
+    tag = tagClean;
+    // --- END EMAIL GATEKEEPER ---
 
     const tagMap = {
       contractor: process.env.KAJABI_TAG_ID_CONTRACTOR,
@@ -163,11 +195,13 @@ module.exports = async (req, res) => {
     };
 
     const tagId = tagMap[tag];
-    if (!tagId) return res.status(400).json({ ok: false, error: 'Invalid tag', requestId });
+    if (!tagId) {
+      return res.status(400).json({ ok: false, error: 'Invalid tag', requestId });
+    }
 
     let token = await getAccessToken(requestId);
 
-    // Try once; if token is stale, clear cache and retry once.
+    // Find contact (retry token once if stale)
     let contact = null;
     try {
       contact = await findContactByEmail(token, email, requestId);
@@ -195,7 +229,6 @@ module.exports = async (req, res) => {
     return res.status(200).json({ ok: true, requestId });
   } catch (err) {
     console.error('Kajabi tag error:', err);
-    // IMPORTANT: return the real reason during debugging
     return res.status(500).json({ ok: false, error: String(err.message || err), requestId });
   }
 };
