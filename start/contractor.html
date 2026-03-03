@@ -404,7 +404,7 @@ footer {
             <button type="submit">Get Access + Join for Pro Intel →</button>
             <p class="privacy-note">🔒 No spam. Unsubscribe anytime.</p>
         </form>
-        <p style="font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 16px; font-style: italic; text-align: center;"><sup>1</sup> $13K install, 4-man crew, one-day job, includes 20% admin, permitting, and sales commission.</p>
+        <p id="bottomFootnote" style="font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 16px; font-style: italic; text-align: center;"><sup>1</sup> $13K install, 4-man crew, one-day job, includes 20% admin, permitting, and sales commission.</p>
     </div>
 
 </section>
@@ -439,7 +439,13 @@ if (localStorage.getItem('opted_in') === 'true') {
     btn.className = 'email-form';
     btn.style.cssText = 'display:block; max-width:460px; margin:0 auto; padding:14px 20px; border-radius:10px; background:#FFA500; color:#0F0F0F; font-size:17px; font-weight:700; font-family:Poppins,sans-serif; text-align:center; text-decoration:none;';
     btn.textContent = 'Take Me to the PV Sizing Calulator';
-    document.querySelector('.optin-section').appendChild(btn);
+    const optinSection = document.querySelector('.optin-section');
+    const footnote = document.getElementById('bottomFootnote');
+    if (footnote) {
+        optinSection.insertBefore(btn, footnote);
+    } else {
+        optinSection.appendChild(btn);
+    }
 }
 
 document.getElementById('optinForm').addEventListener('submit', function(e) {
