@@ -1,7 +1,11 @@
 /**
  * kajabi-tag.js
- * Minimal revision: handle HTTP 422 "Email has already been taken" on create
- * without changing the rest of the behavior/structure.
+ * Revision: Handle HTTP 422 "Email has already been taken" when create fails
+ * but site-scoped search cannot find the contact.
+ *
+ * Strategy:
+ *  - On 422 "taken": wait briefly, then search WITHOUT site_id (global/account),
+ *    then re-try site-scoped search, then proceed if found.
  */
 
 const fetch = require('node-fetch');
@@ -11,6 +15,10 @@ let tokenExpiresAt = 0;
 
 function makeRequestId() {
   return Math.random().toString(36).slice(2, 10);
+}
+
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
 }
 
 async function fetchTextSafe(res) {
@@ -45,11 +53,18 @@ async function getAccessToken(requestId) {
   return cachedToken;
 }
 
-async function findContactByEmail(token, email, requestId) {
+/**
+ * Find contact by email.
+ * includeSiteFilter=true  -> uses filter[site_id]=KAJABI_SITE_ID
+ * includeSiteFilter=false -> global/account search (no site_id)
+ */
+async function findContactByEmail(token, email, requestId, includeSiteFilter = true) {
   const url =
-    'https://api.kajabi.com/v1/contacts?filter%5Bsite_id%5D=' +
-    process.env.KAJABI_SITE_ID +
-    '&filter%5Bsearch%5D=' +
+    'https://api.kajabi.com/v1/contacts?' +
+    (includeSiteFilter
+      ? 'filter%5Bsite_id%5D=' + process.env.KAJABI_SITE_ID + '&'
+      : '') +
+    'filter%5Bsearch%5D=' +
     encodeURIComponent(email);
 
   const res = await fetch(url, {
@@ -223,19 +238,19 @@ module.exports = async (req, res) => {
     // Find contact (retry token once if stale)
     let contact = null;
     try {
-      contact = await findContactByEmail(token, email, requestId);
+      // Site-scoped search first (original behavior)
+      contact = await findContactByEmail(token, email, requestId, true);
     } catch (e) {
       if (String(e.message || '').includes('HTTP 401')) {
         cachedToken = null;
         tokenExpiresAt = 0;
         token = await getAccessToken(requestId);
-        contact = await findContactByEmail(token, email, requestId);
+        contact = await findContactByEmail(token, email, requestId, true);
       } else {
         throw e;
       }
     }
 
-    // --- REVISION: handle 422 "Email has already been taken" on create ---
     if (!contact) {
       try {
         const created = await createContact(token, email, requestId);
@@ -243,15 +258,26 @@ module.exports = async (req, res) => {
       } catch (e) {
         const msg = String(e?.message || e);
 
-        // If Kajabi says the email already exists, re-fetch it and continue (upsert behavior)
+        // Handle 422 Email taken: short backoff + global search (no site_id) + retry site-scoped
         if (msg.includes('HTTP 422') && /email has already been taken/i.test(msg)) {
-          contact = await findContactByEmail(token, email, requestId);
+          await sleep(1000);
+
+          // Try global/account search first
+          contact = await findContactByEmail(token, email, requestId, false);
+
+          // Then retry site-scoped search
+          if (!contact) {
+            contact = await findContactByEmail(token, email, requestId, true);
+          }
 
           if (!contact) {
             throw new Error(
-              `[${requestId}] Kajabi says email exists (422) but contact could not be fetched by search.`
+              `[${requestId}] Kajabi 422 (email taken) but contact not retrievable via search (global or site-scoped).`
             );
           }
+
+          // Keep your existing “ensure subscribed” behavior for existing contacts
+          await ensureSubscribed(token, contact.id, requestId);
         } else {
           throw e; // real failure
         }
@@ -260,7 +286,6 @@ module.exports = async (req, res) => {
       // Optional but recommended
       await ensureSubscribed(token, contact.id, requestId);
     }
-    // --- END REVISION ---
 
     await addTagToContact(token, contact.id, tagId, requestId);
 
