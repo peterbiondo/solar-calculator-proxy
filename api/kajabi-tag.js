@@ -1,3 +1,9 @@
+/**
+ * kajabi-tag.js
+ * Minimal revision: handle HTTP 422 "Email has already been taken" on create
+ * without changing the rest of the behavior/structure.
+ */
+
 const fetch = require('node-fetch');
 
 let cachedToken = null;
@@ -180,7 +186,9 @@ module.exports = async (req, res) => {
     // 2) Strong “looks like an email” check (blocks obvious junk)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     if (!emailRegex.test(emailClean)) {
-      return res.status(400).json({ ok: false, error: 'Please enter a valid email address.', requestId });
+      return res
+        .status(400)
+        .json({ ok: false, error: 'Please enter a valid email address.', requestId });
     }
 
     // 3) Block test/reserved domains (Kajabi may reject anyway)
@@ -190,7 +198,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({
         ok: false,
         error: 'Please use a real email address (not example.com).',
-        requestId
+        requestId,
       });
     }
 
@@ -227,13 +235,32 @@ module.exports = async (req, res) => {
       }
     }
 
+    // --- REVISION: handle 422 "Email has already been taken" on create ---
     if (!contact) {
-      const created = await createContact(token, email, requestId);
-      contact = created.data;
+      try {
+        const created = await createContact(token, email, requestId);
+        contact = created.data;
+      } catch (e) {
+        const msg = String(e?.message || e);
+
+        // If Kajabi says the email already exists, re-fetch it and continue (upsert behavior)
+        if (msg.includes('HTTP 422') && /email has already been taken/i.test(msg)) {
+          contact = await findContactByEmail(token, email, requestId);
+
+          if (!contact) {
+            throw new Error(
+              `[${requestId}] Kajabi says email exists (422) but contact could not be fetched by search.`
+            );
+          }
+        } else {
+          throw e; // real failure
+        }
+      }
     } else {
       // Optional but recommended
       await ensureSubscribed(token, contact.id, requestId);
     }
+    // --- END REVISION ---
 
     await addTagToContact(token, contact.id, tagId, requestId);
 
