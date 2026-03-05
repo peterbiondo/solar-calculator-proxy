@@ -79,7 +79,7 @@ header {
   padding: 100px 0 40px 160px;
   display: grid;
   grid-template-columns: 55% 45%;
-  gap: 40px;                 /* increased gap to prevent overlap */
+  gap: 40px;
   align-items: start;
 }
 
@@ -111,14 +111,14 @@ header {
   font-size: 17px;
   line-height: 1.5;
   color: rgba(255,255,255,0.85);
-  margin-bottom: 36px;        /* a little tighter */
+  margin-bottom: 36px;
 }
 
 .hero-tagline-alt {
   font-size: 19px;
   font-weight: 600;
   color: #00E676;
-  margin-top: 10px;           /* added spacing */
+  margin-top: 14px;
   margin-bottom: 0px;
 }
 
@@ -127,15 +127,15 @@ header {
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
-  padding-right: 70px;        /* more padding on the right */
+  padding-right: 70px;
   padding-left: 20px;
 }
 
 .video-card{
   all: unset;
   cursor: pointer;
-  width: min(340px, 100%);    /* smaller card */
-  aspect-ratio: 2 / 3;        /* 720×1080 portrait */
+  width: min(340px, 100%);
+  aspect-ratio: 2 / 3;
   border-radius: 16px;
   overflow: hidden;
   display: block;
@@ -147,7 +147,7 @@ header {
 .video-placeholder{
   width: 100%;
   height: 100%;
-  background: #ffffff;        /* PURE WHITE placeholder */
+  background: #ffffff;
   display: grid;
   place-items: center;
 }
@@ -173,14 +173,15 @@ header {
 
 /* ================= ROTATING TEXT ================= */
 .rotating-text-container {
-  margin: 0 0 30px 0;
+  margin: 10px 0 30px 0;
   font-family: 'Inter', sans-serif;
   font-size: 26px;
   font-weight: 600;
   line-height: 1.6;
   color: #FFFFFF;
   text-align: left;
-  white-space: nowrap;
+  white-space: normal;     /* FIX: allow wrap */
+  max-width: 520px;        /* FIX: keep it tidy + away from video */
 }
 
 .rotating-phrase {
@@ -190,7 +191,7 @@ header {
   position: relative;
   height: 1.6em;
   overflow: hidden;
-  min-width: 22em;
+  min-width: 0;            /* FIX: remove forced width */
   vertical-align: bottom;
 }
 
@@ -200,12 +201,6 @@ header {
   width: 100%;
   white-space: nowrap;
   text-align: left;
-}
-
-/* Starts wrapping earlier (prevents crossing into video column) */
-@media (max-width: 1100px) {
-  .rotating-text-container { white-space: normal; }
-  .rotating-phrase { min-width: 0; width: 100%; }
 }
 
 /* Animations */
@@ -295,7 +290,7 @@ footer {
 .footer-right a:hover { color: #FFA500; }
 .footer-right svg { width: 26px; height: 26px; }
 
-/* ================= MOBILE ================= */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 1200px) {
   .rotating-text-container { font-size: 22px; }
 }
@@ -320,8 +315,13 @@ footer {
     text-align: center;
   }
 
-  .rotating-text-container { font-size: 20px; white-space: normal; }
-  .rotating-phrase { display: block; min-width: 0; width: 100%; height: 1.6em; }
+  .rotating-text-container { font-size: 20px; max-width: 100%; }
+
+  .rotating-phrase {
+    display: block;
+    width: 100%;
+    height: 1.6em;
+  }
 
   .hero-media{
     padding-right: 0;
