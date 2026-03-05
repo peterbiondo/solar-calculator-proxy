@@ -499,6 +499,21 @@ footer {
     font-size: 18px;
   }
 }
+  /* Subtle “pop” on hover (desktop) */
+  .video-card{
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .video-card:hover{
+    transform: translateY(-3px) scale(1.02);
+  b  ox-shadow: 0 14px 50px rgba(0,0,0,0.55);
+  }
+
+  /* Optional: don’t animate when the user prefers reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    .video-card{ transition: none; }
+    .video-card:hover{ transform: none; }
+  }
 </style>
 </head>
 
