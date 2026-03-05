@@ -426,20 +426,24 @@
                 localStorage.setItem("user_email", email);
                 localStorage.setItem("kajabi_synced", "true");
 
-                // Route by avatar (unchanged)
+                // ✅ CHANGED: Use .replace() instead of .href to remove opt-in page from history
+                // This prevents back button from returning to a grayed-out opt-in page
                 if (selectedAvatar === "contractor") {
-                    window.location.href =
+                    window.location.replace(
                         CONTRACTOR_BOT_URL +
                         "?email=" + encodeURIComponent(email) +
-                        "&avatar=contractor";
+                        "&avatar=contractor"
+                    );
                     return;
                 }
 
+                // ✅ CHANGED: Use .replace() instead of .href to remove opt-in page from history
                 if (selectedAvatar === "diy") {
-                    window.location.href =
+                    window.location.replace(
                         DIY_BOT_URL +
                         "?email=" + encodeURIComponent(email) +
-                        "&avatar=diy";
+                        "&avatar=diy"
+                    );
                     return;
                 }
 
