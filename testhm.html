@@ -526,10 +526,12 @@ footer {
         <img src="Logo.svg" alt="iSolar Hot Water Academy">
       </a>
     </div>
-    <a href="https://pv-hotwater.com/opt-in-calc.html" class="header-cta">
-      <span class="btn-text-desktop">Try the FREE PV Hot Water Designer</span>
-      <span class="btn-text-mobile">FREE PV Sizing Bot</span>
-    </a>
+    <!--
+<a href="https://pv-hotwater.com/opt-in-calc.html" class="header-cta">
+  <span class="btn-text-desktop">Try the FREE PV Hot Water Designer</span>
+  <span class="btn-text-mobile">FREE PV Sizing Bot</span>
+</a>
+-->
   </div>
 </header>
 
@@ -666,21 +668,6 @@ footer {
       </a>
     `);
   }
-})();
-</script>
-
-<script>
-(function () {
-  const optedIn = localStorage.getItem('opted_in') === 'true';
-  const synced = localStorage.getItem('kajabi_synced') === 'true';
-  const avatar = localStorage.getItem('selected_avatar');
-
-  if (!(optedIn && synced && (avatar === 'contractor' || avatar === 'diy'))) return;
-
-  const headerCta = document.querySelector('.header-cta');
-  const calcUrl = avatar === 'contractor' ? '/calc/contractor.html' : '/calc/diy.html';
-
-  if (headerCta) headerCta.href = calcUrl;
 })();
 </script>
 
