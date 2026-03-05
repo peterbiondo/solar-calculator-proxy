@@ -984,14 +984,29 @@
         }
 
         // ── ADDITION: return-to-results scroll on tab focus ───────────────────
-        window.addEventListener('focus', function () {
-            if (sessionStorage.getItem('return_to_results') !== '1') return;
-            const anchor = document.getElementById('return-anchor');
-            if (anchor) {
-                anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-            sessionStorage.removeItem('return_to_results');
-        });
+        function returnToResultsIfNeeded() {
+  if (sessionStorage.getItem('return_to_results') !== '1') return;
+
+  const anchor = document.getElementById('return-anchor');
+  if (anchor) {
+    anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  sessionStorage.removeItem('return_to_results');
+}
+
+// Main (desktop + most cases)
+window.addEventListener('focus', returnToResultsIfNeeded);
+
+// Backup (mobile/Safari sometimes prefers this)
+document.addEventListener('visibilitychange', function () {
+  if (document.visibilityState === 'visible') {
+    returnToResultsIfNeeded();
+  }
+});
+
+// Optional extra backup (safe)
+window.addEventListener('pageshow', returnToResultsIfNeeded);
     </script>
 </body>
 </html>
