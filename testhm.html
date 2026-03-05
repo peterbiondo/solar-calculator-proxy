@@ -13,324 +13,493 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
-  font-family: 'Poppins', sans-serif;
-  background: #0F0F0F;
-  color: #FFFFFF;
-  overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+    background: #0F0F0F;
+    color: #FFFFFF;
+    overflow-x: hidden;
 }
 
 /* ================= HEADER ================= */
 header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 72px;
-  padding: 0 30px 0 160px;
-  display: flex;
-  align-items: center;
-  background: #0F0F0F;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  z-index: 100;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    padding: 0 30px 0 160px;
+    display: flex;
+    align-items: center;
+    background: #0F0F0F;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 100;
 }
 
 .header-inner {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.logo { display: flex; align-items: center; }
-.logo img { height: 36px; width: auto; display: block; }
+/* LOGO (IMAGE) */
+.logo {
+    display: flex;
+    align-items: center;
+}
 
+.logo img {
+    height: 36px;
+    width: auto;
+    display: block;
+}
+
+/* Right-side CTA button - Calculator style */
 .header-cta {
-  padding: 5px 10px 5px 12px;
-  border-radius: 25px;
-  font-size: 14px;
-  font-weight: 600;
-  background: #FFA500;
-  color: #0F0F0F;
-  border: none;
-  text-decoration: none;
-  display: inline-block;
-  transition: transform 0.2s, box-shadow 0.2s;
-  cursor: pointer;
+    padding: 5px 10px 5px 12px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #FFA500;
+    color: #0F0F0F;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
 }
 
 .header-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
 }
 
-.btn-text-mobile { display: none; }
-.btn-text-desktop { display: inline; }
+/* Button text switching - mobile only (not tablet) */
+.btn-text-mobile {
+    display: none;
+}
+
+.btn-text-desktop {
+    display: inline;
+}
 
 @media (max-width: 600px) {
-  .btn-text-mobile { display: inline; }
-  .btn-text-desktop { display: none; }
-  .logo img { height: 32px; }
-  .header-cta { font-size: 12px; padding: 6px 8px 6px 10px; }
+    .btn-text-mobile {
+        display: inline;
+    }
+
+    .btn-text-desktop {
+        display: none;
+    }
+
+    .logo img {
+        height: 32px;
+    }
+
+    .header-cta {
+        font-size: 12px;
+        padding: 6px 8px 6px 10px;
+    }
 }
 
 /* ================= HERO ================= */
 .hero {
-  padding: 100px 0 40px 160px;
-  display: grid;
-  grid-template-columns: 55% 45%;
-  gap: 40px;
-  align-items: start;
+    padding: 100px 0 40px 160px;
+    display: grid;
+    grid-template-columns: 55% 45%;
+    gap: 20px;
+    align-items: start;
 }
 
-.hero-content { max-width: 650px; }
+.hero-content {
+    max-width: 650px;
+}
 
 .hero-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 54px;
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 30px;
+    font-family: 'Inter', sans-serif;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 30px;
 }
 
 .highlight-blue {
-  background: linear-gradient(to top, rgba(70,150,255,0.7) 55%, transparent 55%);
-  padding: 0 4px;
-  border-radius: 2px;
+    background: linear-gradient(to top, rgba(70,150,255,0.7) 55%, transparent 55%);
+    padding: 0 4px;
+    border-radius: 2px;
 }
 
 .hero-tagline {
-  font-size: 19px;
-  font-weight: 600;
-  color: #00E676;
-  margin-bottom: 25px;
-  line-height: 1.8;
+    font-size: 19px;
+    font-weight: 600;
+    color: #00E676;
+    margin-bottom: 25px;
+    line-height: 1.8;
 }
 
 .hero-body {
-  font-size: 17px;
-  line-height: 1.5;
-  color: rgba(255,255,255,0.85);
-  margin-bottom: 36px;
+    font-size: 17px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 50px;
 }
 
 .hero-tagline-alt {
-  font-size: 19px;
-  font-weight: 600;
-  color: #00E676;
-  margin-top: 14px;
-  margin-bottom: 0px;
+    font-size: 19px;
+    font-weight: 600;
+    color: #00E676;
+    margin-bottom: 0px;
 }
 
-/* ================= PORTRAIT VIDEO CARD ================= */
+/* ================= SQUARE VIDEO CARD ================= */
 .hero-media{
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  padding-right: 70px;
-  padding-left: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-right: 70px;   /* more space from right edge */
+    padding-left: 25px;
 }
 
+/* clickable “card” that starts as a white placeholder */
 .video-card{
-  all: unset;
-  cursor: pointer;
-  width: min(340px, 100%);
-  aspect-ratio: 2 / 3;
-  border-radius: 16px;
-  overflow: hidden;
-  display: block;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.45);
-  border: 1px solid rgba(255,255,255,0.12);
-  background: #fff;
+    all: unset;
+    cursor: pointer;
+    width: min(360px, 100%);     /* slightly smaller */
+    aspect-ratio: 1 / 1;         /* SQUARE */
+    border-radius: 16px;
+    overflow: hidden;
+    display: block;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.12);
+    background: #fff;            /* fallback */
 }
 
 .video-placeholder{
-  width: 100%;
-  height: 100%;
-  background: #ffffff;
-  display: grid;
-  place-items: center;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;         /* PURE WHITE placeholder */
+    display: grid;
+    place-items: center;
 }
 
 .play-dot{
-  width: 58px;
-  height: 58px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  background: rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.18);
-  font-size: 18px;
-  color: rgba(0,0,0,0.65);
+    width: 58px;
+    height: 58px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.18);
+    font-size: 18px;
+    color: rgba(0,0,0,0.65);
 }
 
 .video-embed{
-  width: 100%;
-  height: 100%;
-  border: 0;
-  display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
 }
 
 /* ================= ROTATING TEXT ================= */
 .rotating-text-container {
-  margin: 10px 0 30px 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 26px;
-  font-weight: 600;
-  line-height: 1.6;
-  color: #FFFFFF;
-  text-align: left;
-  white-space: normal;     /* FIX: allow wrap */
-  max-width: 520px;        /* FIX: keep it tidy + away from video */
+    margin: 0 0 30px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #FFFFFF;
+    text-align: left;
+    white-space: nowrap;
 }
 
 .rotating-phrase {
-  color: #FFA500;
-  font-weight: 700;
-  display: inline-block;
-  position: relative;
-  height: 1.6em;
-  overflow: hidden;
-  min-width: 0;            /* FIX: remove forced width */
-  vertical-align: bottom;
+    color: #FFA500;
+    font-weight: 700;
+    display: inline-block;
+    position: relative;
+    height: 1.6em;
+    overflow: hidden;
+    min-width: 22em;
+    vertical-align: bottom;
 }
 
 .rotating-phrase span {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  white-space: nowrap;
-  text-align: left;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    white-space: nowrap;
+    text-align: left;
 }
 
-/* Animations */
-.rotating-phrase span:nth-child(1){opacity:1;transform:translateX(0);animation:slideSet1 42s ease-in-out infinite;}
-.rotating-phrase span:nth-child(2){opacity:0;transform:translateX(-100%);animation:slideSet2 42s ease-in-out infinite;}
-.rotating-phrase span:nth-child(3){opacity:0;transform:translateX(-100%);animation:slideSet3 42s ease-in-out infinite;}
-.rotating-phrase span:nth-child(4){opacity:0;transform:translateX(-100%);animation:slideSet4 42s ease-in-out infinite;}
-.rotating-phrase span:nth-child(5){opacity:0;transform:translateX(-100%);animation:slideSet5 42s ease-in-out infinite;}
-.rotating-phrase span:nth-child(6){opacity:0;transform:translateX(-100%);animation:slideSet6 42s ease-in-out infinite;}
+/* Set 1 - starts visible */
+.rotating-phrase span:nth-child(1) {
+    opacity: 1;
+    transform: translateX(0);
+    animation: slideSet1 42s ease-in-out infinite;
+}
 
-@keyframes slideSet1{0%{opacity:1;transform:translateX(0);}14%{opacity:1;transform:translateX(0);}17%{opacity:0;transform:translateX(100%);}97%{opacity:0;transform:translateX(-100%);}100%{opacity:1;transform:translateX(0);}}
-@keyframes slideSet2{0%,14%{opacity:0;transform:translateX(-100%);}17%{opacity:1;transform:translateX(0);}31%{opacity:1;transform:translateX(0);}34%{opacity:0;transform:translateX(100%);}100%{opacity:0;transform:translateX(100%);}}
-@keyframes slideSet3{0%,31%{opacity:0;transform:translateX(-100%);}34%{opacity:1;transform:translateX(0);}48%{opacity:1;transform:translateX(0);}51%{opacity:0;transform:translateX(100%);}100%{opacity:0;transform:translateX(100%);}}
-@keyframes slideSet4{0%,48%{opacity:0;transform:translateX(-100%);}51%{opacity:1;transform:translateX(0);}65%{opacity:1;transform:translateX(0);}68%{opacity:0;transform:translateX(100%);}100%{opacity:0;transform:translateX(100%);}}
-@keyframes slideSet5{0%,65%{opacity:0;transform:translateX(-100%);}68%{opacity:1;transform:translateX(0);}82%{opacity:1;transform:translateX(0);}85%{opacity:0;transform:translateX(100%);}100%{opacity:0;transform:translateX(100%);}}
-@keyframes slideSet6{0%,82%{opacity:0;transform:translateX(-100%);}85%{opacity:1;transform:translateX(0);}97%{opacity:1;transform:translateX(0);}100%{opacity:0;transform:translateX(100%);}}
+/* Set 2 */
+.rotating-phrase span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet2 42s ease-in-out infinite;
+}
+
+/* Set 3 */
+.rotating-phrase span:nth-child(3) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet3 42s ease-in-out infinite;
+}
+
+/* Set 4 */
+.rotating-phrase span:nth-child(4) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet4 42s ease-in-out infinite;
+}
+
+/* Set 5 */
+.rotating-phrase span:nth-child(5) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet5 42s ease-in-out infinite;
+}
+
+/* Set 6 */
+.rotating-phrase span:nth-child(6) {
+    opacity: 0;
+    transform: translateX(-100%);
+    animation: slideSet6 42s ease-in-out infinite;
+}
+
+/* Set 1 - visible 0-14%, exits 14-17%, re-enters 97-100% */
+@keyframes slideSet1 {
+    0%   { opacity: 1; transform: translateX(0); }
+    14%  { opacity: 1; transform: translateX(0); }
+    17%  { opacity: 0; transform: translateX(100%); }
+    97%  { opacity: 0; transform: translateX(-100%); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Set 2 - enters 14-17%, visible 17-31%, exits 31-34% */
+@keyframes slideSet2 {
+    0%, 14%  { opacity: 0; transform: translateX(-100%); }
+    17%      { opacity: 1; transform: translateX(0); }
+    31%      { opacity: 1; transform: translateX(0); }
+    34%      { opacity: 0; transform: translateX(100%); }
+    100%     { opacity: 0; transform: translateX(100%); }
+}
+
+/* Set 3 - enters 31-34%, visible 34-48%, exits 48-51% */
+@keyframes slideSet3 {
+    0%, 31%  { opacity: 0; transform: translateX(-100%); }
+    34%      { opacity: 1; transform: translateX(0); }
+    48%      { opacity: 1; transform: translateX(0); }
+    51%      { opacity: 0; transform: translateX(100%); }
+    100%     { opacity: 0; transform: translateX(100%); }
+}
+
+/* Set 4 - enters 48-51%, visible 51-65%, exits 65-68% */
+@keyframes slideSet4 {
+    0%, 48%  { opacity: 0; transform: translateX(-100%); }
+    51%      { opacity: 1; transform: translateX(0); }
+    65%      { opacity: 1; transform: translateX(0); }
+    68%      { opacity: 0; transform: translateX(100%); }
+    100%     { opacity: 0; transform: translateX(100%); }
+}
+
+/* Set 5 - enters 65-68%, visible 68-82%, exits 82-85% */
+@keyframes slideSet5 {
+    0%, 65%  { opacity: 0; transform: translateX(-100%); }
+    68%      { opacity: 1; transform: translateX(0); }
+    82%      { opacity: 1; transform: translateX(0); }
+    85%      { opacity: 0; transform: translateX(100%); }
+    100%     { opacity: 0; transform: translateX(100%); }
+}
+
+/* Set 6 - enters 82-85%, visible 85-97%, exits 97-100% */
+@keyframes slideSet6 {
+    0%, 82%  { opacity: 0; transform: translateX(-100%); }
+    85%      { opacity: 1; transform: translateX(0); }
+    97%      { opacity: 1; transform: translateX(0); }
+    100%     { opacity: 0; transform: translateX(100%); }
+}
 
 /* ================= CTA ================= */
 .cta-section {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 0 160px 45px;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 0 160px 45px;
 }
 
 .cta-heading {
-  font-size: 28px;
-  font-weight: 600;
-  color: #FFA500;
-  margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 600;
+    color: #FFA500;
+    margin-bottom: 20px;
 }
 
 /* ================= AVATARS ================= */
 .avatar-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  max-width: 520px;
-  margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 520px;
+    margin: 0 auto;
 }
 
 .avatar-card {
-  background: #FFFFFF;
-  border: 3px solid #E8E8E8;
-  border-radius: 12px;
-  padding: 14px 8px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  font-family: 'Inter', sans-serif;
+    background: #FFFFFF;
+    border: 3px solid #E8E8E8;
+    border-radius: 12px;
+    padding: 14px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
 }
 
 .avatar-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(230, 81, 0, 0.2);
-  border-color: #E65100;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(230, 81, 0, 0.2);
+    border-color: #E65100;
 }
 
-.avatar-icon { font-size: 33px; margin-bottom: 8px; }
-.avatar-title { font-size: 16px; font-weight: 600; color: #0F0F0F; margin-bottom: 4px; }
-.avatar-description { font-size: 13px; color: #424242; line-height: 1.3; }
+.avatar-icon {
+    font-size: 33px;
+    margin-bottom: 8px;
+}
+
+.avatar-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F0F0F;
+    margin-bottom: 4px;
+}
+
+.avatar-description {
+    font-size: 13px;
+    color: #424242;
+    line-height: 1.3;
+}
 
 /* ================= FOOTER ================= */
 footer {
-  border-top: 1px solid rgba(255,255,255,0.1);
-  padding: 20px 160px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #0F0F0F;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 20px 160px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0F0F0F;
 }
 
-.footer-left { font-size: 13px; color: rgba(255,255,255,0.5); }
-.footer-center { display: flex; gap: 24px; }
-.footer-center a { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
-.footer-center a:hover { color: #FFA500; }
+.footer-left {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+}
+
+.footer-center {
+    display: flex;
+    gap: 24px;
+}
+
+.footer-center a {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-center a:hover {
+    color: #FFA500;
+}
 
 .footer-right a {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: rgba(255,255,255,0.5);
-  text-decoration: none;
-  font-size: 13px;
-  transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
 }
-.footer-right a:hover { color: #FFA500; }
-.footer-right svg { width: 26px; height: 26px; }
 
-/* ================= RESPONSIVE ================= */
+.footer-right a:hover {
+    color: #FFA500;
+}
+
+.footer-right svg {
+    width: 26px;
+    height: 26px;
+}
+
+/* ================= MOBILE ================= */
 @media (max-width: 1200px) {
-  .rotating-text-container { font-size: 22px; }
+    .rotating-text-container {
+        font-size: 22px;
+    }
 }
 
 @media (max-width: 768px) {
-  header { padding: 0 20px; height: 64px; }
+    header {
+        padding: 0 20px;
+        height: 64px;
+    }
 
-  .hero {
-    grid-template-columns: 1fr;
-    padding: 80px 20px 60px;
-    gap: 22px;
-  }
+    .hero {
+        grid-template-columns: 1fr;
+        padding: 80px 20px 60px;
+    }
 
-  .cta-section { padding: 6px 20px 40px; }
+    .cta-section {
+        padding: 6px 20px 40px;
+    }
 
-  .avatar-grid { grid-template-columns: 1fr; max-width: 520px; }
+    .avatar-grid {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+    }
 
-  footer {
-    flex-direction: column;
-    gap: 16px;
-    padding: 24px 20px;
-    text-align: center;
-  }
+    footer {
+        flex-direction: column;
+        gap: 16px;
+        padding: 24px 20px;
+        text-align: center;
+    }
 
-  .rotating-text-container { font-size: 20px; max-width: 100%; }
+    .rotating-text-container {
+        font-size: 20px;
+        white-space: normal;
+    }
 
-  .rotating-phrase {
-    display: block;
-    width: 100%;
-    height: 1.6em;
-  }
+    .rotating-phrase {
+        display: block;
+        min-width: 0;
+        width: 100%;
+        height: 1.6em;
+    }
 
-  .hero-media{
-    padding-right: 0;
-    padding-left: 0;
-    justify-content: center;
-    margin-top: 18px;
-  }
+    /* Video card mobile placement */
+    .hero-media{
+        padding-right: 0;
+        padding-left: 0;
+        justify-content: center;
+        margin-top: 18px;
+    }
 
-  .video-card{ width: min(360px, 92vw); }
+    .video-card{
+        width: min(360px, 92vw);
+        aspect-ratio: 1 / 1;  /* keep square on mobile too */
+    }
 }
 </style>
 </head>
@@ -338,100 +507,100 @@ footer {
 <body>
 
 <header>
-  <div class="header-inner">
-    <div class="logo">
-      <a href="https://pv-hotwater.com">
-        <img src="Logo.svg" alt="iSolar Hot Water Academy">
-      </a>
+    <div class="header-inner">
+        <div class="logo">
+            <a href="https://pv-hotwater.com">
+                <img src="Logo.svg" alt="iSolar Hot Water Academy">
+            </a>
+        </div>
+        <a href="https://pv-hotwater.com/opt-in-calc.html" class="header-cta">
+            <span class="btn-text-desktop">Try the FREE PV Hot Water Designer</span>
+            <span class="btn-text-mobile">FREE PV Sizing Bot</span>
+        </a>
     </div>
-    <a href="https://pv-hotwater.com/opt-in-calc.html" class="header-cta">
-      <span class="btn-text-desktop">Try the FREE PV Hot Water Designer</span>
-      <span class="btn-text-mobile">FREE PV Sizing Bot</span>
-    </a>
-  </div>
 </header>
 
 <section class="hero">
 
-  <div class="hero-content">
-    <h1 class="hero-title">
-      Solar Hot Water<br>
-      <span class="highlight-blue">isn't one thing anymore.</span>
-    </h1>
+    <div class="hero-content">
+        <h1 class="hero-title">
+            Solar Hot Water<br>
+            <span class="highlight-blue">isn't one thing anymore.</span>
+        </h1>
 
-    <p class="hero-tagline">
-      PV ELECTRIC HOT WATER<br>
-      or<br>
-      SOLAR THERMAL COLLECTORS
-    </p>
+        <p class="hero-tagline">
+            PV ELECTRIC HOT WATER<br>
+            or<br>
+            SOLAR THERMAL COLLECTORS
+        </p>
 
-    <p class="hero-body">
-      The simplest system with the best real-world economics wins.<br>
-      <strong>Easier to install. Predictable. No Guesswork.</strong>
-    </p>
+        <p class="hero-body">
+            The simplest system with the best real-world economics wins.<br>
+            <strong>Easier to install. Predictable. No Guesswork.</strong>
+        </p>
 
-    <p class="hero-tagline-alt">No fluff. No hype.</p>
+        <p class="hero-tagline-alt">No fluff. No hype.</p>
 
-    <div class="rotating-text-container">
-      Finally, a Solar Water Heater without
-      <span class="rotating-phrase">
-        <span>the fuss and mess of thermal fluids</span>
-        <span>roof plumbing, complexity, high cost</span>
-        <span>freeze protection and overheating</span>
-        <span>pumps, heat exchangers, costly upkeep</span>
-        <span>expensive, special, hard to get tanks</span>
-        <span>batteries or grid interconnection</span>
-      </span>
+        <div class="rotating-text-container">
+            Finally, a Solar Water Heater without
+            <span class="rotating-phrase">
+                <span>the fuss and mess of thermal fluids</span>
+                <span>roof plumbing, complexity, high cost</span>
+                <span>freeze protection and overheating</span>
+                <span>pumps, heat exchangers, costly upkeep</span>
+                <span>expensive, special, hard to get tanks</span>
+                <span>batteries or grid interconnection</span>
+            </span>
+        </div>
     </div>
-  </div>
 
-  <!-- RIGHT SIDE: Portrait Card Placeholder (click loads YouTube) -->
-  <div class="hero-media">
-    <button class="video-card js-video-card" type="button" aria-label="Play intro video">
-      <div class="video-placeholder">
-        <div class="play-dot">▶</div>
-      </div>
-    </button>
-  </div>
-
-  <div class="cta-section">
-    <h2 class="cta-heading">Who are you? Click one to continue</h2>
-
-    <div class="avatar-grid">
-      <a href="/start/contractor.html" class="avatar-card">
-        <div class="avatar-icon">⚡</div>
-        <div class="avatar-title">PV Contractor</div>
-        <div class="avatar-description">Grow your solar business</div>
-      </a>
-
-      <a href="/start/diy.html" class="avatar-card">
-        <div class="avatar-icon">🏠</div>
-        <div class="avatar-title">DIY Homeowner</div>
-        <div class="avatar-description">Self-install your own system</div>
-      </a>
+    <!-- RIGHT SIDE: Square Card Placeholder (click loads YouTube) -->
+    <div class="hero-media">
+        <button class="video-card js-video-card" type="button" aria-label="Play intro video">
+            <div class="video-placeholder">
+                <div class="play-dot">▶</div>
+            </div>
+        </button>
     </div>
-  </div>
+
+    <div class="cta-section">
+        <h2 class="cta-heading">Who are you? Click one to continue</h2>
+
+        <div class="avatar-grid">
+            <a href="/start/contractor.html" class="avatar-card">
+                <div class="avatar-icon">⚡</div>
+                <div class="avatar-title">PV Contractor</div>
+                <div class="avatar-description">Grow your solar business</div>
+            </a>
+
+            <a href="/start/diy.html" class="avatar-card">
+                <div class="avatar-icon">🏠</div>
+                <div class="avatar-title">DIY Homeowner</div>
+                <div class="avatar-description">Self-install your own system</div>
+            </a>
+        </div>
+    </div>
 
 </section>
 
 <footer>
-  <div class="footer-left">
-    © <script>document.write(new Date().getFullYear())</script> iSolar Hot Water Academy
-  </div>
-  <div class="footer-center">
-    <a href="https://isolarhotwater.mykajabi.com/about">About</a>
-    <a href="https://isolarhotwater.mykajabi.com/contact-us">Contact Us</a>
-    <a href="/privacy.html" target="_blank" rel="noopener">Privacy</a>
-    <a href="/terms.html" target="_blank" rel="noopener">Terms</a>
-  </div>
-  <div class="footer-right">
-    <a href="https://www.youtube.com/@isolar_hotwater" target="_blank" rel="noopener" aria-label="YouTube">
-      <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-      </svg>
-      <span>YouTube</span>
-    </a>
-  </div>
+    <div class="footer-left">
+        © <script>document.write(new Date().getFullYear())</script> iSolar Hot Water Academy
+    </div>
+    <div class="footer-center">
+        <a href="https://isolarhotwater.mykajabi.com/about">About</a>
+        <a href="https://isolarhotwater.mykajabi.com/contact-us">Contact Us</a>
+        <a href="/privacy.html" target="_blank" rel="noopener">Privacy</a>
+        <a href="/terms.html" target="_blank" rel="noopener">Terms</a>
+    </div>
+    <div class="footer-right">
+        <a href="https://www.youtube.com/@isolar_hotwater" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            <span>YouTube</span>
+        </a>
+    </div>
 </footer>
 
 <!-- Swap placeholder -> YouTube embed on click -->
