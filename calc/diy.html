@@ -247,6 +247,7 @@
                 peakSunHours: lastAps || '',
                 season: userData.season || (userData.useAIClimate ? 'annual' : 'custom')
             });
+            sessionStorage.setItem('return_to_results', '1');
             window.open('/diagram/installation.html?' + params.toString(), '_blank');
         }
 
