@@ -806,6 +806,7 @@
                     // ── ADDITION 4a: diagram button (metric single) ───────────
                     '<button class="diagram-btn" onclick="openDiagram(\'CIM ' + inverterModel + '\',\'' + system.inverters + '\',\'' + system.panels + '\',\'' + userData.panelWatts + '\',\'' + system.element_size + '\',\'' + dg + '\',\'' + system.kwh_day + '\',\'' + (system.kwh_max || system.kwh_day) + '\',\'' + (showOpt ? td : '') + '\')">⚡ How It All Connects</button><br>' +
                     getOptimalConditionsMessage(dir) +
+                    '<div id="return-anchor"></div>' +
                     '<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>' +
                     '<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>' +
                     '<a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>' +
@@ -842,6 +843,7 @@
                     // ── ADDITION 4b: diagram button (imperial single) ─────────
                     '<button class="diagram-btn" onclick="openDiagram(\'CIM ' + inverterModel + '\',\'' + system.inverters + '\',\'' + system.panels + '\',\'' + userData.panelWatts + '\',\'' + system.element_size + '\',\'' + dg + '\',\'' + system.kwh_day + '\',\'' + (system.kwh_max || system.kwh_day) + '\',\'' + (showOpt ? otd : '') + '\')">⚡ How It All Connects</button><br>' +
                     getOptimalConditionsMessage(dir) +
+                    '<div id="return-anchor"></div>' +
                     '<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>' +
                     '<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>' +
                     '<a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>' +
@@ -923,6 +925,7 @@
                     // ── ADDITION 4d: diagram button (metric alternative) ──────
                     '<button class="diagram-btn" onclick="openDiagram(\'' + altModel + '\',\'' + alt.inverters + '\',\'' + alt.panels + '\',\'' + userData.panelWatts + '\',\'' + alt.element_size + '\',\'' + dg + '\',\'' + alt.kwh_day + '\',\'' + (alt.kwh_max || alt.kwh_day) + '\',\'' + (showAOpt ? atd : '') + '\')">⚡ How It All Connects</button><br>' +
                     getOptimalConditionsMessage(dir) +
+                    '<div id="return-anchor"></div>' +
                     '<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>' +
                     '<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>' +
                     '<a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>' +
@@ -965,6 +968,7 @@
                     // ── ADDITION 4f: diagram button (imperial alternative) ────
                     '<button class="diagram-btn" onclick="openDiagram(\'' + altModel + '\',\'' + alt.inverters + '\',\'' + alt.panels + '\',\'' + userData.panelWatts + '\',\'' + alt.element_size + '\',\'' + dg + '\',\'' + alt.kwh_day + '\',\'' + (alt.kwh_max || alt.kwh_day) + '\',\'' + (showAOpt ? aot : '') + '\')">⚡ How It All Connects</button><br>' +
                     getOptimalConditionsMessage(dir) +
+                    '<div id="return-anchor"></div>' +
                     '<button class="gallon-btn" onclick="copyResults()" style="margin-right:10px;">Copy Results</button>' +
                     '<button class="gallon-btn" onclick="tryAgain()">Try Again</button><br>' +
                     '<a href="https://www.cyboenergy.com/downloads/CyboInverter-CIM-1200H-Spec-Sheet-Rev-6.6-Jan-2024.pdf" target="_blank" class="spec-btn">1200H Spec Sheet</a>' +
@@ -978,6 +982,16 @@
                 if (last) last.scrollIntoView({ behavior:'smooth', block:'start' });
             }, 100);
         }
+
+        // ── ADDITION: return-to-results scroll on tab focus ───────────────────
+        window.addEventListener('focus', function () {
+            if (sessionStorage.getItem('return_to_results') !== '1') return;
+            const anchor = document.getElementById('return-anchor');
+            if (anchor) {
+                anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            sessionStorage.removeItem('return_to_results');
+        });
     </script>
 </body>
 </html>
