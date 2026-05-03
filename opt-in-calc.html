@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     
 <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -333,6 +334,7 @@
                 <input type="email" id="email" name="email" placeholder="you@example.com" required>
             </div>
             
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADIiJ6t6EW6bQBBF" data-theme="light"></div>
             <button type="submit" class="submit-btn" id="submitBtn">Get Access + Join for Design Tips →</button>
         </form>
         
@@ -397,6 +399,11 @@
                 showError('Please enter a valid email address.');
                 return;
             }
+            const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+            if (!turnstileToken) {
+                showError('Please complete the verification checkbox.');
+                return;
+            }
 
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.textContent;
@@ -409,7 +416,7 @@
                 const resp = await fetch(KAJABI_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, tag: selectedAvatar }),
+                    body: JSON.stringify({ email: email, tag: selectedAvatar, turnstileToken: turnstileToken }),
                     cache: 'no-store',
                     keepalive: true
                 });
