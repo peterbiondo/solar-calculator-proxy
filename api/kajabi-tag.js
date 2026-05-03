@@ -1,5 +1,6 @@
-module.exports = async (req, res) => }
-  // CORS headers
+const fetch = require('node-fetch');
+
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -23,8 +24,7 @@ module.exports = async (req, res) => }
       return res.status(400).json({ ok: false, error: 'Missing verification token' });
     }
 
-    // Step 1: Verify Turnstile token
-    const turnstileRes = await fetch(
+    var turnstileRes = await fetch(
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       {
         method: 'POST',
@@ -36,26 +36,24 @@ module.exports = async (req, res) => }
       }
     );
 
-    const turnstileData = await turnstileRes.json();
+    var turnstileData = await turnstileRes.json();
 
     if (!turnstileData.success) {
       return res.status(403).json({ ok: false, error: 'Bot detected' });
     }
 
-    // Step 2: Map tag to MailerLite group ID
-    const groupMap = {
+    var groupMap = {
       contractor: process.env.MAILERLITE_GROUP_PVCONTRACTOR,
       diy: process.env.MAILERLITE_GROUP_DIY,
       waitlist: process.env.MAILERLITE_GROUP_WAITLIST,
     };
 
-    const groupId = groupMap[tag];
+    var groupId = groupMap[tag];
     if (!groupId) {
       return res.status(400).json({ ok: false, error: 'Invalid tag' });
     }
 
-    // Step 3: Create/update subscriber in MailerLite
-    const mlRes = await fetch('https://connect.mailerlite.com/api/subscribers', {
+    var mlRes = await fetch('https://connect.mailerlite.com/api/subscribers', {
       method: 'POST',
       headers: {
         Authorization: 'Bearer ' + process.env.MAILERLITE_API_TOKEN,
@@ -69,5 +67,13 @@ module.exports = async (req, res) => }
     });
 
     if (!mlRes.ok) {
-      const errorBody = await mlRes.text();
-      throw new Error('MailerLite error:
+      var errorBody = await mlRes.text();
+      throw new Error('MailerLite error: ' + errorBody);
+    }
+
+    return res.status(200).json({ ok: true });
+  } catch (err) {
+    console.error('Subscribe error:', err);
+    return res.status(500).json({ ok: false, error: 'Server error' });
+  }
+};
