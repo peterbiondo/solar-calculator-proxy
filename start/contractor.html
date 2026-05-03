@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -364,6 +365,7 @@ footer {
 
     <form class="email-form" id="optinForm" novalidate>
       <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" required>
+      <div class="cf-turnstile" data-sitekey="0x4AAAAAADIiJ6t6EW6bQBBF" data-theme="dark"></div>
       <button type="submit" id="submitBtn">Get Free Access + Join for Pro Intel →</button>
       <p class="privacy-note">🔒 No spam. Unsubscribe anytime.</p>
     </form>
@@ -446,6 +448,10 @@ footer {
     if (!email) {
       alert('Please enter your email.');
       return;
+    }const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+    if (!turnstileToken) {
+      alert('Please complete the verification checkbox.');
+      return;
     }
 
     const originalText = submitBtn ? submitBtn.textContent : '';
@@ -458,7 +464,7 @@ footer {
       const resp = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, tag: TAG }),
+        body: JSON.stringify({ email, tag: TAG, turnstileToken: turnstileToken }),
         cache: 'no-store',
         keepalive: true
       });
