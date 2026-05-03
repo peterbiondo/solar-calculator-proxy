@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     
     <style>
         /* ═══════════════════════════════════════════════════════════════ */
@@ -438,7 +439,8 @@
                     </span>
                 </label>
             </div>
-
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADIiJ6t6EW6bQBBF" data-theme="dark"></div>
+            
             <!-- Accordion (Hidden by Default) -->
             <div class="accordion" id="accordion">
                 <div class="accordion-content">
@@ -501,7 +503,7 @@
         /* ═══════════════════════════════════════════════════════════════ */
         /* SUBMIT TO KAJABI FORM */
         /* ═══════════════════════════════════════════════════════════════ */
-        async function submitToKajabi(email) {
+          async function submitToKajabi(email, turnstileToken) {
             console.log('📤 Submitting to Kajabi...', { email, tags: ['waitlist'] });
 
             // Check if Kajabi URL is configured
@@ -519,7 +521,8 @@
                     },
                     body: JSON.stringify({
                         email: email,
-                        tag: 'waitlist'
+                        tag: 'waitlist',
+                        turnstileToken: turnstileToken
                     })
                 });
 
@@ -573,7 +576,15 @@
                 }
 
                 /* Submit to Kajabi */
-                const result = await submitToKajabi(userEmail);
+                const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+                if (!turnstileToken) {
+                    alert('Please complete the verification checkbox.');
+                    this.checked = false;
+                    accordion.classList.remove('open');
+                    return;
+                }
+
+                const result = await submitToKajabi(userEmail, turnstileToken);
 
                 if (result.success) {
                     successMessage.classList.add('show');
